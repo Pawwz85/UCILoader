@@ -1,0 +1,71 @@
+#include <UCILoader/Parser.h>
+
+void Option::dispose_content() {
+	switch (type_)
+	{
+	case Check:
+		dispose_content_internal<bool>();
+		break;
+	case Spin:
+		dispose_content_internal<spin_option>();
+		break;
+	case Combo:
+		dispose_content_internal<combo_option>();
+		break;
+	case Button:
+		dispose_content_internal<nullptr_t>();
+		break;
+	case String:
+		dispose_content_internal<std::string>();
+		break;
+	default:
+		break;
+	}
+}
+
+void* Option::deep_copy_content() const {
+	switch (type_)
+	{
+	case Check:
+		return new bool(check_content());
+	case Spin:
+		return new spin_option(spin_content());
+	case Combo:
+		return new combo_option(combo_content());
+	case String:
+		return new std::string(str_content());
+	default:
+		return nullptr;
+	}
+}
+
+std::string formatSetOptionCommand(const Option& option)
+{
+	std::string result = std::string("setoption ") + option.id();
+
+	if (option.type() == Button) goto FINALE;
+
+	result += " value ";
+
+	switch (option.type())
+	{
+	case Check:
+		result += option.check_content() ? "on" : "off";
+		break;
+	case String:
+		result += option.str_content().empty() ? "<empty>" : option.str_content();
+		break;
+	case Combo:
+		result += option.combo_content().value;
+		break;
+	case Spin:
+		result += std::to_string(option.spin_content().value);
+		break;
+	default:
+		break;
+	}
+
+FINALE:
+	result.push_back('\n');
+	return result;
+}

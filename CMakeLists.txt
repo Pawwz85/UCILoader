@@ -1,0 +1,43 @@
+
+cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actually
+project(UCILoader VERSION 1.0
+                  DESCRIPTION "UCI Engine Loader Library for C++"
+                  LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(lib_header_files
+    "include/UCILoader/AbstractPipe.h"
+    "include/UCILoader/EngineConnection.h"
+    "include/UCILoader/EngineEvent.h"
+    "include/UCILoader/EngineLoader.h"
+    "include/UCILoader/Parser.h"
+    "include/UCILoader/StandardChess.h"
+    "include/UCILoader/target.h"
+    "include/UCILoader/UCI.h"
+)
+
+set(lib_source_files
+    "src/AbstractPipe.cpp"
+    "src/EngineEvent.cpp"
+    "src/EngineConnection.cpp"
+    "src/Parser.cpp"
+    "src/StandardChess.cpp"
+    "src/UCI.cpp"
+    "src/UnixEngineProcess.cpp"
+    "src/WinEngineProcess.cpp"
+)
+
+set(all_lib_files
+    ${lib_header_files}
+    ${lib_source_files}
+)
+
+add_library(uciloaderlib STATIC ${all_lib_files} )
+
+target_include_directories(uciloaderlib PUBLIC include )
+
+add_subdirectory("Examples/proxy")
+add_subdirectory("Examples/EngineOptionDetector")
+add_subdirectory("UnitTests")
