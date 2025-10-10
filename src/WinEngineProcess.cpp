@@ -72,7 +72,7 @@ public:
 
 };
 
-class WindowsPipeWriter : UCILoader::AbstractPipeWriter, public ClosableWindowsObject {
+class WindowsPipeWriter : public UCILoader::AbstractPipeWriter, public ClosableWindowsObject {
 public:
 	WindowsPipeWriter(HANDLE h) : ClosableWindowsObject(h) {};
 
