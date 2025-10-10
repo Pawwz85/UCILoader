@@ -1,7 +1,7 @@
 
 #include <UCILoader/target.h>
 
-#if TARGET_OS == Windows
+#if TARGET_OS == 0
 
 #include <mutex>
 #include <UCILoader/AbstractPipe.h>

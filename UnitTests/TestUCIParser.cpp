@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include <UCILoader/Uci.h>
+#include <UCILoader/UCI.h>
 #include <UCILoader/StandardChess.h>
 
 using namespace StandardChess;

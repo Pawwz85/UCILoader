@@ -61,7 +61,7 @@ class Option {
 	}
 
 	template <>
-	void dispose_content_internal<nullptr_t>() {};
+	void dispose_content_internal<std::nullptr_t>() {};
 
 
 	void dispose_content();
@@ -363,7 +363,7 @@ public:
 std::string formatSetOptionCommand(const Option & option);
 
 
-#define SingleTokenCommand(command) static constexpr std::string command() {return std::string(#command) + '\n' ;};
+#define SingleTokenCommand(command) static std::string command() {return std::string(#command) + '\n' ;};
 
 template<class Move>
 class UciFormatter {
@@ -376,9 +376,9 @@ public:
 	SingleTokenCommand(ponderhit);
 	SingleTokenCommand(stop);
 	SingleTokenCommand(quit);
-	static constexpr std::string debug(bool b) { return b ? "debug on\n" : "debug off\n"; }
-	static constexpr std::string registerLater() { return "register later\n"; };
-	static constexpr std::string registerEngine(std::string name, std::string code) { return "register name " + name + " code " + code + "\n"; }
+	static std::string debug(bool b) { return b ? "debug on\n" : "debug off\n"; }
+	static std::string registerLater() { return "register later\n"; };
+	static std::string registerEngine(std::string name, std::string code) { return "register name " + name + " code " + code + "\n"; }
 	static std::string position(const PositionFormatter & pos , std::vector<Move> moves = {});
 	static std::string go(const GoParams<Move>& params);
 	static std::string setOpion(const Option& option); 

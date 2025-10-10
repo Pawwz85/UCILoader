@@ -1,6 +1,6 @@
 #include <UCILoader/target.h>
 
-#if (TARGET_OS == 1)
+#if TARGET_OS == 1
 	
 #include <unistd.h>
 #include <stdlib.h>
@@ -12,7 +12,7 @@
 
 
 
-class UnixPipeReader : AbstractPipeReader {
+class UnixPipeReader : UCILoader::AbstractPipeReader {
 
 	int pipe_fd;
 
@@ -32,6 +32,15 @@ public:
 	}
 
 };
+
+UCILoader::EngineProcessWrapper* UCILoader::openEngineProcess(const std::vector<std::string> & args, const std::string& workingDirectory) {
+
+        if (args.empty())
+                throw UCILoader::CanNotOpenEngineException("Missing command line arguments");
+
+	// TODO: implement
+        return nullptr;
+}
 
 
 #endif

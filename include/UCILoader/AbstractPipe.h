@@ -7,7 +7,7 @@
 namespace UCILoader {
 	class PipeClosedException : public std::exception {
 	public:
-		const char* what() const override {
+		const char* what() const noexcept override {
 			return "Couldn't finish I/O operation because the underlying pipe was closed";
 		}
 	};
@@ -33,7 +33,7 @@ namespace UCILoader {
 
 	class PipeScanner {
 		static const size_t _InternalBufferSize = 256;
-		static const size_t _PollingIntervalMilliseconds = 2;
+		const size_t _PollingIntervalMilliseconds = 2;
 		char internalBuffer[_InternalBufferSize];
 		size_t currentBufferSize = 0;
 		size_t currentBufferPosition = 0;
