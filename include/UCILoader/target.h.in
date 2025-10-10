@@ -3,4 +3,4 @@
 const int Windows = 0;
 const int Unix = 1;
 
-#define TARGET_OS 0
+#define TARGET_OS @TARGET_OPERATING_SYSTEM_CODE@

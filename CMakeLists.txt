@@ -7,6 +7,15 @@ project(UCILoader VERSION 1.0
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
+# configure target os based on detected platform
+if(WIN32)
+    set(TARGET_OPERATING_SYSTEM_CODE 0) # build library using windows api
+else()
+    set(TARGET_OPERATING_SYSTEM_CODE 1) # build library around posix api
+endif()
+
+configure_file(include/UCILoader/target.h.in include/UCILoader/target.h @ONLY)
+
 set(lib_header_files
     "include/UCILoader/AbstractPipe.h"
     "include/UCILoader/EngineConnection.h"
