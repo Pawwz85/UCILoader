@@ -1,5 +1,6 @@
 #pragma once
 #include "Parser.h"
+#include "EngineConnection.h" 
 #include <cstring> // for memcpy
 
 namespace StandardChess {
@@ -69,4 +70,6 @@ namespace StandardChess {
 		std::string toFen() const override{ return fen; };
 		std::string toPositionString() const override{ return "fen " + fen; };
 	};
+
+	extern std::shared_ptr<UCILoader::EngineInstanceBuilder<StandardChessMove>> ChessEngineInstanceBuilder;
 }

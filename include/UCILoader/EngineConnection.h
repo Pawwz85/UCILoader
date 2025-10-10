@@ -547,5 +547,21 @@ namespace UCILoader {
 	{
 	}
 
+	template <class Move>
+	class EngineInstanceBuilder {
+		std::shared_ptr<PatternMatcher> moveValidator;
+		std::shared_ptr<Marschaler<Move>> moveMarshaler;
+	public:
+		EngineInstanceBuilder(std::shared_ptr<PatternMatcher> validator, std::shared_ptr<Marschaler<Move>> marschaler) :
+			moveValidator(validator), moveMarshaler(marschaler) {};
+		EngineInstance<Move>* build(EngineProcessWrapper* engineProcess);
+	};
+
+	template<class Move>
+	inline EngineInstance<Move>* EngineInstanceBuilder<Move>::build(EngineProcessWrapper* engineProcess)
+	{
+		std::shared_ptr<EngineProcessWrapper> proces(engineProcess);
+		return new EngineInstance<Move>(proces, moveMarshaler, moveValidator);
+	}
 
 }

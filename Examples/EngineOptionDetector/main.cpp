@@ -36,7 +36,6 @@ std::string toString(const Option & option) {
 }
 
 void displayInfo(const UCILoader::EngineEvent* e) {
-	// TODO: refactor Events with payload to make this api easier to use: done
 	// TODO: onInfo method for engine instance that does this cast in the name of the user
 	
 	Info<StandardChessMove> info = *(Info<StandardChessMove>*)e->getPayload();
@@ -57,39 +56,74 @@ int main() {
 	cout << "Enter path to a chess engine: ";
 	cin >> pathToEngine;
 	cout << "\n";
-	auto proces = std::shared_ptr<EngineProcessWrapper>(openEngineProcess({pathToEngine}, "/"));
 
-	UCILoader::EngineInstance<StandardChessMove> instance(proces, make_shared<StandardChessMoveMarschaler>(), make_shared<StandardChessMoveMatcher>());
-	instance.sync();
+	// Open the engine specified by a user
+	auto proces = openEngineProcess({pathToEngine}, "/");
+
+	// use  ChessEngineInstanceBuilder from StandardChess.h to get engine instance using default move parser
+	auto instance = ChessEngineInstanceBuilder->build(proces);
 	
-	cout << "Engine: " << instance.getName() << "\n";
-	cout << "Author: " << instance.getAuthor() << "\n";
+	// wait for engine to finish initialising
+	instance->sync();
+	
+	// Get information about engine name and author (default is <empty>)
+	cout << "Engine: " << instance->getName() << "\n";
+	cout << "Author: " << instance->getAuthor() << "\n";
+
+	// Measure latency using ping() command
+	cout << "Latency: " << instance->ping().count() << " ms\n";
+
+	// iterate over detected engine options
 	cout << "Detected engine options:\n";
-	cout << "Latency: " << instance.ping().count() << " ms\n";
-	for (auto& option : instance.options) {
+	for (auto& option : instance->options) {
 		cout << toString(option.getAsOption()) << "\n";
 	}
 
-	instance.connect(displayInfo, UCILoader::NamedEngineEvents::InfoReceived);
+	if (instance->options.contains("UCI_ShowWDL")) {
+		instance->options["UCI_ShowWDL"] = true;
+		/*
+			For the check option, you could also use string values [on/off] or [true/false]:
+			instance->options["UCI_ShowWDL"] = "true";
+			instance->options["UCI_ShowWDL"] = "on";
+		*/
+	}
 
-	GoParamsBuilder<StandardChessMove> paramsBuilder;
+	if (instance->options.contains("Hash")) {
+		int defaultHash = instance->options["Hash"];
+		cout << "Engine uses by default hash table of size " << defaultHash << "\n";
+	}
+
+
+	// register callback for handling incoming infos
+	instance->connect(displayInfo, UCILoader::NamedEngineEvents::InfoReceived);
+
+	// start a search request and obtain search connection
 	cout << "Searching for best move\n";
-	auto searchConnection = instance.search(paramsBuilder.withMoveTime(500).build(), StartPos());
+	GoParamsBuilder<StandardChessMove> paramsBuilder;
+	auto searchConnection = instance->search(paramsBuilder.withMoveTime(500).build(), StartPos()); // engine has 0.5s to think over the starting position
 
+	// wait up to 550 milliseconds for the engine to finish, declare timeout if that did not happened
 	searchConnection->waitFor(std::chrono::milliseconds(550));
 
+	// check search status
 	auto status = searchConnection->getStatus();
-
 	if (status == UCILoader::ResultReady) {
+
 		cout << "Best starting move is " << stringValueOf(*searchConnection->getResult().bestMove) << "\n";
-		if (searchConnection->getResult().ponderMove)
+		if (searchConnection->getResult().ponderMove) // checks if engine  send pondermove candite in the resulting string
 			cout << "Engine thinks " << stringValueOf(*searchConnection->getResult().ponderMove) << " is best response for black\n";
 	}
 	else {
 		cout << "Search status code timed out with a status of " << status<<'\n';
 	}
 
+	// send 'quit' command to the engine
+	instance->quit();
+	delete instance;
 
-	instance.quit();
 
+	// stop the script for a while so user could read its output before cmd windows disappears (on Windows)  
+	cout << "Program finished. Write anything to continue\n" ;
+	char c;
+	cin >> c;
 }
