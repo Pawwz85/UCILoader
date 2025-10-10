@@ -1,7 +1,7 @@
 
 #include <UCILoader/target.h>
 
-#if TARGET_OS == Windows
+#if TARGET_OS == 0
 
 #include <mutex>
 #include <UCILoader/AbstractPipe.h>
@@ -39,7 +39,7 @@ public:
 
 	WindowsPipeReader(HANDLE h) : ClosableWindowsObject(h) {};
 
-	// Odziedziczono za poœrednictwem elementu AbstractPipeReader
+	// Odziedziczono za poï¿½rednictwem elementu AbstractPipeReader
 	size_t poll(char* buffer, size_t buffer_size) override
 	{
 		std::lock_guard<std::mutex> guard(mut);
@@ -76,7 +76,7 @@ class WindowsPipeWriter : UCILoader::AbstractPipeWriter, public ClosableWindowsO
 public:
 	WindowsPipeWriter(HANDLE h) : ClosableWindowsObject(h) {};
 
-	// Odziedziczono za poœrednictwem elementu AbstractPipeWriter
+	// Odziedziczono za poï¿½rednictwem elementu AbstractPipeWriter
 	void write(const char* buffer, size_t buffer_size) override
 	{
 		std::lock_guard<std::mutex> guard(mut);
@@ -114,7 +114,7 @@ class WindowsEngineProcess : public UCILoader::EngineProcessWrapper {
 
 
 protected:
-	// Odziedziczono za poœrednictwem elementu EngineProcessWrapper
+	// Odziedziczono za poï¿½rednictwem elementu EngineProcessWrapper
 	std::shared_ptr<UCILoader::AbstractPipeReader> getReader() override
 	{
 		return reader_ptr;
@@ -128,7 +128,7 @@ public:
 
 	std::shared_ptr<UCILoader::AbstractPipeWriter> getWriter() override
 	{
-		return std::reinterpret_pointer_cast<UCILoader::AbstractPipeWriter>(writer_ptr);
+		return std::static_pointer_cast<UCILoader::AbstractPipeWriter>(writer_ptr);
 	}
 
 	void kill() override

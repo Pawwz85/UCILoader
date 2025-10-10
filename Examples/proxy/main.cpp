@@ -2,6 +2,7 @@
 
 #include <UCILoader/target.h>
 #include <UCILoader/EngineLoader.h>
+#include <string>
 
 using namespace std;
 using namespace UCILoader;

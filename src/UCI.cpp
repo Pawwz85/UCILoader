@@ -13,7 +13,7 @@ void Option::dispose_content() {
 		dispose_content_internal<combo_option>();
 		break;
 	case Button:
-		dispose_content_internal<nullptr_t>();
+		dispose_content_internal<std::nullptr_t>();
 		break;
 	case String:
 		dispose_content_internal<std::string>();

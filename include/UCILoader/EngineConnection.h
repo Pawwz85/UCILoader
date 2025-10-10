@@ -5,6 +5,7 @@
 #include "EngineEvent.h"
 #include <mutex>
 #include <unordered_map>
+#include <condition_variable>
 
 namespace UCILoader {
 	enum SearchStatusCode {

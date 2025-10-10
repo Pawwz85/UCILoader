@@ -55,7 +55,7 @@ void UCILoader::EngineOptionProxy::parse(const std::string& s)
 		break;
 	case Check:
 		str = s;
-		std::transform(s.begin(), s.end(), str.begin(), std::tolower);
+		std::transform(s.begin(), s.end(), str.begin(), [](unsigned char c){return std::tolower(c);});
 		if (str == "on" || str == "true")
 			value.check_content() = true;
 		else if (str == "off" || str == "false")

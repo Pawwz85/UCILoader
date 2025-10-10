@@ -1,5 +1,6 @@
 #pragma once
 #include "Parser.h"
+#include <cstring> // for memcpy
 
 namespace StandardChess {
 

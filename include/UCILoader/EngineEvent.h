@@ -48,16 +48,15 @@ namespace UCILoader {
 
 
 
-	class NamedEngineEvents {
-	public:
-		const static uint32_t EmitterConnected = 1u;
-		const static uint32_t EmitterDestroyed = 2u;
-		const static uint32_t EngineSynchronized = 4u;
-		const static uint32_t SearchStarted = 8u;
-		const static uint32_t SearchCompleted = 16u;
-		const static uint32_t EngineCrashed = 32u;
-		const static uint32_t InfoClampReceived = 64u;
-		const static uint32_t InfoReceived = 128u;
+	namespace NamedEngineEvents {
+		const uint32_t EmitterConnected = 1u;
+		const uint32_t EmitterDestroyed = 2u;
+		const uint32_t EngineSynchronized = 4u;
+		const uint32_t SearchStarted = 8u;
+		const uint32_t SearchCompleted = 16u;
+		const uint32_t EngineCrashed = 32u;
+		const uint32_t InfoClampReceived = 64u;
+		const uint32_t InfoReceived = 128u;
 
 
 		//using EngineConnectedEvent = NoPayloadEvent;

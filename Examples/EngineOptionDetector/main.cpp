@@ -3,6 +3,7 @@
 #include <UCILoader/target.h>
 #include <UCILoader/EngineConnection.h>
 #include <UCILoader/StandardChess.h>
+#include <string>
 
 using namespace StandardChess;
 using namespace std;
