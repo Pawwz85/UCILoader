@@ -11,7 +11,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <UCILoader/AbstractPipe.h>
-#include <UCILoader/EngineLoader.h>
+#include <UCILoader/ProcessWrapper.h>
 
 inline int kill_OS_call(int pid, int signal){
 	return kill(pid, signal);
@@ -92,7 +92,7 @@ public:
 	}
 };
 
-class UnixProcessWrapper : public UCILoader::EngineProcessWrapper {
+class UnixProcessWrapper : public UCILoader::ProcessWrapper {
 
 	int childProccessId;
 
@@ -131,10 +131,10 @@ class UnixProcessWrapper : public UCILoader::EngineProcessWrapper {
 
 };
 
-UCILoader::EngineProcessWrapper* UCILoader::openEngineProcess(const std::vector<std::string> & args, const std::string& workingDirectory) {
+UCILoader::ProcessWrapper* UCILoader::openProcess(const std::vector<std::string> & args, const std::string& workingDirectory) {
 
     if (args.empty())
-        throw UCILoader::CanNotOpenEngineException("Missing command line arguments");
+        throw UCILoader::CanNotOpenProcessException("Missing command line arguments");
 	
 	int child_pipe[2];
 	int parent_pipe[2];
@@ -170,10 +170,10 @@ UCILoader::EngineProcessWrapper* UCILoader::openEngineProcess(const std::vector<
 	close(parent_pipe[0]);
 
 	if(pid == -1)
-		throw UCILoader::CanNotOpenEngineException("Fork() returned -1");
+		throw UCILoader::CanNotOpenProcessException("Fork() returned -1");
 	
 	if(kill_OS_call(pid, 0))
-		throw UCILoader::CanNotOpenEngineException("Engine process created, but it was terminated early");
+		throw UCILoader::CanNotOpenProcessException("Engine process created, but it was terminated early");
 
 	return new UnixProcessWrapper(pid, parent_pipe[1], child_pipe[0]);
 }

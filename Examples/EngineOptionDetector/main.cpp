@@ -58,7 +58,7 @@ int main() {
 	cout << "\n";
 
 	// Open the engine specified by a user
-	auto proces = openEngineProcess({pathToEngine}, "/");
+	auto proces = openProcess({pathToEngine}, "/");
 
 	// use  ChessEngineInstanceBuilder from StandardChess.h to get engine instance using default move parser
 	auto instance = ChessEngineInstanceBuilder->build(proces);

@@ -5,7 +5,7 @@
 
 #include <mutex>
 #include <UCILoader/AbstractPipe.h>
-#include <UCILoader/EngineLoader.h>
+#include <UCILoader/ProcessWrapper.h>
 #include <Windows.h>
 
 class ClosableWindowsObject {
@@ -102,7 +102,7 @@ public:
 };
 
 
-class WindowsEngineProcess : public UCILoader::EngineProcessWrapper {
+class WindowsEngineProcess : public UCILoader::ProcessWrapper {
 
 	HANDLE readerHandle;
 	HANDLE writerHandle;
@@ -210,15 +210,15 @@ void openPipe(HANDLE& read, HANDLE& write) {
 	bool success = CreatePipe(&read, &write, &saAttr, 0);
 
 	if (!success || read == INVALID_HANDLE_VALUE || write == INVALID_HANDLE_VALUE) {
-		throw UCILoader::CanNotOpenEngineException("An exception occurred during process of pipe creation");
+		throw UCILoader::CanNotOpenProcessException("An exception occurred during process of pipe creation");
 	}
 }
 
-inline UCILoader::EngineProcessWrapper* spawnEngine(const std::wstring& command, const std::wstring workingDirectory) {
+inline UCILoader::ProcessWrapper* spawnEngine(const std::wstring& command, const std::wstring workingDirectory) {
 	wchar_t commandArguments[1024];
 
 	if (command.size() >= 1024) {
-		throw UCILoader::CanNotOpenEngineException("Provided command is too long, expected at most 1023 characters");
+		throw UCILoader::CanNotOpenProcessException("Provided command is too long, expected at most 1023 characters");
 	}
 
 	HANDLE childInRead;
@@ -267,12 +267,12 @@ inline UCILoader::EngineProcessWrapper* spawnEngine(const std::wstring& command,
 
 
 	if (!success) {
-		throw UCILoader::CanNotOpenEngineException("Failed to start the engine process, make sure the path is correct");
+		throw UCILoader::CanNotOpenProcessException("Failed to start the engine process, make sure the path is correct");
 	}
 
 	DWORD status;
 	if (!GetExitCodeProcess(proces_info.hProcess, &status) || status != STILL_ACTIVE) {
-		throw UCILoader::CanNotOpenEngineException("Engine process started but crashed immediately");
+		throw UCILoader::CanNotOpenProcessException("Engine process started but crashed immediately");
 	}
 
 
@@ -285,10 +285,10 @@ inline UCILoader::EngineProcessWrapper* spawnEngine(const std::wstring& command,
 	);
 }
 
-UCILoader::EngineProcessWrapper* UCILoader::openEngineProcess(const std::vector<std::string> & args, const std::string& workingDirectory) {
+UCILoader::ProcessWrapper* UCILoader::openProcess(const std::vector<std::string> & args, const std::string& workingDirectory) {
 
 	if (args.empty())
-		throw UCILoader::CanNotOpenEngineException("Missing command line arguments");
+		throw UCILoader::CanNotOpenProcessException("Missing command line arguments");
 
 	std::wstring commandLine = concatenateCommendLineArguments(args);
 	std::wstring workingDirectoryWide = expand_utf8_string(workingDirectory);

@@ -10,11 +10,40 @@
 
 namespace UCILoader {
 	
+	/*!
+		EngineEvent class describes events that could be emitted by a EngineInstance and are fundamental to the engine event system.
+		Each event has dedicated type code which has exactly one bit set in its binary representation, allowing user to filter and 
+		match events using bitwise operations. See documentation of getType() for an example.
+
+		The event system of a library is pretty minimalistic and is focused on delivering asynchronous events that originated
+		from the engine. See documentation of EventReceiver class or EventEmiiter::connect method for more details about how 
+		user defined code interacts with engine events.
+	*/
 	class EngineEvent {
 
 	public:
 		virtual ~EngineEvent() {};
+		/*!
+			Returns an event type code associated with given type. The returned value will always be one of the constants
+			defined in UCILoader::NamedEngineEvents namespace. Each of those predefined values is power of two, which allows
+			user to check if event type is present in certain set of values by performing bitwise operations:
+
+			if(event.getType() & (UCILoader::NamedEngineEvents::SearchStarted & UCILoader::NamedEngineEvents::EngineCrashed))'\n'
+			// some logic here
+			
+			See documentation od UCILoader::NamedEngineEvents for detailed explanation of each event type emitted by a 
+			library.
+		*/
 		virtual uint32_t getType() const = 0;
+
+		/*!
+			Returns a pointer to value associated with a given Event. Some events do not carry any value of them and will always 
+			return nullptr. Other events return pointer to internaly stored value and the C style cast could be performed over
+			the returned pointer in orderd to access the associated event payload. 
+			
+			See documentation for constants in UCILoader::NamedEngineEvents to see which events carry a value
+			and if they do, what is a type of a stored value. 
+		*/
 		virtual const void* getPayload() const = 0;
 	};
 
@@ -25,7 +54,7 @@ namespace UCILoader {
 
 		ConcreteEvent(const Payload& p) : value(p) {};
 
-		// Odziedziczono za poœrednictwem elementu EngineEvent
+		// Odziedziczono za poï¿½rednictwem elementu EngineEvent
 		uint32_t getType() const override{
 			return EventCode;
 		}
@@ -37,7 +66,7 @@ namespace UCILoader {
 		uint32_t code;
 	public:
 		NoPayloadEvent(uint32_t c) : code(c) {};
-		// Odziedziczono za poœrednictwem elementu EngineEvent
+		// Odziedziczono za poï¿½rednictwem elementu EngineEvent
 		uint32_t getType() const override
 		{
 			return code;

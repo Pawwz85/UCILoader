@@ -9,12 +9,12 @@
 #include <functional>
 
 namespace UCILoader {
-	class CanNotOpenEngineException : std::exception {
+	class CanNotOpenProcessException : std::exception {
 
 		std::string reason;
 	public:
 
-		CanNotOpenEngineException(const std::string& reason) : reason(reason) {};
+		CanNotOpenProcessException(const std::string& reason) : reason(reason) {};
 
 		const char* what() const noexcept override {
 			return reason.c_str();
@@ -22,7 +22,7 @@ namespace UCILoader {
 	};
 
 
-	class EngineProcessWrapper {
+	class ProcessWrapper {
 
 		std::unique_ptr<std::thread> listener = nullptr;
 		bool healthCheckFailed = false;
@@ -32,7 +32,7 @@ namespace UCILoader {
 
 	public:
 
-		virtual ~EngineProcessWrapper() {
+		virtual ~ProcessWrapper() {
 			if (listener) listener->join();
 		};
 
@@ -72,8 +72,8 @@ namespace UCILoader {
 	};
 
 	/*
-		Opens generic process, throws CanNotOpenEngineException if operation failed for any reason.
+		Opens generic process, throws CanNotOpenProcessException if operation failed for any reason.
 	*/
-	EngineProcessWrapper* openEngineProcess(const std::vector<std::string>& args, const std::string& workingDirectory);
+	ProcessWrapper* openProcess(const std::vector<std::string>& args, const std::string& workingDirectory);
 }
 

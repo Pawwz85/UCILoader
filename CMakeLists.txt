@@ -20,7 +20,7 @@ set(lib_header_files
     "include/UCILoader/AbstractPipe.h"
     "include/UCILoader/EngineConnection.h"
     "include/UCILoader/EngineEvent.h"
-    "include/UCILoader/EngineLoader.h"
+    "include/UCILoader/ProcessWrapper.h"
     "include/UCILoader/Parser.h"
     "include/UCILoader/StandardChess.h"
     "include/UCILoader/target.h"
@@ -34,8 +34,8 @@ set(lib_source_files
     "src/Parser.cpp"
     "src/StandardChess.cpp"
     "src/UCI.cpp"
-    "src/UnixEngineProcess.cpp"
-    "src/WinEngineProcess.cpp"
+    "src/UnixProcessWrapper.cpp"
+    "src/WinProcessWrapper.cpp"
 )
 
 set(all_lib_files

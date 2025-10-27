@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include <UCILoader/target.h>
-#include <UCILoader/EngineLoader.h>
+#include <UCILoader/ProcessWrapper.h>
 #include <string>
 
 using namespace std;
@@ -40,8 +40,8 @@ std::string deduceWorkingDirectory(const std::string & executable){
 	return result;
 };
 
-EngineProcessWrapper* promptForProcess(remoteProcessInfo & info) {
-	EngineProcessWrapper* result = nullptr;
+ProcessWrapper* promptForProcess(remoteProcessInfo & info) {
+	ProcessWrapper* result = nullptr;
 
 	std::string path_to_process;
 
@@ -51,9 +51,9 @@ EngineProcessWrapper* promptForProcess(remoteProcessInfo & info) {
 		cout << endl;
 
 		try {
-			result = openEngineProcess({ path_to_process },"/");
+			result = openProcess({ path_to_process },"/");
 		}
-		catch (CanNotOpenEngineException e) {
+		catch (CanNotOpenProcessException e) {
 			cout << "Failed to open " << path_to_process << ", because " << e.what() << endl;
 		}
 
@@ -69,7 +69,7 @@ EngineProcessWrapper* promptForProcess(remoteProcessInfo & info) {
 int main() {
 
 	remoteProcessInfo info;
-	EngineProcessWrapper* process = promptForProcess(info);
+	ProcessWrapper* process = promptForProcess(info);
 
 	process->listen([&info](std::string line) {
 		cout << info.name << ": " << line << endl;
