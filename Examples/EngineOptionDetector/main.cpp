@@ -63,7 +63,7 @@ int main() {
 	// use  ChessEngineInstanceBuilder from StandardChess.h to get engine instance using default move parser
 	auto instance = ChessEngineInstanceBuilder->build(proces);
 	
-	// wait for engine to finish initialising
+	// wait for engine to finish initializing
 	instance->sync();
 	
 	// Get information about engine name and author (default is <empty>)

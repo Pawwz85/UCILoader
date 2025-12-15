@@ -6,6 +6,7 @@
 #include <mutex>
 #include <unordered_map>
 #include <condition_variable>
+#include "GameAnnotations.h"
 
 namespace UCILoader {
 	/*!
@@ -190,11 +191,16 @@ namespace UCILoader {
 		*/
 		const SearchResult<Move> & getResult();
 		/*!
-			Send the *stop* command to the engine and search search status to _Stopped_ provided that current status is neither _ResultReady_ nor _Terminated_. 
+			Send the *stop* command to the engine and sets search status to _Stopped_ provided that current status is neither _ResultReady_ nor _Terminated_. 
 			If the search was terminated with either of those codes, the resulting operation is a NOOP. Note that _TimedOut_ status doesn't result in a noop, so
 			user can send *stop* command to terminate search of the engine in case if the engine fails do respond with the user specified time.
 		*/
 		void stop();
+		/*!
+			Send the *ponderhit* command to the engine. If the engine status is not equal to _OnGoing_ the resulting operation will be a NOOP, otherwise engine will be instructed
+			to switch from pondering mode to searching mode. In any case, the actual search status will be left unchanged.
+		*/
+		void ponderhit();
 		/*!
 			Blocks the calling thread and waits up to _time_ milliseconds for the search to complete. The thread will wake up early if the search status changes - 
 			engine crashes or a search completes. In the case the engine fails to deliver *bestmove* command before the wait ends, the TimedDown status is set once
@@ -266,6 +272,18 @@ namespace UCILoader {
 		status = Stopped;
 		engine->getWriter()->write("stop\n", 6);
 	}
+
+	template<class Move>
+	inline void SearchConnection<Move>::ponderhit()
+	{
+		std::lock_guard<std::mutex> guard(lock);
+		SearchStatusCode currentStatus = getStatusNoLock();
+		if (currentStatus != OnGoing)
+			return;
+
+		engine->getWriter()->write("ponderhit\n", 11);
+	}
+
 	template<class Move>
 	inline void SearchConnection<Move>::waitFor(const std::chrono::milliseconds& time)
 	{
@@ -540,6 +558,12 @@ namespace UCILoader {
 		*/
 		void sync(std::chrono::milliseconds timeout = std::chrono::milliseconds(10000));
 		
+		/*!
+			Sends "ucinewgame" command to the engine, presumably allowing the engine to clear its transposition table 
+			before starting future searches.
+		*/
+		void ucinewgame();
+
 		//! wrapper around sync command that measures time to response
 		std::chrono::milliseconds ping(std::chrono::milliseconds timeout = std::chrono::milliseconds(10000));
 		std::shared_ptr<SearchConnection<Move>> getCurrentSearch();
@@ -580,12 +604,18 @@ namespace UCILoader {
 			killed by calling ProcessWrapper's kill command.  
 		*/
 		void quit();
+
+		/*!
+			Performs the health check of underlying engine process. If this function ever returns false, it means the underlying process was already killed and
+			the current engine instance is in unstable state.
+		*/
+		bool healthCheck();
 	};
 
 	template<class Move>
 	inline void EngineInstance<Move>::sendToEngine(const std::string& msg)
 	{
-		processWrapper->getWriter()->write(msg.c_str(), msg.size());
+			processWrapper->getWriter()->write(msg.c_str(), msg.size());	
 	}
 
 	template<class Move>
@@ -593,7 +623,14 @@ namespace UCILoader {
 	{
 		std::unique_lock<std::mutex> guard(lock);
 		receivedReadyOk = false;
-		sendToEngine("isready\n");
+
+		try {
+			sendToEngine("isready\n");
+		}
+		catch (PipeClosedException e) {
+			throw TimeoutException(); 
+		}
+		
 		conditional_var.wait_for(guard, timeout);
 		if (!receivedReadyOk) {
 			processWrapper->kill();
@@ -648,7 +685,13 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::quit()
 	{
-		sendToEngine("quit\n");
+		try {
+			sendToEngine("quit\n");
+		}
+		catch (PipeClosedException ignored) {
+			// If we got here, the engine process in in unstable state, but since we are already killing it, we can ignore it.
+		};
+		
 
 		int counter = 0;
 		
@@ -661,8 +704,18 @@ namespace UCILoader {
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
 			++counter;
 		};
-
 	}
+
+	template<class Move>
+	inline bool  EngineInstance<Move>::healthCheck() {
+		return processWrapper->healthCheck();
+	}
+
+	template<class Move>
+	inline void EngineInstance<Move>::ucinewgame(){
+		sendToEngine("ucinewgame\n");
+	}
+
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onEngineName(const std::string& name)
 	{

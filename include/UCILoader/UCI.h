@@ -349,7 +349,7 @@ public:
 	SELF& withBlackTime(unsigned int time, unsigned int inc) { this->result.BlackTime = time; this->result.BlackIncrement = inc; return *this; }
 	SELF& withPondering(bool v) { this->result.Ponder = v; return *this; }
 	SELF& withInfiniteMode(bool v) { this->result.Infinite = v; return *this; }
-	GoParams<Move> build() { return result; };
+	GoParams<Move> build() const { return result; };
 };
 #undef WITH_INTEGER_VALUE
 #undef SELF
