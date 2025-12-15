@@ -6,7 +6,6 @@
 #include <mutex>
 #include <unordered_map>
 #include <condition_variable>
-#include "GameAnnotations.h"
 
 namespace UCILoader {
 	/*!
