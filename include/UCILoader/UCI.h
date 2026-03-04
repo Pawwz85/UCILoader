@@ -354,6 +354,9 @@ public:
 #undef WITH_INTEGER_VALUE
 #undef SELF
 
+/*!
+	Formats given position 
+*/
 class PositionFormatter {
 public:
 	virtual std::string toFen() const = 0;

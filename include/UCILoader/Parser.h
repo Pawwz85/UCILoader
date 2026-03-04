@@ -28,14 +28,19 @@ namespace UCILoader {
 		default constructible. It is especially useful for chess variants that do not obey standard chess move notation
 		and custom parsing logic / move representation is required. 
 
-		In order to implement this interface user should provide a loadInto() method, that parses the value inside a 
-		'token' string into 'target' object. It is guaranteed that 'token' string will match the move pattern matcher
-		used to construct the EngineInstance, so this method can assume input correctness.
+		In order to implement this interface user should provide a loadInto() method.
 	*/
 	template<class Target>
 	class Marschaler {
 	public:
+		/*!
+			Parses value of 'token' string into 'target' object. 
+		*/
 		virtual void loadInto(const std::string& token, Target& target) const = 0;
+		
+		/*!
+			Returns parsed value of given token
+		*/
 		virtual Target marshal(const std::string& token) const;
 	};
 
@@ -44,9 +49,6 @@ namespace UCILoader {
 {return parseIntegerInfo( InfoFactory<Move>::make##tp##Info , tokens, i);}
 
 	namespace _UCI_info_parsers {
-		/*
-			A set of
-		*/
 
 		class UciParsingException : public std::exception {};
 

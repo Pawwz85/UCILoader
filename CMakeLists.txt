@@ -57,7 +57,7 @@ $<INSTALL_INTERFACE:include/UCILoader>
 enable_testing()
 
 add_subdirectory("Examples/proxy")
-add_subdirectory("Examples/EngineOptionDetector")
+add_subdirectory("Examples/demo")
 add_subdirectory("UnitTests")
 
 install(TARGETS uciloader
