@@ -1,5 +1,6 @@
 
 cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actually
+
 project(UCILoader VERSION 1.0
                   DESCRIPTION "UCI Engine Loader Library for C++"
                   LANGUAGES CXX)
@@ -43,10 +44,53 @@ set(all_lib_files
     ${lib_source_files}
 )
 
-add_library(uciloaderlib STATIC ${all_lib_files} )
+# set d postfix for debug builds
+set(CMAKE_DEBUG_POSTFIX d)
 
-target_include_directories(uciloaderlib PUBLIC include )
+add_library(uciloader STATIC ${all_lib_files} )
+
+target_include_directories(uciloader PUBLIC
+$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+$<INSTALL_INTERFACE:include/UCILoader>
+)
+
+enable_testing()
 
 add_subdirectory("Examples/proxy")
 add_subdirectory("Examples/EngineOptionDetector")
 add_subdirectory("UnitTests")
+
+install(TARGETS uciloader
+    EXPORT UCILoader
+    CONFIGURATIONS Release Debug
+    LIBRARY DESTINATION Release/lib
+    ARCHIVE DESTINATION Release/lib
+    INCLUDES DESTINATION include
+)
+
+install(FILES ${lib_header_files}
+    DESTINATION include/UCILoader
+)
+
+install(EXPORT UCILoader
+    FILE UCILoader.cmake
+    DESTINATION cmake
+)
+
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+    "UCILoaderConfigVersion.cmake"
+    VERSION ${uciloaderlib_VERSION}
+    COMPATIBILITY AnyNewerVersion
+)
+
+configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
+  "${CMAKE_CURRENT_BINARY_DIR}/UCILoaderConfig.cmake"
+  INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/
+  NO_CHECK_REQUIRED_COMPONENTS_MACRO
+)
+
+install( FILES "UCILoaderConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/UCILoaderConfigVersion.cmake" 
+    DESTINATION cmake
+)

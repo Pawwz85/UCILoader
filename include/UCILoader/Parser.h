@@ -8,6 +8,10 @@
 #include <map>
 
 namespace UCILoader {
+
+	/*!
+		This class verifies if given string matches certain pattern. 
+	*/
 	class PatternMatcher {
 	public:
 		virtual bool match(const std::string& val) const = 0;
@@ -18,6 +22,16 @@ namespace UCILoader {
 		bool match(const std::string& val) const;
 	};
 
+	/*!
+		The move Marschaler interface provides a functionality of parsing move tokens from UCI protocol into usable objects. 
+		It is possible to implement this interface for any custom move representation as long as that representation is
+		default constructible. It is especially useful for chess variants that do not obey standard chess move notation
+		and custom parsing logic / move representation is required. 
+
+		In order to implement this interface user should provide a loadInto() method, that parses the value inside a 
+		'token' string into 'target' object. It is guaranteed that 'token' string will match the move pattern matcher
+		used to construct the EngineInstance, so this method can assume input correctness.
+	*/
 	template<class Target>
 	class Marschaler {
 	public:
@@ -529,7 +543,7 @@ namespace UCILoader {
 	{
 		std::string str_value;
 		if (i + 1 >= payload.size() || payload[i++] != "default") {
-			handler->onError("Engine send option command, but string option is missing a default value (use '<empty>' the default is empty string");
+			handler->onError("Engine send option command, but string option is missing a default value (use '<empty>' if the default is empty string");
 			return;
 		}
 

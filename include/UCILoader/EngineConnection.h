@@ -207,7 +207,7 @@ namespace UCILoader {
 		*/
 		void waitFor(const std::chrono::milliseconds& time);
 		/*!
-			Immediatelly sets status to _TimedOut_ if the current status is _OnGoing_ and do nothing in any other case. This function is intended in asynchronous use cases
+			Immediately sets status to _TimedOut_ if the current status is _OnGoing_ and do nothing in any other case. This function is intended in asynchronous use cases
 			where caller opted out from using _waitFor_ method in order to embrace manual timeouts.			
 		*/
 		void timeOutIfNotFinished(); 
@@ -396,7 +396,7 @@ namespace UCILoader {
 
 	/*
 		The behavior of inserting a new options inside options map should be internal for EngineInstance. Therefore, EngineOptionsMap will
-		inherit this interface privately to attempt hide that method from the user.
+		inherit this interface privately to hide that method from the user.
 	*/
 	class IOptionConsumer {
 	public:
@@ -512,7 +512,6 @@ namespace UCILoader {
 			EngineInstance<Move>* parent;
 		public:
 			_CommandHandler(EngineInstance<Move>* parent) : parent(parent) {};
-			// Odziedziczono za po�rednictwem elementu AbstractEngineHandler
 			void onEngineName(const std::string& name) override;
 			void onEngineAuthor(const std::string& author) override;
 			void onUCIOK() override;
@@ -537,7 +536,7 @@ namespace UCILoader {
 		};
 		
 		/*!
-			This exception will be thrown everytime the _sync_ command or _ping_ command timeouts.
+			This exception will be thrown every time the _sync_ command or _ping_ command timeouts.
 			If that happens, the engine process will be terminated along the listener thread associated with given engine instance.
 		*/
 		class TimeoutException : public std::exception {};
@@ -592,8 +591,8 @@ namespace UCILoader {
 		std::string getName();
 
 		/*!
-			Return name of the engine's author declared by *id author* command. If the engine didn't send this command default value "*<empty>*""
-			will be returned. It is recommended to query this method only after calling sync() method for the first time.  
+			Return name of the engine's author declared by *id author* command. If the engine didn't send this command default 
+			value "*<empty>*"" will be returned. It is recommended to query this method only after calling sync() method for the first time.  
 		*/
 		std::string getAuthor();
 		
@@ -605,8 +604,8 @@ namespace UCILoader {
 		void quit();
 
 		/*!
-			Performs the health check of underlying engine process. If this function ever returns false, it means the underlying process was already killed and
-			the current engine instance is in unstable state.
+			Performs the health check of underlying engine process. If this function ever returns false, it means the underlying
+			process was already killed and the current engine instance is in unstable state.
 		*/
 		bool healthCheck();
 	};
@@ -635,6 +634,9 @@ namespace UCILoader {
 			processWrapper->kill();
 			throw TimeoutException();
 		}
+
+		auto e = NamedEngineEvents::makeSynchronizedEvent();
+		emit(&e);
 	}
 	template<class Move>
 	inline std::chrono::milliseconds EngineInstance<Move>::ping(std::chrono::milliseconds timeout)
@@ -663,8 +665,10 @@ namespace UCILoader {
 
 		sendToEngine(UciFormatter<Move>::position(pos, moves));
 		sendToEngine(UciFormatter<Move>::go(params));
-
 		currentConnection->status.set(OnGoing);
+
+		auto event = NamedEngineEvents::makeSearchStartedEvent();
+		emit(&event);
 		return currentConnection;
 	}
 	template<class Move>
@@ -707,7 +711,11 @@ namespace UCILoader {
 
 	template<class Move>
 	inline bool  EngineInstance<Move>::healthCheck() {
-		return processWrapper->healthCheck();
+		bool isHealthy = processWrapper->healthCheck();
+		auto event = NamedEngineEvents::makeEngineCrashedEvent();
+		if (!isHealthy)
+			emit(&event);
+		return isHealthy;
 	}
 
 	template<class Move>
@@ -747,9 +755,12 @@ namespace UCILoader {
 	inline void EngineInstance<Move>::_CommandHandler::onBestMove(const Move& bestMove)
 	{
 		std::unique_lock<std::mutex> guard(parent->lock);
+		static auto searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();
+
 		if (parent->currentConnection != nullptr) {
 			parent->currentConnection->receiveBestMoveSignal(&bestMove, nullptr);
 			parent->currentConnection = nullptr;
+			parent->emit(&searchCompletedEvent);
 		}
 	}
 
@@ -757,9 +768,11 @@ namespace UCILoader {
 	inline void EngineInstance<Move>::_CommandHandler::onBestMove(const Move& bestMove, const Move& ponderMove)
 	{
 		std::unique_lock<std::mutex> guard(parent->lock);
+		static auto searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();
 		if (parent->currentConnection != nullptr) {
 			parent->currentConnection->receiveBestMoveSignal(&bestMove, &ponderMove);
 			parent->currentConnection = nullptr;
+			parent->emit(&searchCompletedEvent);
 		}
 	}
 

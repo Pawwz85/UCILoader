@@ -36,7 +36,7 @@ std::string toString(const Option & option) {
 }
 
 void displayInfo(const UCILoader::EngineEvent* e) {
-	// TODO: onInfo method for engine instance that does this cast in the name of the user
+	// TODO: implement onInfo method for the engine instance that does this cast in the name of the user
 	
 	Info<StandardChessMove> info = *(Info<StandardChessMove>*)e->getPayload();
 	
@@ -114,7 +114,7 @@ int main() {
 			cout << "Engine thinks " << stringValueOf(*searchConnection->getResult().ponderMove) << " is best response for black\n";
 	}
 	else {
-		cout << "Search status code timed out with a status of " << status<<'\n';
+		cout << "Search status code timed out with a status code: " << status<<'\n';
 	}
 
 	// send 'quit' command to the engine
@@ -122,7 +122,7 @@ int main() {
 	delete instance;
 
 
-	// stop the script for a while so user could read its output before cmd windows disappears (on Windows)  
+	// stop the script for a while so user could read its output before cmd window disappears  
 	cout << "Program finished. Write anything to continue\n" ;
 	char c;
 	cin >> c;

@@ -65,11 +65,23 @@ TEST(Standard_Chess_Move, Pattern_Matcher_Too_Long) {
 	ASSERT_FALSE(matcher.match("a1h8h8"));
 }
 
+TEST(Standard_Chess_Move, Pattern_Matcher_Promotion) {
+	StandardChessMoveMatcher  matcher;
+	ASSERT_TRUE(matcher.match("a7a8q"));
+}
+
+TEST(Standard_Chess_Move, Pattern_Matcher_Invalid_Promotion) {
+	StandardChessMoveMatcher  matcher;
+	ASSERT_FALSE(matcher.match("a7a8f"));
+}
+
 TEST(Standard_Chess_Move, To_String) {
 	StandardChessMove move = moveValueOf("b2c4");
 	std::string res = stringValueOf(move);
 	ASSERT_EQ(res, "b2c4");
 }
+
+
 
 class MockupEngineHandler : public AbstractEngineHandler<StandardChessMove> {
 

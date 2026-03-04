@@ -8,4 +8,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(proxy main.cpp)
 
-target_link_libraries(proxy uciloaderlib)
+target_link_libraries(proxy uciloader)

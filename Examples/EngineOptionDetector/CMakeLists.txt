@@ -8,4 +8,4 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(demo main.cpp)
 
-target_link_libraries(demo uciloaderlib)
+target_link_libraries(demo uciloader)
