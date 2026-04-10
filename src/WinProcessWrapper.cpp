@@ -239,6 +239,7 @@ inline UCILoader::ProcessWrapper* spawnEngine(const std::wstring& command, const
 
 	startup_info.cb = sizeof(STARTUPINFOW);
 	startup_info.dwFlags = STARTF_USESTDHANDLES;
+	startup_info.wShowWindow = false;
 	startup_info.hStdInput = childInRead; 
 	startup_info.hStdOutput = childOutWrite;
 
@@ -255,11 +256,11 @@ inline UCILoader::ProcessWrapper* spawnEngine(const std::wstring& command, const
 	bool success = CreateProcessW(
 		0,
 		commandArguments,	// command line arguments
-		&saAttr,		// proc. security attributes
-		nullptr,		// thread. security attributes
-		true,			// handle inheritance. True, since engine must inherit open handles to pipe
-		0,				// creation flags - boot engine in windowless mode
-		nullptr,		// env variables used by engine - in our case: none,
+		&saAttr,			// proc. security attributes
+		nullptr,			// thread. security attributes
+		true,				// handle inheritance. True, since engine must inherit open handles to pipe
+		CREATE_NO_WINDOW,	// creation flags - boot engine in windowless mode
+		nullptr,			// env variables used by engine - in our case: none,
 		workingDirectory.c_str(),
 		&startup_info,
 		&proces_info
