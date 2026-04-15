@@ -27,8 +27,17 @@ namespace StandardChess {
 
 		// necessary for Unit testing
 		bool operator == (const StandardChessMove& other) const {
-			return memcmp(this, &other, sizeof(StandardChessMove)) == 0;
+			return 	this->from == other.from && 
+					this->to == other.to &&
+					this->promoteTo == other.promoteTo;
 		}
+
+		StandardChessMove & operator = (const StandardChessMove & other) {
+			this->from = other.from;
+			this->to = other.to;
+			this->promoteTo = other.promoteTo;
+			return *this;
+		};
 	};
 
 	static unsigned char parseCoords(char column, char file) {

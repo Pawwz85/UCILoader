@@ -3,6 +3,7 @@
 #include "ProcessWrapper.h"
 #include "Parser.h"
 #include "EngineEvent.h"
+#include "Logger.h"
 #include <mutex>
 #include <unordered_map>
 #include <condition_variable>
@@ -496,6 +497,8 @@ namespace UCILoader {
 		std::shared_ptr<SearchConnection<Move>> currentConnection = nullptr;
 		std::shared_ptr<ProcessWrapper> processWrapper;
 
+		std::unique_ptr<Logger> logger;
+
 		bool receivedReadyOk = false;
 
 		std::string name = "<empty>";
@@ -503,7 +506,6 @@ namespace UCILoader {
 
 		std::condition_variable conditional_var;
 		std::mutex lock;
-
 
 		void sendToEngine(const std::string& msg);
 	public:
@@ -525,12 +527,14 @@ namespace UCILoader {
 			void onError(const std::string& errorMsg) override;
 		};
 
-		EngineInstance(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator) :
-			processWrapper(engineProcess), options(engineProcess->getWriter()) {
+		EngineInstance(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> && logger) :
+			processWrapper(engineProcess), options(engineProcess->getWriter()), logger(std::move(logger)) {
 			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(this));
 			auto parser = std::make_shared<UCIParser<Move>>(handler, moveMarshaler, moveValidator);
-			engineProcess->listen([parser](std::string line) {
+			engineProcess->listen([parser, this](std::string line) {
 				parser->parseLine(line);
+				line.push_back('\n'); // append newline character to line to style logger entry 
+				this->logger->log(Logger::FromEngine, line);
 			});
 			sendToEngine("uci\n");
 		};
@@ -614,6 +618,7 @@ namespace UCILoader {
 	inline void EngineInstance<Move>::sendToEngine(const std::string& msg)
 	{
 			processWrapper->getWriter()->write(msg.c_str(), msg.size());	
+			logger->log(Logger::ToEngine, msg);
 	}
 
 	template<class Move>
@@ -836,16 +841,17 @@ namespace UCILoader {
 			The newly constructed EngineInstance object takes ownership over given process, so you user doesn't need 
 			to free it later. Note that the caller is nevertheless responsible for memory handling of the resulting pointer.
 			
-			To see how to get a pointer to ProcessWrapper see UCILoader::openEngineProcessFunction.
+			To see how to get a pointer to ProcessWrapper refer to documentation of UCILoader::openEngineProcessFunction.
 		*/
-		EngineInstance<Move>* build(ProcessWrapper* engineProcess);
+		EngineInstance<Move>* build(ProcessWrapper* engineProcess, Logger * logger = new NoopLogger);
 	};
 
 	template<class Move>
-	inline EngineInstance<Move>* EngineInstanceBuilder<Move>::build(ProcessWrapper* engineProcess)
+	inline EngineInstance<Move>* EngineInstanceBuilder<Move>::build(ProcessWrapper* engineProcess, Logger * logger)
 	{
 		std::shared_ptr<ProcessWrapper> proces(engineProcess);
-		return new EngineInstance<Move>(proces, moveMarshaler, moveValidator);
+		std::unique_ptr<Logger> loggerUnique(logger);
+		return new EngineInstance<Move>(proces, moveMarshaler, moveValidator, std::move(loggerUnique));
 	}
 
 }

@@ -225,9 +225,12 @@ public:
 		}
 	}
 	Info(const CurrentLineInfo<Move>& currLineInfo) : _type(CurrentLine), content(currLineInfo.getCPUnr()), stringContent(""), moveArray(currLineInfo.getCurrentLine()) {};
-	Info(const Info& other) : _type(other._type), content(int32_t(0)),  stringContent(other.stringContent), moveArray(other.moveArray) {
-		memcpy(&content, &other.content, sizeof(_ContentType));
-	};
+	Info(const Info& other) : _type(other._type), content(int32_t(0)),  stringContent(other.stringContent), moveArray(other.moveArray) {	
+		if (_type == InfoType::Score) 
+			content.score = other.content.score;
+		else
+			content.integer = other.content.integer;
+	}
 
 	const InfoType getType() const { return _type; };
 	const int32_t& getIntegerValue() const { return content.integer; };
