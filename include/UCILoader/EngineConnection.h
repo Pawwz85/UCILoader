@@ -843,7 +843,7 @@ namespace UCILoader {
 			
 			To see how to get a pointer to ProcessWrapper refer to documentation of UCILoader::openEngineProcessFunction.
 		*/
-		EngineInstance<Move>* build(ProcessWrapper* engineProcess, Logger * logger = new NoopLogger);
+		EngineInstance<Move>* build(ProcessWrapper* engineProcess, Logger * logger = Loggers::toNoting());
 	};
 
 	template<class Move>

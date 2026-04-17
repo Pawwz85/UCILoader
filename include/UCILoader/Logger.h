@@ -4,6 +4,8 @@
 #include <mutex>
 
 #include <functional>
+#include <memory>
+#include <ostream>
 
 namespace UCILoader {
 
@@ -11,31 +13,17 @@ namespace UCILoader {
         public:
         enum MessageDirection {
             ToEngine,
-            FromEngine
+            FromEngine,
+            FromParser
         };
-
-        using LoggingFunctor = typename std::function<void(MessageDirection, const std::string & msg)>;
-        private:
-
-        LoggingFunctor functor;
-
-        protected:
-        Logger() = default; // protected. Useful for derived classes that override log method, useless otherwise.  
-
-        public:
-
-        Logger(LoggingFunctor & functor)  : functor(functor) {};
-        Logger(LoggingFunctor && functor) : functor(functor) {};
-
         virtual ~Logger() = default;
-        virtual void log(MessageDirection direction, const std::string & msg) {
-            functor(direction, msg);
-        };
+        virtual void log(MessageDirection dir, const std::string & msg) = 0;
     };
 
-    class NoopLogger : public Logger {
-        public:
-        NoopLogger() = default;
-        void log(MessageDirection direction, const std::string & msg) override {};
+    namespace Loggers {
+        extern Logger* toNoting();
+        extern Logger* toStd();
+        extern Logger* toFile(const std::string & filename);
+        extern Logger* toFile(const char * filename);
     };
 };

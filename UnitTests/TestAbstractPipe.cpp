@@ -115,3 +115,14 @@ TEST(PipeScannerTest, PipeClosedDuringRead) {
 	EXPECT_GE(std::chrono::steady_clock::now() - start, delay);
 	worker.join();
 }
+
+
+TEST(PipeScannerTest, CRLF) {
+	SharedString _pipe;
+	_pipe.value = "First Line\r\nSecond Line\r\n";
+
+	PipeScanner scanner(std::make_unique<SharedStringReader>(&_pipe));
+
+	EXPECT_EQ("First Line", scanner.getLine());
+	EXPECT_EQ("Second Line", scanner.getLine());
+};

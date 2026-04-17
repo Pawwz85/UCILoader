@@ -8,11 +8,16 @@ bool PipeScanner::scanInternalBuffer(std::string& result)
 {
 	char currentCharacter;
 
-	for (currentBufferPosition; currentBufferPosition < currentBufferSize; ++currentBufferPosition) {
+	for (; currentBufferPosition < currentBufferSize; ++currentBufferPosition) {
 		currentCharacter = internalBuffer[currentBufferPosition];
 
 		if (currentCharacter == '\n') {
 			++currentBufferPosition;
+
+			// If the line ends with /r/n, we must remove both characters
+			if(!result.empty() && result.back() == '\r') 
+				result.pop_back();
+
 			return true;
 		}
 

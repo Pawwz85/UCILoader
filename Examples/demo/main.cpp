@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include <UCILoader/target.h>
 #include <UCILoader/EngineConnection.h>
 #include <UCILoader/StandardChess.h>
 #include <string>
@@ -61,7 +60,8 @@ int main() {
 	auto proces = openProcess({pathToEngine}, "/");
 
 	// use  ChessEngineInstanceBuilder from StandardChess.h to get engine instance using default move parser
-	auto instance = ChessEngineInstanceBuilder->build(proces);
+	// 
+	auto instance = ChessEngineInstanceBuilder->build(proces, Loggers::toFile("Logs.txt"));
 	
 	// wait for engine to finish initializing
 	instance->sync();

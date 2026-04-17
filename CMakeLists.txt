@@ -32,6 +32,7 @@ set(lib_source_files
     "src/AbstractPipe.cpp"
     "src/EngineEvent.cpp"
     "src/EngineConnection.cpp"
+    "src/Logger.cpp"
     "src/Parser.cpp"
     "src/StandardChess.cpp"
     "src/UCI.cpp"
@@ -59,6 +60,7 @@ enable_testing()
 add_subdirectory("Examples/proxy")
 add_subdirectory("Examples/demo")
 add_subdirectory("UnitTests")
+add_subdirectory("SystemTests")
 
 install(TARGETS uciloader
     EXPORT UCILoader

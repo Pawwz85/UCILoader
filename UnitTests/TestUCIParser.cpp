@@ -64,7 +64,7 @@ TEST(Standard_Chess_Move, Pattern_Matcher_Too_Long) {
 	StandardChessMoveMatcher  matcher;
 	ASSERT_FALSE(matcher.match("a1h8h8"));
 }
-
+	
 TEST(Standard_Chess_Move, Pattern_Matcher_Promotion) {
 	StandardChessMoveMatcher  matcher;
 	ASSERT_TRUE(matcher.match("a7a8q"));
