@@ -843,15 +843,20 @@ namespace UCILoader {
 			
 			To see how to get a pointer to ProcessWrapper refer to documentation of UCILoader::openEngineProcessFunction.
 		*/
-		EngineInstance<Move>* build(ProcessWrapper* engineProcess, Logger * logger = Loggers::toNoting());
+		EngineInstance<Move>* build(ProcessWrapper* engineProcess);
+		EngineInstance<Move>* build(ProcessWrapper* engineProcess, LoggerBuilder logger);
 	};
 
 	template<class Move>
-	inline EngineInstance<Move>* EngineInstanceBuilder<Move>::build(ProcessWrapper* engineProcess, Logger * logger)
+	inline EngineInstance<Move>* EngineInstanceBuilder<Move>::build(ProcessWrapper* engineProcess) {
+		return build(engineProcess, Loggers::toNoting());
+	};
+
+	template<class Move>
+	inline EngineInstance<Move>* EngineInstanceBuilder<Move>::build(ProcessWrapper* engineProcess, LoggerBuilder logger)
 	{
 		std::shared_ptr<ProcessWrapper> proces(engineProcess);
-		std::unique_ptr<Logger> loggerUnique(logger);
-		return new EngineInstance<Move>(proces, moveMarshaler, moveValidator, std::move(loggerUnique));
+		return new EngineInstance<Move>(proces, moveMarshaler, moveValidator, std::move(logger.build()));
 	}
 
 }

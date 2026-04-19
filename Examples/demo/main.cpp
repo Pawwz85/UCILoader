@@ -61,7 +61,7 @@ int main() {
 
 	// use  ChessEngineInstanceBuilder from StandardChess.h to get engine instance using default move parser
 	// 
-	auto instance = ChessEngineInstanceBuilder->build(proces, Loggers::toFile("Logs.txt"));
+	auto instance = ChessEngineInstanceBuilder->build(proces, Loggers::toFile("Logs.txt") | LoggerTraits::Pretty);
 	
 	// wait for engine to finish initializing
 	instance->sync();

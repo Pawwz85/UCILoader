@@ -6,20 +6,25 @@
 using namespace UCILoader;
 using namespace StandardChess;
 
-class CustomLogger : public Logger {
-    std::mutex lock;
-    public:
+struct ResultSection {
     bool readyOkReceived = false;
     bool isReadySend  = false;
+};
+
+class CustomLogger : public Logger {
+    std::mutex lock;
+    ResultSection * result;
+    public:
+    CustomLogger(ResultSection * section) : result(section) {};
 
     void log(MessageDirection dir, const std::string & msg) override {
         std::lock_guard<std::mutex> guard(lock); 
 
         if (dir == Logger::FromEngine && msg == "readyok\n")
-            readyOkReceived = true;
+            result->readyOkReceived = true;
 
         if (dir == Logger::ToEngine && msg == "isready\n")
-            isReadySend = true;
+            result->isReadySend = true;
 
         std::cout << std::string(dir == Logger::FromEngine ? "<: " : ">: ") +  msg;
     }
@@ -35,9 +40,11 @@ int main(int argc, char ** argv) {
     std::string pathToChal(argv[1]);
     ProcessWrapper * proccess = openProcess({pathToChal}, "/");
     std::unique_ptr<EngineInstance<StandardChessMove>> instance;
-    CustomLogger * logger = new CustomLogger;
+
+    ResultSection result;
+
     try {
-        instance.reset(ChessEngineInstanceBuilder->build(proccess, logger));
+        instance.reset(ChessEngineInstanceBuilder->build(proccess, Loggers::from<CustomLogger>(&result)));
         instance->sync(std::chrono::milliseconds(1000));
     } catch (const std::exception & e) {
         std::cerr << "ERROR: Exception during engine init: " << e.what() << "\n";
@@ -46,12 +53,12 @@ int main(int argc, char ** argv) {
 
     instance->quit();
 
-    if (!logger->isReadySend) {
+    if (!result.isReadySend) {
         std::cerr << "ERROR: isready command was not logged \n";
         return EXIT_FAILURE;
     }
 
-    if (!logger->readyOkReceived) {
+    if (!result.readyOkReceived) {
         std::cerr << "ERROR: readyok response was not logged \n";
         return EXIT_FAILURE;
     }
