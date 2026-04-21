@@ -139,7 +139,7 @@ public:
 	{
 		HANDLE & handle = engineProcessInfo.hProcess;
 		if (handle && handle != INVALID_HANDLE_VALUE)
-			(void*)TerminateProcess(handle, -1);
+			(void)TerminateProcess(handle, -1);
 
 		writer_ptr->close();
 		reader_ptr->close();

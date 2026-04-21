@@ -5,6 +5,7 @@
 #include "EngineEvent.h"
 #include "Logger.h"
 #include <mutex>
+#include <atomic>
 #include <unordered_map>
 #include <condition_variable>
 
@@ -500,6 +501,7 @@ namespace UCILoader {
 		std::unique_ptr<Logger> logger;
 
 		bool receivedReadyOk = false;
+		std::atomic_bool quitCommandSend;
 
 		std::string name = "<empty>";
 		std::string author = "<empty>";
@@ -510,6 +512,7 @@ namespace UCILoader {
 		void sendToEngine(const std::string& msg);
 
 		void quit();
+		void tryReportEngineCrash();
 	public:
 		
 		class _CommandHandler : public AbstractEngineHandler<Move> {
@@ -530,14 +533,15 @@ namespace UCILoader {
 		};
 
 		EngineInstance(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> && logger) :
-			processWrapper(engineProcess), options(engineProcess->getWriter()), logger(std::move(logger)) {
+			processWrapper(engineProcess), options(engineProcess->getWriter()), logger(std::move(logger)), quitCommandSend(false) {
 			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(this));
 			auto parser = std::make_shared<UCIParser<Move>>(handler, moveMarshaler, moveValidator);
 			engineProcess->listen([parser, this](std::string line) {
 				parser->parseLine(line);
 				line.push_back('\n'); // append newline character to line to style logger entry 
 				this->logger->log(Logger::FromEngine, line);
-			});
+			},
+			[this](){this->tryReportEngineCrash();});
 			sendToEngine("uci\n");
 		};
 		
@@ -692,6 +696,7 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::quit()
 	{
+		quitCommandSend = true;
 		try {
 			sendToEngine("quit\n");
 		}
@@ -714,12 +719,17 @@ namespace UCILoader {
 	}
 
 	template<class Move>
-	inline bool  EngineInstance<Move>::healthCheck() {
-		bool isHealthy = processWrapper->healthCheck();
-		auto event = NamedEngineEvents::makeEngineCrashedEvent();
-		if (!isHealthy)
+	void EngineInstance<Move>::tryReportEngineCrash() {
+		if (quitCommandSend == false) {
+			auto event = NamedEngineEvents::makeEngineCrashedEvent();
 			emit(&event);
-		return isHealthy;
+		};
+	};
+
+
+	template<class Move>
+	inline bool  EngineInstance<Move>::healthCheck() {
+		return processWrapper->healthCheck();
 	}
 
 	template<class Move>

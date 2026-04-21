@@ -74,21 +74,27 @@ namespace UCILoader {
 		}
 
 		/*!
-			Start listening to the process output using the provided line callback.
-			That function should be called only once by process.
+			Starts a new listening thread using provide callback arguments. 
+
+			The first argument of this method is a callback that will be used to process each line received
+			from process.
+
+			Second argument is optional and defines a callback that will be called when the listener thread crashed
+			due to underlying pipe being closed
 		*/
-		void listen(std::function<void(std::string)> lineReceiver) {
+		void listen(std::function<void(std::string)> lineReceiver, std::function<void()> onCrash = [](){}) {
 			assert(listener == nullptr);
 
 			PipeScanner* scanner = new PipeScanner(std::move(getReader()));
 
 			listener = std::make_unique<std::thread>(
-				[scanner, lineReceiver]() {
+				[scanner, lineReceiver, onCrash]() {
 					while (true) {
 						try {
 							lineReceiver(scanner->getLine());
 						}
 						catch (PipeClosedException) {
+							onCrash();
 							break;
 						}
 					}
