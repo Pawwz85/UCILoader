@@ -60,7 +60,7 @@ int main() {
 	auto proces = openProcess({pathToEngine}, "/");
 
 	// use  ChessEngineInstanceBuilder from StandardChess.h to get engine instance using default move parser
-	// 
+	// Save all communication to a "Logs.txt" file using 'Pretty' formatter
 	auto instance = ChessEngineInstanceBuilder->build(proces, Loggers::toFile("Logs.txt") | LoggerTraits::Pretty);
 	
 	// wait for engine to finish initializing
@@ -117,8 +117,7 @@ int main() {
 		cout << "Search status code timed out with a status code: " << status<<'\n';
 	}
 
-	// send 'quit' command to the engine
-	instance->quit();
+	// When EngineInstance object goes out of scope, 'quit' command will be send automatically
 	delete instance;
 
 

@@ -508,6 +508,8 @@ namespace UCILoader {
 		std::mutex lock;
 
 		void sendToEngine(const std::string& msg);
+
+		void quit();
 	public:
 		
 		class _CommandHandler : public AbstractEngineHandler<Move> {
@@ -539,6 +541,10 @@ namespace UCILoader {
 			sendToEngine("uci\n");
 		};
 		
+		~EngineInstance() {
+			quit();
+		}
+
 		/*!
 			This exception will be thrown every time the _sync_ command or _ping_ command timeouts.
 			If that happens, the engine process will be terminated along the listener thread associated with given engine instance.
@@ -599,13 +605,6 @@ namespace UCILoader {
 			value "*<empty>*"" will be returned. It is recommended to query this method only after calling sync() method for the first time.  
 		*/
 		std::string getAuthor();
-		
-		/*!
-			Sends the *quit* command to the engine. This method is blocks the calling thread until the engine process is killed.
-			If the engine fails to kill itself within 1s, the engine process will be forcefully
-			killed by calling ProcessWrapper's kill command.  
-		*/
-		void quit();
 
 		/*!
 			Performs the health check of underlying engine process. If this function ever returns false, it means the underlying
@@ -815,6 +814,7 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onError(const std::string& errorMsg)
 	{
+		parent->logger->log(Logger::FromParser, errorMsg);
 	}
 
 	/*!

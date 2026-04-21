@@ -51,8 +51,6 @@ int main(int argc, char ** argv) {
         return EXIT_FAILURE;
     };
 
-    instance->quit();
-
     if (!result.isReadySend) {
         std::cerr << "ERROR: isready command was not logged \n";
         return EXIT_FAILURE;

@@ -2,9 +2,11 @@
 
 #include <chrono>
 #include <mutex>
-
+#include <ostream>
 #include <functional>
+#include <vector>
 #include <memory>
+#include <mutex>
 #include <ostream>
 #include <type_traits>
 
@@ -29,11 +31,17 @@ namespace UCILoader {
         LoggerWrapper(std::unique_ptr<Logger> && logger);   
     };
 
+    class ComposedLoggerTrait;
+
     class LoggerTrait {
         public:
         virtual ~LoggerTrait() = default;
         virtual std::unique_ptr<Logger> addTo(std::unique_ptr<Logger> && logger) const = 0;
-    };
+   };
+   
+   class ComposedLoggerTrait : public LoggerTrait {
+        public:
+   };
 
     class LoggerBuilder {
         std::unique_ptr<Logger> logger;
@@ -49,13 +57,19 @@ namespace UCILoader {
         };
     };
 
-    
+    class LogBuffer;
 
     namespace Loggers {
         extern LoggerBuilder toNoting();
         extern LoggerBuilder toStd();
+        extern LoggerBuilder toStderr();
         extern LoggerBuilder toFile(const std::string & filename);
         extern LoggerBuilder toFile(const char * filename);
+        extern LoggerBuilder toBuffer(LogBuffer & buffer); 
+        extern LoggerBuilder toCallback(std::function<void(Logger::MessageDirection, const std::string & msg)> callback);
+        extern LoggerBuilder toOstream(std::ostream & os);
+
+        // todo: tee Logger
 
         template <class CustomLogger, typename ... args>
         LoggerBuilder from(args... params) {
@@ -68,7 +82,38 @@ namespace UCILoader {
 
     namespace LoggerTraits {
         extern const LoggerTrait & Pretty;
-        extern const LoggerTrait & SilenceParser;
+        extern const LoggerTrait & IgnoreParser;
+        extern const LoggerTrait & IgnoreEngine; 
+        extern const LoggerTrait & IgnoreApplication;
+        extern const LoggerTrait & Timestamp;   
     };
 
+    // Forward declaration of log buffer implementation details.
+    namespace _LogBufferPrivate {
+        struct CriticalSection;
+        class Friend;
+    };
+
+    class LogBuffer {
+        std::shared_ptr<_LogBufferPrivate::CriticalSection> criticalSection;
+        friend _LogBufferPrivate::Friend;
+        public:
+        void push_back(const std::string & msg);
+        std::vector<std::string> snapshot() const;
+    };
+
+    namespace _LogBufferPrivate{
+        struct CriticalSection {
+            std::mutex lock;
+            std::vector<std::string> buffer;
+        };
+        class Friend {
+            protected:
+            std::shared_ptr<CriticalSection> criticalSection;
+            public:
+            Friend(LogBuffer & buffer) {
+                this->criticalSection = buffer.criticalSection;
+            }
+        };
+    };
 };

@@ -24,13 +24,17 @@ int main(int argc, char ** argv) {
         return EXIT_FAILURE;
     };
 
-    std::string engineName = instance->getName();
+    bool crashed = false;
 
-    if (engineName != "Chal 1.4.0") {
-        std::cerr << "ERROR: Unexpected engine name. Expected 'Chal 1.4.0', got '"
-                  << engineName << "'\n";
-        return EXIT_FAILURE;
-    };
+    instance->connect( [&crashed]() {crashed = true;}, NamedEngineEvents::EngineCrashed);
+    proccess->kill();
+
+    std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    if (!crashed) {
+       std::cerr << "Engine crash event was not emitted";
+       return EXIT_FAILURE;
+   };
 
     return EXIT_SUCCESS;
 };

@@ -15,3 +15,7 @@ add_test(NAME EngineConnectionTest COMMAND EngineConnectionTester $<TARGET_FILE:
 add_executable(BasicLoggingTester BasicLoggingTester.cpp)
 target_link_libraries(BasicLoggingTester PRIVATE uciloader)
 add_test(NAME BasicLoggingTester COMMAND BasicLoggingTester $<TARGET_FILE:chal_engine>)
+
+add_executable(EngineCrashTester EngineCrashTester.cpp)
+target_link_libraries(EngineCrashTester PRIVATE uciloader)
+add_test(NAME EngineCrashTester COMMAND EngineCrashTester $<TARGET_FILE:chal_engine>)

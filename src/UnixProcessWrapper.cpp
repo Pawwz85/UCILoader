@@ -112,6 +112,10 @@ class UnixProcessWrapper : public UCILoader::ProcessWrapper {
 		reader_ptr = std::make_shared<UnixPipeReader>(reader_fd);
 	}
 
+	~UnixProcessWrapper() {
+		if(isAlive()) kill();
+	}
+
 	std::shared_ptr<UCILoader::AbstractPipeWriter> getWriter() override
 	{
 		return std::static_pointer_cast<UCILoader::AbstractPipeWriter>(writer_ptr);

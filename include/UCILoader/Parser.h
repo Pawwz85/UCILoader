@@ -450,10 +450,6 @@ namespace UCILoader {
 	template<class Move>
 	inline void UCIParser<Move>::onOption(Tokens& payload)
 	{
-		/*
-			Todo: This shit is ugly as hell. But before refactoring this mess, write as many unit tests as you can and fix all bugs.
-			Only then make the code more readable
-		*/
 
 		// option name [at least 1 word of option name] value [value]
 
@@ -473,8 +469,6 @@ namespace UCILoader {
 
 		size_t i = 2;
 
-
-
 		std::string option_name, str_value, combo_default;
 		std::vector<std::string> combo_values;
 		int32_t min_ = 0, max_ = 0, default_ = 0;
@@ -493,7 +487,7 @@ namespace UCILoader {
 
 		CHECK_IF_HAS_NEXT_TOKEN("Engine send option command, but it unexpectedly terminated after the 'type' token.")
 
-			auto option_type_it = _types.find(payload[i]);
+		auto option_type_it = _types.find(payload[i]);
 
 		if (option_type_it == _types.end()) {
 			handler->onError(payload[i] + " is not recognised option type.");
@@ -622,13 +616,13 @@ namespace UCILoader {
 			temp = payload[i++];
 
 			if (temp == "var") {
-				CHECK_IF_HAS_NEXT_TOKEN("Spin option needs min value");
+				CHECK_IF_HAS_NEXT_TOKEN("Missing value after 'var' token");
 				combo_values.push_back(payload[i++]);
 			}
 
 
 			if (temp == "default") {
-				CHECK_IF_HAS_NEXT_TOKEN("Spin option needs default value");
+				CHECK_IF_HAS_NEXT_TOKEN("Missing value after 'default' token");
 				combo_default = payload[i++];
 			}
 
