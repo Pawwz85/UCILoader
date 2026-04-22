@@ -117,7 +117,7 @@ int main() {
 		cout << "Search status code timed out with a status code: " << status<<'\n';
 	}
 
-	// When EngineInstance object goes out of scope, 'quit' command will be send automatically
+	// Resource cleanup
 	delete instance;
 
 
