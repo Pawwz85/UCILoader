@@ -60,11 +60,8 @@ namespace UCILoader {
 		template <class T>
 		void  dispose_content_internal() {
 			T* view = (T*)content;
+			delete view;
 		}
-
-		template <>
-		void dispose_content_internal<std::nullptr_t>() {};
-
 
 		void dispose_content();
 

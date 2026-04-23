@@ -12,12 +12,10 @@ void UCILoader::Option::dispose_content() {
 	case Combo:
 		dispose_content_internal<combo_option>();
 		break;
-	case Button:
-		dispose_content_internal<std::nullptr_t>();
-		break;
 	case String:
 		dispose_content_internal<std::string>();
 		break;
+		case Button:
 	default:
 		break;
 	}
