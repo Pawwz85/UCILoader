@@ -61,6 +61,16 @@ simply add the following line:
   add_subdirectory(UCILoader)
 ```
 
+Alternatively, you can use FetchContent module to download and build the library for you:
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(
+		UCILoader
+		URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.1.0.zip
+)
+```
+
 Then link it like this:
 ```cmake
   target_link_libraries(MyProject PUBLIC uciloader)
@@ -282,6 +292,6 @@ For specialized logging needs, implement a custom logger and use `Loggers::from<
 
 ## Documentation
 
-The library documentation is in its source. You can either view it in your favorite code editor or generate it using doxygen.
+The library documentation is in its source. You can either view it in your favorite code editor, generate it using doxygen or read it here: https://pawwz85.github.io/UCILoader/
 
 
