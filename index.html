@@ -123,6 +123,12 @@ Running Tests</h3>
 Linking library (in cmake)</h3>
 <p>If you are using cmake, the fastest way to add this library to your project is to simply add it to your project source folder. Then in your CMakeLists.txt simply add the following line:</p>
 <div class="fragment"><div class="line">add_subdirectory(UCILoader)</div>
+</div><!-- fragment --><p>Alternatively, you can use FetchContent module to download and build the library for you:</p>
+<div class="fragment"><div class="line">include(FetchContent)</div>
+<div class="line">FetchContent_Declare(</div>
+<div class="line">        UCILoader</div>
+<div class="line">        URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.1.0.zip</div>
+<div class="line">)</div>
 </div><!-- fragment --><p>Then link it like this: </p><div class="fragment"><div class="line">target_link_libraries(MyProject PUBLIC uciloader)</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
 Usage</h2>
@@ -313,7 +319,7 @@ Closing Engine</h4>
 <div class="line"><span class="keyword">delete</span> instance;</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md14"></a>
 Documentation</h2>
-<p>The library documentation is in its source. You can either view it in your favorite code editor or generate it using doxygen. </p>
+<p>The library documentation is in its source. You can either view it in your favorite code editor, generate it using doxygen or read it here: <a href="https://pawwz85.github.io/UCILoader/">https://pawwz85.github.io/UCILoader/</a> </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 </div><!-- doc-content -->
