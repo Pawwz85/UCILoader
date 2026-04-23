@@ -276,8 +276,7 @@ For specialized logging needs, implement a custom logger and use `Loggers::from<
 #### Closing Engine
 
 ```cpp
-  // send 'quit' command to the engine
-  instance->quit();
+  // Engine will be closed automatically when the instance's destructor will be called
   delete instance;
 ```
 

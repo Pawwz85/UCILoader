@@ -951,7 +951,7 @@ static int eg_pst[6][64] = { {94,94,94,94,94,94,94,94, 125,121,120,116,119,121,1
 static void init_lmr(void) {
     for (int d = 1; d < 32; d++)
         for (int m = 1; m < 64; m++) {
-            int r = (int)round(log(d) * log(m) / 1.6);
+            int r = (int)roundf(logf(d) * logf(m) / 1.6);
             lmr_table[d][m] = r < 1 ? 1 : r > 5 ? 5 : r;
         }
 }
