@@ -4,7 +4,6 @@ project(SystemTests
 
 # Step 0. Compile an example engine binary
 add_executable(chal_engine ThirdParty/Chal.c)
-target_link_libraries(chal_engine m)
 set_target_properties(chal_engine PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin
 )
