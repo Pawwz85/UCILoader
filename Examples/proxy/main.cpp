@@ -1,6 +1,5 @@
 #include <iostream>
 
-#include <UCILoader/target.h>
 #include <UCILoader/ProcessWrapper.h>
 #include <string>
 

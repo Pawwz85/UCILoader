@@ -10,12 +10,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # configure target os based on detected platform
 if(WIN32)
-    set(TARGET_OPERATING_SYSTEM_CODE 0) # build library using windows api
+    set(process_wrapper_impl "src/WinProcessWrapper.cpp")
 else()
-    set(TARGET_OPERATING_SYSTEM_CODE 1) # build library around posix api
+    set(process_wrapper_impl "src/UnixProcessWrapper.cpp")
 endif()
-
-configure_file(include/UCILoader/target.h.in include/UCILoader/target.h @ONLY)
 
 set(lib_header_files
     "include/UCILoader/AbstractPipe.h"
@@ -24,7 +22,6 @@ set(lib_header_files
     "include/UCILoader/ProcessWrapper.h"
     "include/UCILoader/Parser.h"
     "include/UCILoader/StandardChess.h"
-    "include/UCILoader/target.h"
     "include/UCILoader/UCI.h"
 )
 
@@ -36,8 +33,7 @@ set(lib_source_files
     "src/Parser.cpp"
     "src/StandardChess.cpp"
     "src/UCI.cpp"
-    "src/UnixProcessWrapper.cpp"
-    "src/WinProcessWrapper.cpp"
+    ${process_wrapper_impl}
 )
 
 set(all_lib_files

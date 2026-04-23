@@ -1,7 +1,4 @@
-#include <UCILoader/target.h>
 
-#if TARGET_OS == 1
-	
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -182,5 +179,3 @@ UCILoader::ProcessWrapper* UCILoader::openProcess(const std::vector<std::string>
 	return new UnixProcessWrapper(pid, parent_pipe[1], child_pipe[0]);
 }
 
-
-#endif

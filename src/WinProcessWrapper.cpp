@@ -1,8 +1,3 @@
-
-#include <UCILoader/target.h>
-
-#if TARGET_OS == 0
-
 #include <mutex>
 #include <stdexcept>
 #include <UCILoader/AbstractPipe.h>
@@ -301,4 +296,3 @@ UCILoader::ProcessWrapper* UCILoader::openProcess(const std::vector<std::string>
 	return spawnEngine(commandLine, workingDirectoryWide);
 }
 
-#endif
