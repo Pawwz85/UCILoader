@@ -247,7 +247,7 @@ namespace StandardChess {
 	 * @see FenPos for custom positions
 	 * @see PositionFormatter for the interface
 	 */
-	class StartPos : public PositionFormatter {
+	class StartPos : public UCILoader::PositionFormatter {
 	public:
 
 		/*!
@@ -282,7 +282,7 @@ namespace StandardChess {
 	 * 
 	 * @see StartPos for the initial position
 	 */
-	class FenPos : public PositionFormatter {
+	class FenPos : public UCILoader::PositionFormatter {
 		std::string fen;
 	public:
 		/*!

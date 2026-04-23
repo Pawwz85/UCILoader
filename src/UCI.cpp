@@ -1,6 +1,6 @@
 #include <UCILoader/Parser.h>
 
-void Option::dispose_content() {
+void UCILoader::Option::dispose_content() {
 	switch (type_)
 	{
 	case Check:
@@ -23,7 +23,7 @@ void Option::dispose_content() {
 	}
 }
 
-void* Option::deep_copy_content() const {
+void* UCILoader::Option::deep_copy_content() const {
 	switch (type_)
 	{
 	case Check:
@@ -39,7 +39,7 @@ void* Option::deep_copy_content() const {
 	}
 }
 
-std::string formatSetOptionCommand(const Option& option)
+std::string UCILoader::formatSetOptionCommand(const Option& option)
 {
 	std::string result = std::string("setoption ") + option.id();
 
