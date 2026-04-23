@@ -95,6 +95,123 @@ int main() {
 	cout << "Latency: " << instance->ping().count() << " ms\n";      
 ```
 
+#### Logging UCI Protocol Communication
+
+UCILoader provides a flexible logging system to capture and analyze the UCI protocol messages exchanged with engines. Loggers can be created from various sources and customized with traits.
+
+**Basic Logging:**
+
+```cpp
+  // Log all communication to a file with pretty formatting
+  auto instance = StandardChess::ChessEngineInstanceBuilder->build(
+    proces, 
+    Loggers::toFile("engine.log") | LoggerTraits::Pretty
+  );
+```
+
+**Available Loggers:**
+
+- `Loggers::toNoting()` - Discards all messages (no-op logger)
+- `Loggers::toStd()` - Outputs to standard output (stdout)
+- `Loggers::toStderr()` - Outputs to standard error
+- `Loggers::toFile(filename)` - Logs to a file
+- `Loggers::toBuffer(buffer)` - Stores messages in an in-memory buffer
+- `Loggers::toCallback(callback)` - Forwards messages to a custom callback function
+- `Loggers::toOstream(stream)` - Logs to any std::ostream
+
+**Available Traits:**
+
+Traits customize logger behavior using the pipe operator `|`:
+
+- `LoggerTraits::Pretty` - Adds direction prefixes (`>> ` for sent, `<< ` for received, `Parser: ` for parsed)
+- `LoggerTraits::Timestamp` - Prepends timestamps to each message
+- `LoggerTraits::IgnoreParser` - Filters out parser-generated messages
+- `LoggerTraits::IgnoreEngine` - Filters out messages from the engine
+- `LoggerTraits::IgnoreApplication` - Filters out messages sent to the engine
+
+**Logging Examples:**
+
+> **Note on Move Semantics:** LoggerBuilder uses move semantics and has no copy constructor. When binding a logger composition to a variable, use `std::move()` to transfer ownership. Inline compositions (used directly in function arguments) automatically apply move semantics.
+
+**Method Comparison:**
+
+Both of these approaches are equivalent so choose one based on your code style:
+
+```cpp
+  // Method 1: Inline composition (implicit move)
+  auto instance1 = StandardChess::ChessEngineInstanceBuilder->build(
+    proces,
+    Loggers::toFile("engine.log") | LoggerTraits::Pretty | LoggerTraits::Timestamp
+  );
+
+  // Method 2: Bind to variable (explicit std::move)
+  auto logger = Loggers::toFile("engine.log") | LoggerTraits::Pretty | LoggerTraits::Timestamp;
+  auto instance2 = StandardChess::ChessEngineInstanceBuilder->build(proces, std::move(logger));
+```
+
+**Full Examples:**
+
+```cpp
+  // Log with pretty formatting and timestamps
+  auto logger1 = Loggers::toFile("engine.log") 
+    | LoggerTraits::Pretty 
+    | LoggerTraits::Timestamp;
+  auto instance1 = StandardChess::ChessEngineInstanceBuilder->build(proces, std::move(logger1));
+
+  // Log only engine responses with timestamps
+  auto logger2 = Loggers::toFile("responses.log")
+    | LoggerTraits::IgnoreParser
+    | LoggerTraits::IgnoreApplication
+    | LoggerTraits::Timestamp;
+  auto instance2 = StandardChess::ChessEngineInstanceBuilder->build(proces, std::move(logger2));
+
+  // Capture messages in memory
+  LogBuffer buffer;
+  auto logger3 = Loggers::toBuffer(buffer) | LoggerTraits::Pretty;
+  auto instance3 = StandardChess::ChessEngineInstanceBuilder->build(proces, std::move(logger3));
+  
+  // ... perform operations ...
+  
+  // Retrieve captured messages
+  auto messages = buffer.snapshot();
+  for (const auto& msg : messages) {
+    cout << msg << endl;
+  }
+
+  // Log via callback function
+  auto logger4 = Loggers::toCallback([](Logger::MessageDirection dir, const std::string& msg) {
+    if (dir == Logger::FromEngine) {
+      cout << "Engine: " << msg;
+    }
+  });
+  auto instance4 = StandardChess::ChessEngineInstanceBuilder->build(proces, std::move(logger4));
+```
+
+**Custom Logger:**
+
+For specialized logging needs, implement a custom logger and use `Loggers::from<T>()`:
+
+```cpp
+  // Define custom logger
+  class MyCustomLogger : public UCILoader::Logger {
+  private:
+    std::ofstream file;
+  public:
+    MyCustomLogger(const std::string& filename) : file(filename) {}
+    
+    void log(MessageDirection dir, const std::string& msg) override {
+      std::string prefix = (dir == ToEngine) ? "[CMD] " : "[RSP] ";
+      file << prefix << msg << std::flush;
+    }
+  };
+
+  // Use custom logger
+  auto instance = StandardChess::ChessEngineInstanceBuilder->build(
+    proces,
+    Loggers::from<MyCustomLogger>("engine.log") | LoggerTraits::Timestamp
+  );
+```
+
 #### Configure Engine Options
 
 ```cpp
