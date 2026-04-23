@@ -1,12 +1,15 @@
 // Force Microsoft to follow the C++ standard for localtime_s
 #define _CRT_USE_CONFORMING_ANNEX_K_TIME 1
 
+// ask c compiler for localtime_s function
+#define __STDC_WANT_LIB_EXT1__ 1
+
 #include <UCILoader/Logger.h>
 #include <iostream>
 #include <fstream>
 #include <mutex>
 #include <chrono>
-#include <ctime>
+#include <time.h>
 #include <sstream>
 #include <iomanip>
 
@@ -118,10 +121,20 @@ class LoggerWithIgnoredDirectionTrait : public LoggerWrapper {
 
 class LoggerWithTimestampTrait : public LoggerWrapper {
     std::string makeTimestamp() {
-        std::time_t now = std::time(nullptr);
-        std::tm tm {};
-        if(localtime_s(&now, &tm) == nullptr)
-            return "[##:##:##] ";
+        time_t now = time(nullptr);
+        tm tm {};
+
+        #ifdef __STDC_LIB_EXT1__
+            if(localtime_s(&now, &tm) == nullptr)
+                return "[##:##:##] ";
+        #else
+            struct tm * tmp;
+            if((tmp = localtime(&now)) == nullptr)
+                return "[##:##:##] ";
+            tm = *tmp;
+        #endif
+
+        
         std::stringstream ss;
         ss << std::put_time(&tm, "[%T] ");
         std::string result;

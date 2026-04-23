@@ -4,6 +4,7 @@
 #if TARGET_OS == 0
 
 #include <mutex>
+#include <stdexcept>
 #include <UCILoader/AbstractPipe.h>
 #include <UCILoader/ProcessWrapper.h>
 #include <Windows.h>
@@ -152,7 +153,7 @@ public:
 		DWORD status;
 
 		if (!GetExitCodeProcess(handle, &status)) {
-			throw std::exception("OS error");
+			throw std::runtime_error("OS error");
 		}
 
 		return status == STILL_ACTIVE;
