@@ -4,7 +4,7 @@
 #include <cstring> // for memcpy
 
 /*!
- * @mainpage Standard Chess UCI Loader Module
+ * @page Standard_Chess Standard Chess UCI Loader Module
  * 
  * @brief StandardChess module provides out-of-the-box UCI protocol support for standard chess.
  * 
@@ -15,12 +15,12 @@
  * To use StandardChess with an engine:
  * @code
  *     auto process = openProcess({"stockfish.exe"}, "/");
- *     auto engine = StandardChess::ChessEngineInstanceBuilder->build(process, logger);
+ *     auto engine = StandardChess::ChessEngineInstanceBuilder->build(process, Loggers::toStd() | LoggerTraits::Pretty);
  *     engine->sync();
  * @endcode
  * 
- * @see StandardChessMove for move representation
- * @see StandardChessMoveMarschaler for move parsing
+ * @see StandardChess::StandardChessMove for move representation
+ * @see StandardChess::StandardChessMoveMarschaler for move parsing
  */
 namespace StandardChess {
 

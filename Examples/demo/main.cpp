@@ -35,7 +35,6 @@ std::string toString(const Option & option) {
 }
 
 void displayInfo(const UCILoader::EngineEvent* e) {
-	// TODO: implement onInfo method for the engine instance that does this cast in the name of the user
 	
 	Info<StandardChessMove> info = *(Info<StandardChessMove>*)e->getPayload();
 	
