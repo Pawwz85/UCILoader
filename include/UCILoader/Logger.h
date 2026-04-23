@@ -330,7 +330,7 @@ namespace UCILoader {
          */
         template <class CustomLogger, typename ... args>
         LoggerBuilder from(args... params) {
-            static_assert((bool)std::is_base_of<Logger, CustomLogger>,
+            static_assert(std::is_base_of<Logger, CustomLogger>::value,
                       "CustomLogger must derive from Logger");
             auto logger = std::make_unique<CustomLogger>(params...);
             return LoggerBuilder(std::move(logger));
