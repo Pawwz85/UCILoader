@@ -762,9 +762,10 @@ namespace UCILoader {
 			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(this));
 			auto parser = std::make_shared<UCIParser<Move>>(handler, moveMarshaler, moveValidator);
 			engineProcess->listen([parser, this](std::string line) {
-				parser->parseLine(line);
 				line.push_back('\n'); // append newline character to line to style logger entry 
 				this->logger->log(Logger::FromEngine, line);
+				line.pop_back();
+				parser->parseLine(line);
 			},
 			[this](){this->tryReportEngineCrash();});
 			sendToEngine("uci\n");
@@ -1133,7 +1134,7 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onError(const std::string& errorMsg)
 	{
-		parent->logger->log(Logger::FromParser, errorMsg);
+		parent->logger->log(Logger::FromParser, errorMsg + "\n");
 	}
 
 	/*!
