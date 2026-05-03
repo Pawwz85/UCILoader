@@ -737,7 +737,6 @@ namespace UCILoader {
 
 		void sendToEngine(const std::string& msg);
 
-		void quit();
 		void tryReportEngineCrash();
 	public:
 		
@@ -905,6 +904,8 @@ namespace UCILoader {
 		 * If this method returns false, the EngineInstance is in an unstable state and should not be used further.
 		 */
 		bool healthCheck();
+
+		void quit();
 	};
 
 	template<class Move>
@@ -986,6 +987,9 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::quit()
 	{
+		if (quitCommandSend)
+			return;
+
 		quitCommandSend = true;
 		try {
 			sendToEngine("quit\n");
