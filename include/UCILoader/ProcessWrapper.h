@@ -109,9 +109,7 @@ namespace UCILoader {
 		/*!
 		 * @brief Virtual destructor that ensures listening thread is properly joined.
 		 */
-		virtual ~ProcessWrapper() {
-			if (listener) listener->join();
-		};
+		virtual ~ProcessWrapper() = default;
 
 		/*!
 		 * @brief Get the pipe writer for the process's standard input.
@@ -219,7 +217,7 @@ namespace UCILoader {
 					delete scanner;
 				}
 			);
-
+			listener->detach(); // Listener will stop on its own when engine kills itself
 		};
 	};
 
