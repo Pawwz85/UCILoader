@@ -905,6 +905,21 @@ namespace UCILoader {
 		 */
 		bool healthCheck();
 
+		/*!
+		 * @brief Manually terminate the engine process.
+		 * 
+		 * @details
+		 * **Note:** Manually calling this method is unnecessary. The engine will be automatically terminated
+		 * when the EngineInstance object goes out of scope via the destructor.
+		 * 
+		 * However, manual termination is allowed for exceptional cases, such as when the engine becomes
+		 * stuck in an infinite loop or is otherwise unresponsive. In such scenarios, calling quit() will
+		 * forcibly shut down the engine process.
+		 * 
+		 * @warning **Important:** After calling quit() manually, the EngineInstance object becomes unusable.
+		 * Do not attempt to perform any operations other than health check (search, sync, option configuration, etc.) on the 
+		 * EngineInstance after calling this method.  
+		 */
 		void quit();
 	};
 
