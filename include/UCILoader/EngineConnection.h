@@ -721,29 +721,34 @@ namespace UCILoader {
 	 */
 	template <class Move>
 	class EngineInstance : public UCILoader::EventEmitter {
-		std::shared_ptr<SearchConnection<Move>> currentConnection = nullptr;
-		std::shared_ptr<ProcessWrapper> processWrapper;
 
-		std::unique_ptr<Logger> logger;
+		struct InstancePrivate {
+			std::shared_ptr<SearchConnection<Move>> currentConnection = nullptr;
+			std::shared_ptr<ProcessWrapper> processWrapper;
+			std::unique_ptr<Logger> logger;
+			bool receivedReadyOk = false;
+			std::atomic_bool quitCommandSend;
+			std::string name = "<empty>";
+			std::string author = "<empty>";
+			std::condition_variable conditional_var;
+			EngineInstance<Move> * instance;
+			std::mutex lock;
 
-		bool receivedReadyOk = false;
-		std::atomic_bool quitCommandSend;
+			InstancePrivate(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> && logger, EngineInstance<Move>* instance);
+			void sendToEngine(const std::string& msg);
+			void logFromEngine(const std::string & msg);
+			void tryReportEngineCrash();
+			void emit(const EngineEvent* event);
+		};
 
-		std::string name = "<empty>";
-		std::string author = "<empty>";
-
-		std::condition_variable conditional_var;
-		std::mutex lock;
-
-		void sendToEngine(const std::string& msg);
-		void tryLogLine(const std::string & msg);
-		void tryReportEngineCrash();
+		std::shared_ptr<InstancePrivate> core;
+		void detachInstance(); 
 	public:
 		
 		class _CommandHandler : public AbstractEngineHandler<Move> {
-			EngineInstance<Move>* parent;
+			std::shared_ptr<InstancePrivate> core;
 		public:
-			_CommandHandler(EngineInstance<Move>* parent) : parent(parent) {};
+			_CommandHandler(std::shared_ptr<InstancePrivate> core) : core(core) {};
 			void onEngineName(const std::string& name) override;
 			void onEngineAuthor(const std::string& author) override;
 			void onUCIOK() override;
@@ -758,20 +763,23 @@ namespace UCILoader {
 		};
 
 		EngineInstance(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> && logger) :
-			processWrapper(engineProcess), options(engineProcess->getWriter()), logger(std::move(logger)), quitCommandSend(false) {
-			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(this));
+			options(engineProcess->getWriter())
+		{
+			core = std::make_shared<InstancePrivate>(engineProcess, moveMarshaler, moveValidator, std::move(logger), this);
+			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(core));
 			auto parser = std::make_shared<UCIParser<Move>>(handler, moveMarshaler, moveValidator);
-			engineProcess->listen([parser, this](std::string line) {
-				this->tryLogLine(line);
+			auto corePtr = core;
+			engineProcess->listen([parser, corePtr](std::string line) {
+				corePtr->logFromEngine(line);
 				parser->parseLine(line);
 			},
-			[this](){this->tryReportEngineCrash();});
-			sendToEngine("uci\n");
+			[corePtr](){corePtr->tryReportEngineCrash();});
+			core->sendToEngine("uci\n");
 		};
 		
 		~EngineInstance() {
 			quit();
-			logger.reset();
+			detachInstance();
 		}
 
 		/*!
@@ -923,35 +931,46 @@ namespace UCILoader {
 		void quit();
 	};
 
-	template<class Move>
-	inline void EngineInstance<Move>::sendToEngine(const std::string& msg)
-	{
-			processWrapper->getWriter()->write(msg.c_str(), msg.size());	
-			logger->log(Logger::ToEngine, msg);
+    template <class Move>
+    inline EngineInstance<Move>::InstancePrivate::InstancePrivate(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> &&logger, UCILoader::EngineInstance<Move> * instance) :
+	processWrapper(engineProcess),  logger(std::move(logger)), quitCommandSend(false), instance(instance) {
+    }
+
+    template <class Move>
+    inline void EngineInstance<Move>::InstancePrivate::sendToEngine(const std::string &msg)
+    {
+		processWrapper->getWriter()->write(msg.c_str(), msg.size());	
+		logger->log(Logger::ToEngine, msg);
 	}
 
     template <class Move>
-    inline void EngineInstance<Move>::tryLogLine(const std::string &msg){
-		if(logger)
-			logger->log(UCILoader::Logger::FromEngine, msg + "\n");
+    inline void EngineInstance<Move>::InstancePrivate::logFromEngine(const std::string &msg){
+		logger->log(UCILoader::Logger::FromEngine, msg + "\n");
     }
 
-    template<class Move>
-	inline void EngineInstance<Move>::sync(std::chrono::milliseconds timeout)
-	{
-		std::unique_lock<std::mutex> guard(lock);
-		receivedReadyOk = false;
+    template <class Move>
+    inline void EngineInstance<Move>::detachInstance()
+    {
+		std::unique_lock<std::mutex> guard(core->lock);
+		core->instance = nullptr;
+    }
+
+    template <class Move>
+    inline void EngineInstance<Move>::sync(std::chrono::milliseconds timeout)
+    {
+		std::unique_lock<std::mutex> guard(core->lock);
+		core->receivedReadyOk = false;
 
 		try {
-			sendToEngine("isready\n");
+			core->sendToEngine("isready\n");
 		}
 		catch (PipeClosedException e) {
 			throw TimeoutException(); 
 		}
 		
-		conditional_var.wait_for(guard, timeout);
-		if (!receivedReadyOk) {
-			processWrapper->kill();
+		core->conditional_var.wait_for(guard, timeout);
+		if (!core->receivedReadyOk) {
+			core->processWrapper->kill();
 			throw TimeoutException();
 		}
 
@@ -969,51 +988,53 @@ namespace UCILoader {
 	template<class Move>
 	inline std::shared_ptr<SearchConnection<Move>> EngineInstance<Move>::getCurrentSearch()
 	{
-		std::unique_lock<std::mutex> guard(lock);
-		return currentConnection;
+		std::unique_lock<std::mutex> guard(core->lock);
+		return core->currentConnection;
 	}
 	template<class Move>
 	inline std::shared_ptr<SearchConnection<Move>> EngineInstance<Move>::search(const GoParams<Move>& params, const PositionFormatter& pos,
 		const std::vector<Move> moves)
 	{
-		std::unique_lock<std::mutex> guard(lock);
+		std::unique_lock<std::mutex> guard(core->lock);
 
-		if (currentConnection != nullptr)
+		if (core->currentConnection != nullptr)
 			throw EngineBusyException();
 
-		currentConnection = std::make_shared<SearchConnection<Move>>(processWrapper);
+		core->currentConnection = std::make_shared<SearchConnection<Move>>(core->processWrapper);
 
-		sendToEngine(UciFormatter<Move>::position(pos, moves));
-		sendToEngine(UciFormatter<Move>::go(params));
-		currentConnection->status.set(OnGoing);
+		core->sendToEngine(UciFormatter<Move>::position(pos, moves));
+		core->sendToEngine(UciFormatter<Move>::go(params));
+		core->currentConnection->status.set(OnGoing);
 
 		auto event = NamedEngineEvents::makeSearchStartedEvent();
 		emit(&event);
-		return currentConnection;
+		return core->currentConnection;
 	}
 	template<class Move>
 	inline std::string EngineInstance<Move>::getName()
 	{
-		std::unique_lock<std::mutex> guard(lock);
-		return name;
+		std::unique_lock<std::mutex> guard(core->lock);
+		return core->name;
 	}
 
 	template<class Move>
 	inline std::string EngineInstance<Move>::getAuthor()
 	{
-		std::unique_lock<std::mutex> guard(lock);
-		return author;
+		std::unique_lock<std::mutex> guard(core->lock);
+		return core->author;
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::quit()
 	{
-		if (quitCommandSend)
+		std::unique_lock<std::mutex> guard(core->lock);
+
+		if (core->quitCommandSend)
 			return;
 
-		quitCommandSend = true;
+		core->quitCommandSend = true;
 		try {
-			sendToEngine("quit\n");
+			core->sendToEngine("quit\n");
 		}
 		catch (PipeClosedException ignored) {
 			// If we got here, the engine process in in unstable state, but since we are already killing it, we can ignore it.
@@ -1022,10 +1043,10 @@ namespace UCILoader {
 
 		int counter = 0;
 		
-		while (processWrapper->healthCheck()) {
+		while (core->processWrapper->healthCheck()) {
 			
 			if (counter == 10) {
-				processWrapper->kill();
+				core->processWrapper->kill();
 				break;
 			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -1034,36 +1055,41 @@ namespace UCILoader {
 	}
 
 	template<class Move>
-	void EngineInstance<Move>::tryReportEngineCrash() {
+	void EngineInstance<Move>::InstancePrivate::tryReportEngineCrash() {
 		if (quitCommandSend == false) {
 			auto event = NamedEngineEvents::makeEngineCrashedEvent();
 			emit(&event);
 		};
+	}
+    
+	template <class Move>
+    inline void EngineInstance<Move>::InstancePrivate::emit(const EngineEvent *event) {
+		if(instance)
+			instance->emit(event);
 	};
 
-
-	template<class Move>
+    template<class Move>
 	inline bool  EngineInstance<Move>::healthCheck() {
-		return processWrapper->healthCheck();
+		return core->processWrapper->healthCheck();
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::ucinewgame(){
-		sendToEngine("ucinewgame\n");
+		core->sendToEngine("ucinewgame\n");
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onEngineName(const std::string& name)
 	{
-		std::unique_lock<std::mutex> guard(parent->lock);
-		parent->name = name;
+		std::unique_lock<std::mutex> guard(core->lock);
+		core->name = name;
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onEngineAuthor(const std::string& author)
 	{
-		std::unique_lock<std::mutex> guard(parent->lock);
-		parent->author = author;
+		std::unique_lock<std::mutex> guard(core->lock);
+		core->author = author;
 	}
 
 	template<class Move>
@@ -1075,46 +1101,46 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onReadyOK()
 	{
-		std::unique_lock<std::mutex> guard(parent->lock);
-		parent->receivedReadyOk = true;
-		parent->conditional_var.notify_all();
+		std::unique_lock<std::mutex> guard(core->lock);
+		core->receivedReadyOk = true;
+		core->conditional_var.notify_all();
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onBestMove(const Move& bestMove)
 	{
-		std::unique_lock<std::mutex> guard(parent->lock);
+		std::unique_lock<std::mutex> guard(core->lock);
 		static auto searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();
 
-		if (parent->currentConnection != nullptr) {
-			parent->currentConnection->receiveBestMoveSignal(&bestMove, nullptr);
-			parent->currentConnection = nullptr;
-			parent->emit(&searchCompletedEvent);
+		if (core->currentConnection != nullptr) {
+			core->currentConnection->receiveBestMoveSignal(&bestMove, nullptr);
+			core->currentConnection = nullptr;
+			core->emit(&searchCompletedEvent);
 		}
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onBestMove(const Move& bestMove, const Move& ponderMove)
 	{
-		std::unique_lock<std::mutex> guard(parent->lock);
+		std::unique_lock<std::mutex> guard(core->lock);
 		static auto searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();
-		if (parent->currentConnection != nullptr) {
-			parent->currentConnection->receiveBestMoveSignal(&bestMove, &ponderMove);
-			parent->currentConnection = nullptr;
-			parent->emit(&searchCompletedEvent);
+		if (core->currentConnection != nullptr) {
+			core->currentConnection->receiveBestMoveSignal(&bestMove, &ponderMove);
+			core->currentConnection = nullptr;
+			core->emit(&searchCompletedEvent);
 		}
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onInfo(const std::vector<Info<Move>>& infos)
 	{
-		std::unique_lock<std::mutex>guard(parent->lock);
+		std::unique_lock<std::mutex>guard(core->lock);
 
 		auto clampEvent = UCILoader::NamedEngineEvents::makeInfoClampEvent<Move>(infos);
-		parent->emit(&clampEvent);
+		core->emit(&clampEvent);
 		for (auto& info : infos) {
 			auto infoEvent = UCILoader::NamedEngineEvents::makeInfoEvent<Move>(info);
-			parent->emit(&infoEvent);
+			core->emit(&infoEvent);
 		}
 	}
 
@@ -1131,15 +1157,18 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onOption(const Option& option)
 	{
-		std::unique_lock<std::mutex> guard(parent->lock);
-		IOptionConsumer* consumer = (IOptionConsumer*)(&parent->options);
-		consumer->consume(option);
+		std::unique_lock<std::mutex> guard(core->lock);
+		if (core->instance){
+			IOptionConsumer* consumer = (IOptionConsumer*)(&core->instance->options);
+			consumer->consume(option);
+		};
+		
 	}
 
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onError(const std::string& errorMsg)
 	{
-		parent->logger->log(Logger::FromParser, errorMsg + "\n");
+		core->logger->log(Logger::FromParser, errorMsg + "\n");
 	}
 
 	/*!
