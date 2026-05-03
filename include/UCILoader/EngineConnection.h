@@ -736,7 +736,7 @@ namespace UCILoader {
 		std::mutex lock;
 
 		void sendToEngine(const std::string& msg);
-
+		void tryLogLine(const std::string & msg);
 		void tryReportEngineCrash();
 	public:
 		
@@ -762,9 +762,7 @@ namespace UCILoader {
 			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(this));
 			auto parser = std::make_shared<UCIParser<Move>>(handler, moveMarshaler, moveValidator);
 			engineProcess->listen([parser, this](std::string line) {
-				line.push_back('\n'); // append newline character to line to style logger entry 
-				this->logger->log(Logger::FromEngine, line);
-				line.pop_back();
+				this->tryLogLine(line);
 				parser->parseLine(line);
 			},
 			[this](){this->tryReportEngineCrash();});
@@ -773,6 +771,7 @@ namespace UCILoader {
 		
 		~EngineInstance() {
 			quit();
+			logger.reset();
 		}
 
 		/*!
@@ -931,7 +930,13 @@ namespace UCILoader {
 			logger->log(Logger::ToEngine, msg);
 	}
 
-	template<class Move>
+    template <class Move>
+    inline void EngineInstance<Move>::tryLogLine(const std::string &msg){
+		if(logger)
+			logger->log(UCILoader::Logger::FromEngine, msg + "\n");
+    }
+
+    template<class Move>
 	inline void EngineInstance<Move>::sync(std::chrono::milliseconds timeout)
 	{
 		std::unique_lock<std::mutex> guard(lock);
