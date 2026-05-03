@@ -107,10 +107,10 @@ $(document).ready(function(){initNavTree('classUCILoader_1_1ProcessWrapper.html'
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a92737d4e04f78b62dfd9798c652166b1"><td class="memItemLeft" align="right" valign="top"><a id="a92737d4e04f78b62dfd9798c652166b1" name="a92737d4e04f78b62dfd9798c652166b1"></a>
-virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ProcessWrapper</b> ()</td></tr>
-<tr class="memdesc:a92737d4e04f78b62dfd9798c652166b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor that ensures listening thread is properly joined. <br /></td></tr>
-<tr class="separator:a92737d4e04f78b62dfd9798c652166b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0cc7bf88942d969aa74d9872c3363fb"><td class="memItemLeft" align="right" valign="top"><a id="ae0cc7bf88942d969aa74d9872c3363fb" name="ae0cc7bf88942d969aa74d9872c3363fb"></a>
+virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~ProcessWrapper</b> ()=default</td></tr>
+<tr class="memdesc:ae0cc7bf88942d969aa74d9872c3363fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Virtual destructor that ensures listening thread is properly joined. <br /></td></tr>
+<tr class="separator:ae0cc7bf88942d969aa74d9872c3363fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4b43939c7a3eb0c29bafd4b6899e148"><td class="memItemLeft" align="right" valign="top">virtual std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1AbstractPipeWriter.html">AbstractPipeWriter</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1ProcessWrapper.html#aa4b43939c7a3eb0c29bafd4b6899e148">getWriter</a> ()=0</td></tr>
 <tr class="memdesc:aa4b43939c7a3eb0c29bafd4b6899e148"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the pipe writer for the process's standard input.  <br /></td></tr>
 <tr class="separator:aa4b43939c7a3eb0c29bafd4b6899e148"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -166,7 +166,7 @@ Protected Member Functions</h2></td></tr>
 <div class="line"><span class="keywordflow">if</span> (!process-&gt;healthCheck()) {</div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Engine terminated&quot;</span> &lt;&lt; std::endl;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassUCILoader_1_1ProcessWrapper_html_a0acf00f13ee3b9f2ea3d5278ab4825cc"><div class="ttname"><a href="classUCILoader_1_1ProcessWrapper.html#a0acf00f13ee3b9f2ea3d5278ab4825cc">UCILoader::ProcessWrapper::listen</a></div><div class="ttdeci">void listen(std::function&lt; void(std::string)&gt; lineReceiver, std::function&lt; void()&gt; onCrash=[](){})</div><div class="ttdoc">Start a background listening thread for reading process output lines.</div><div class="ttdef"><b>Definition:</b> ProcessWrapper.h:202</div></div>
+<div class="ttc" id="aclassUCILoader_1_1ProcessWrapper_html_a0acf00f13ee3b9f2ea3d5278ab4825cc"><div class="ttname"><a href="classUCILoader_1_1ProcessWrapper.html#a0acf00f13ee3b9f2ea3d5278ab4825cc">UCILoader::ProcessWrapper::listen</a></div><div class="ttdeci">void listen(std::function&lt; void(std::string)&gt; lineReceiver, std::function&lt; void()&gt; onCrash=[](){})</div><div class="ttdoc">Start a background listening thread for reading process output lines.</div><div class="ttdef"><b>Definition:</b> ProcessWrapper.h:200</div></div>
 </div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> for typical usage </dd>
 <dd>
 openProcess for creating instances </dd></dl>
