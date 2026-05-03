@@ -1,7 +1,10 @@
 var searchData=
 [
-  ['waitfor_0',['waitFor',['../classUCILoader_1_1SearchStatusWrapper.html#a48d8921d033424dd525c57f2a91543df',1,'UCILoader::SearchStatusWrapper::waitFor()'],['../classUCILoader_1_1SearchConnection.html#a869de5d299511bc7ab0f84a9413c309f',1,'UCILoader::SearchConnection::waitFor()']]],
-  ['what_1',['what',['../classUCILoader_1_1PipeClosedException.html#ad235371641c50c114b1761a334aa5710',1,'UCILoader::PipeClosedException::what()'],['../classUCILoader_1_1CanNotOpenProcessException.html#a350030f4f23e54c1058cfd2ae58cf11c',1,'UCILoader::CanNotOpenProcessException::what()']]],
-  ['write_2',['write',['../classUCILoader_1_1AbstractPipeWriter.html#ade66c4c5ef58a40d7ce322050e8d4603',1,'UCILoader::AbstractPipeWriter']]],
-  ['wrongtypeerror_3',['WrongTypeError',['../classUCILoader_1_1EngineOptionProxy_1_1WrongTypeError.html',1,'UCILoader::EngineOptionProxy']]]
+  ['_5flogbufferprivate_0',['_LogBufferPrivate',['../namespaceUCILoader_1_1__LogBufferPrivate.html',1,'UCILoader']]],
+  ['loggers_1',['Loggers',['../namespaceUCILoader_1_1Loggers.html',1,'UCILoader']]],
+  ['loggertraits_2',['LoggerTraits',['../namespaceUCILoader_1_1LoggerTraits.html',1,'UCILoader']]],
+  ['uciloader_3',['UCILoader',['../index.html',1,'']]],
+  ['ucinewgame_4',['ucinewgame',['../classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b',1,'UCILoader::EngineInstance']]],
+  ['unlink_5',['unlink',['../classUCILoader_1_1EventEmitter.html#ab55696b1aa30e58c3ce67f19388a3be7',1,'UCILoader::EventEmitter']]],
+  ['unlinkall_6',['unlinkAll',['../classUCILoader_1_1EventReceiver.html#a47468ea4a91c095bbf88a08ce36d1411',1,'UCILoader::EventReceiver']]]
 ];

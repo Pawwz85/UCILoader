@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['_7eabstractpipereader_0',['~AbstractPipeReader',['../classUCILoader_1_1AbstractPipeReader.html#a4c136b919fb97cf2370e2bc98b82bda5',1,'UCILoader::AbstractPipeReader']]],
-  ['_7eabstractpipewriter_1',['~AbstractPipeWriter',['../classUCILoader_1_1AbstractPipeWriter.html#a9e3e6cdd6402592ab112c73ab7a82379',1,'UCILoader::AbstractPipeWriter']]],
-  ['_7eengineevent_2',['~EngineEvent',['../classUCILoader_1_1EngineEvent.html#a5e8290a735da7bd8b5e25f08b4d2656e',1,'UCILoader::EngineEvent']]],
-  ['_7eeventemitter_3',['~EventEmitter',['../classUCILoader_1_1EventEmitter.html#a32721864cc5dc35ac16de0d7567f5005',1,'UCILoader::EventEmitter']]],
-  ['_7eeventreceiver_4',['~EventReceiver',['../classUCILoader_1_1EventReceiver.html#ad83e76823459a171535e5c24e4d4560d',1,'UCILoader::EventReceiver']]],
-  ['_7elogger_5',['~Logger',['../classUCILoader_1_1Logger.html#a11867cee7a0aab51340fbc84c3828cd8',1,'UCILoader::Logger']]],
-  ['_7eloggertrait_6',['~LoggerTrait',['../classUCILoader_1_1LoggerTrait.html#ae2189ab209e695d15ee467e77ca954e7',1,'UCILoader::LoggerTrait']]],
-  ['_7eprocesswrapper_7',['~ProcessWrapper',['../classUCILoader_1_1ProcessWrapper.html#a92737d4e04f78b62dfd9798c652166b1',1,'UCILoader::ProcessWrapper']]]
+  ['waitfor_0',['waitFor',['../classUCILoader_1_1SearchStatusWrapper.html#a48d8921d033424dd525c57f2a91543df',1,'UCILoader::SearchStatusWrapper::waitFor()'],['../classUCILoader_1_1SearchConnection.html#a869de5d299511bc7ab0f84a9413c309f',1,'UCILoader::SearchConnection::waitFor()']]],
+  ['what_1',['what',['../classUCILoader_1_1PipeClosedException.html#ad235371641c50c114b1761a334aa5710',1,'UCILoader::PipeClosedException::what()'],['../classUCILoader_1_1CanNotOpenProcessException.html#a350030f4f23e54c1058cfd2ae58cf11c',1,'UCILoader::CanNotOpenProcessException::what()']]],
+  ['write_2',['write',['../classUCILoader_1_1AbstractPipeWriter.html#ade66c4c5ef58a40d7ce322050e8d4603',1,'UCILoader::AbstractPipeWriter']]],
+  ['wrongtypeerror_3',['WrongTypeError',['../classUCILoader_1_1EngineOptionProxy_1_1WrongTypeError.html',1,'UCILoader::EngineOptionProxy']]]
 ];

@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.1.0</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.1.1</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -151,6 +151,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1f0171ebc0eff8c285744dea7ce254e2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">healthCheck</a> ()</td></tr>
 <tr class="memdesc:a1f0171ebc0eff8c285744dea7ce254e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the health status of the underlying engine process.  <br /></td></tr>
 <tr class="separator:a1f0171ebc0eff8c285744dea7ce254e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96c7b8a18879044ee18a8af7c9929230"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">quit</a> ()</td></tr>
+<tr class="memdesc:a96c7b8a18879044ee18a8af7c9929230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually terminate the engine process.  <br /></td></tr>
+<tr class="separator:a96c7b8a18879044ee18a8af7c9929230"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classUCILoader_1_1EventEmitter"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classUCILoader_1_1EventEmitter')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classUCILoader_1_1EventEmitter.html">UCILoader::EventEmitter</a></td></tr>
 <tr class="memitem:ab55696b1aa30e58c3ce67f19388a3be7 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#ab55696b1aa30e58c3ce67f19388a3be7">unlink</a> (const <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> *receiver)</td></tr>
 <tr class="memdesc:ab55696b1aa30e58c3ce67f19388a3be7 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect a specific receiver from future events.  <br /></td></tr>
@@ -220,7 +223,7 @@ class UCILoader::EngineInstance&lt; Move &gt;</div><p>Top-level interface for ma
 <div class="line">    <span class="keyword">auto</span> result = <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#ac905ee82849470ede08620b0283a3136">search</a>-&gt;getResult();</div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Best move: &quot;</span> &lt;&lt; moveToString(result.bestMove) &lt;&lt; std::endl;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_ac905ee82849470ede08620b0283a3136"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#ac905ee82849470ede08620b0283a3136">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:954</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_ac905ee82849470ede08620b0283a3136"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#ac905ee82849470ede08620b0283a3136">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:971</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1LoggerTraits_html_aa37b1735dcd9b41a98b0de1b58b46d50"><div class="ttname"><a href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">UCILoader::LoggerTraits::Pretty</a></div><div class="ttdeci">const LoggerTrait &amp; Pretty</div><div class="ttdoc">Trait that formats log messages for human readability.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:165</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1Loggers_html_a3effa63e40d9a10f8a2a687d501c26d5"><div class="ttname"><a href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">UCILoader::Loggers::toFile</a></div><div class="ttdeci">LoggerBuilder toFile(const std::string &amp;filename)</div><div class="ttdoc">Create a logger that outputs to a file.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:185</div></div>
 </div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>Always call <a class="el" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295" title="Synchronize engine state with local representation.">sync()</a> after construction to ensure engine options and metadata are loaded. </dd></dl>
@@ -380,6 +383,36 @@ template&lt;class Move &gt; </div>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a96c7b8a18879044ee18a8af7c9929230" name="a96c7b8a18879044ee18a8af7c9929230"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96c7b8a18879044ee18a8af7c9929230">&#9670;&#160;</a></span>quit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Move &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::quit</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Manually terminate the engine process. </p>
+<p><b>Note:</b> Manually calling this method is unnecessary. The engine will be automatically terminated when the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> object goes out of scope via the destructor.</p>
+<p>However, manual termination is allowed for exceptional cases, such as when the engine becomes stuck in an infinite loop or is otherwise unresponsive. In such scenarios, calling <a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230" title="Manually terminate the engine process.">quit()</a> will forcibly shut down the engine process.</p>
+<dl class="section warning"><dt>Warning</dt><dd><b>Important:</b> After calling <a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230" title="Manually terminate the engine process.">quit()</a> manually, the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> object becomes unusable. Do not attempt to perform any operations other than health check (search, sync, option configuration, etc.) on the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> after calling this method. <br  />
+ </dd></dl>
 
 </div>
 </div>
