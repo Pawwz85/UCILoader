@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actually
 
-project(UCILoader VERSION 1.1.0
+project(UCILoader VERSION 1.1.1
                   DESCRIPTION "UCI Engine Loader Library for C++"
                   LANGUAGES CXX)
 
