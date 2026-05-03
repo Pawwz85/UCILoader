@@ -1,7 +1,7 @@
 
 cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actually
 
-project(UCILoader VERSION 1.0
+project(UCILoader VERSION 1.1.0
                   DESCRIPTION "UCI Engine Loader Library for C++"
                   LANGUAGES CXX)
 
@@ -45,6 +45,12 @@ set(all_lib_files
 set(CMAKE_DEBUG_POSTFIX d)
 
 add_library(uciloader STATIC ${all_lib_files} )
+
+if (MSVC)
+    # Microsoft doesn't define __STDC_LIB_EXT1__ despide providing localtime_s and gtime_s
+    # So we tell the compiler ourselves, that those functions are available
+    target_compile_definitions(uciloader PRIVATE __STDC_LIB_EXT1__=1)
+endif()
 
 target_include_directories(uciloader PUBLIC
 $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

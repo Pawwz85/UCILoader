@@ -339,7 +339,7 @@ namespace UCILoader {
 			return;
 
 		status = Stopped;
-		engine->getWriter()->write("stop\n", 6);
+		engine->getWriter()->write("stop\n", 5);
 	}
 
 	template<class Move>
@@ -350,7 +350,7 @@ namespace UCILoader {
 		if (currentStatus != OnGoing)
 			return;
 
-		engine->getWriter()->write("ponderhit\n", 11);
+		engine->getWriter()->write("ponderhit\n", 10);
 	}
 
 	template<class Move>

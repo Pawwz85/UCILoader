@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actually
-project(EngineOptionDetector VERSION 1.0
+project(Demo VERSION 1.0
                   DESCRIPTION "Example program usage of UCILoader library to connect to UCI engine"
                   LANGUAGES CXX)
 
