@@ -90,7 +90,7 @@ TEST(OptionProxy, clickButton) {
 	auto proxy = makeProxy(clickOption, writer);
 
 	proxy->click();
-	ASSERT_EQ("setoption clear hash\n", writer->getContent());
+	ASSERT_EQ("setoption name clear hash\n", writer->getContent());
 }
 
 TEST(OptionProxy, stringOption1) {
@@ -100,7 +100,7 @@ TEST(OptionProxy, stringOption1) {
 
 	*proxy = "test";
 	
-	ASSERT_EQ("setoption var value test\n", writer->getContent());
+	ASSERT_EQ("setoption name var value test\n", writer->getContent());
 }
 
 TEST(OptionProxy, checkOption1) {
@@ -110,7 +110,7 @@ TEST(OptionProxy, checkOption1) {
 
 	*proxy = false;
 
-	ASSERT_EQ("setoption var value off\n", writer->getContent());
+	ASSERT_EQ("setoption name var value off\n", writer->getContent());
 }
 
 TEST(OptionProxy, checkOption2) {
@@ -120,7 +120,7 @@ TEST(OptionProxy, checkOption2) {
 
 	*proxy = true;
 
-	ASSERT_EQ("setoption var value on\n", writer->getContent());
+	ASSERT_EQ("setoption name var value on\n", writer->getContent());
 }
 
 TEST(OptionProxy, spinOption1) {
@@ -130,7 +130,7 @@ TEST(OptionProxy, spinOption1) {
 
 	*proxy = 7;
 
-	ASSERT_EQ("setoption var value 7\n", writer->getContent());
+	ASSERT_EQ("setoption name var value 7\n", writer->getContent());
 }
 
 TEST(OptionProxy, spinOption2) {
@@ -140,7 +140,7 @@ TEST(OptionProxy, spinOption2) {
 
 	*proxy = "7";
 
-	ASSERT_EQ("setoption var value 7\n", writer->getContent());
+	ASSERT_EQ("setoption name var value 7\n", writer->getContent());
 }
 
 TEST(OptionProxy, spinOption3) {
@@ -150,7 +150,7 @@ TEST(OptionProxy, spinOption3) {
 
 	*proxy = -5;
 
-	ASSERT_EQ("setoption var value -5\n", writer->getContent());
+	ASSERT_EQ("setoption name var value -5\n", writer->getContent());
 }
 
 TEST(OptionProxy, spinOption_parsingError) {
@@ -184,7 +184,7 @@ TEST(OptionProxy, comboOption) {
 	auto proxy = makeProxy(option, writer);
 
 	*proxy = "dynamic";
-	ASSERT_EQ("setoption var value dynamic\n", writer->getContent());
+	ASSERT_EQ("setoption name var value dynamic\n", writer->getContent());
 
 }
 
@@ -203,7 +203,7 @@ TEST(OptionProxy, stringOption_empty_string) {
 	auto proxy = makeProxy(option, writer);
 
 	*proxy = "";
-	ASSERT_EQ("setoption var value <empty>\n", writer->getContent());
+	ASSERT_EQ("setoption name var value <empty>\n", writer->getContent());
 }
 
 TEST(OptionProxy, getCheckValue) {

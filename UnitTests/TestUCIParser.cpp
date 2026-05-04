@@ -928,19 +928,19 @@ TEST(UciFormatter, go3) {
 }
 
 TEST(UciFormatter, setoption_button) {
-	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("clear hash")), "setoption clear hash\n");
+	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("clear hash")), "setoption name clear hash\n");
 }
 
 TEST(UciFormatter, setoption_string) {
-	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("string option", "some value")), "setoption string option value some value\n");
+	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("string option", "some value")), "setoption name string option value some value\n");
 }
 
 
 TEST(UciFormatter, setoption_spin) {
-	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("spin option", spin_option({ 7, 1, 10 }))), "setoption spin option value 7\n");
+	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("spin option", spin_option({ 7, 1, 10 }))), "setoption name spin option value 7\n");
 }
 
 TEST(UciFormatter, setoption_combo) {
 	combo_option opt = { "var1", {"var1", "var2", "var3"}};
-	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("combo option", opt)), "setoption combo option value var1\n");
+	ASSERT_EQ(UciFormatter<StandardChessMove>::setOpion(Option("combo option", opt)), "setoption name combo option value var1\n");
 }

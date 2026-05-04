@@ -39,7 +39,7 @@ void* UCILoader::Option::deep_copy_content() const {
 
 std::string UCILoader::formatSetOptionCommand(const Option& option)
 {
-	std::string result = std::string("setoption ") + option.id();
+	std::string result = std::string("setoption name ") + option.id();
 
 	if (option.type() == Button) goto FINALE;
 
