@@ -48,7 +48,7 @@ std::string UCILoader::formatSetOptionCommand(const Option& option)
 	switch (option.type())
 	{
 	case Check:
-		result += option.check_content() ? "on" : "off";
+		result += option.check_content() ? "true" : "false";
 		break;
 	case String:
 		result += option.str_content().empty() ? "<empty>" : option.str_content();

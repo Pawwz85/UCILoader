@@ -110,7 +110,7 @@ TEST(OptionProxy, checkOption1) {
 
 	*proxy = false;
 
-	ASSERT_EQ("setoption name var value off\n", writer->getContent());
+	ASSERT_EQ("setoption name var value false\n", writer->getContent());
 }
 
 TEST(OptionProxy, checkOption2) {
@@ -120,7 +120,7 @@ TEST(OptionProxy, checkOption2) {
 
 	*proxy = true;
 
-	ASSERT_EQ("setoption name var value on\n", writer->getContent());
+	ASSERT_EQ("setoption name var value true\n", writer->getContent());
 }
 
 TEST(OptionProxy, spinOption1) {
