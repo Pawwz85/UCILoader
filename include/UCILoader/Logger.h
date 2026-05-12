@@ -131,7 +131,7 @@ namespace UCILoader {
      * composed with traits using the pipe operator (|).
      * 
      * The builder uses the pipe operator for readability and to allow chaining multiple
-     * trait applications. Once all traits are applied, call build() to obtain the final
+     * trait applications. Once all desired traits are applied, call build() to obtain the final
      * logger instance.
      * 
      * @see Loggers namespace for factory functions
@@ -357,15 +357,17 @@ namespace UCILoader {
      * Usage Examples:
      * @code
      *     // Log only engine messages with timestamps
-     *     auto logger = (Loggers::toFile("engine.log") 
+     *     auto logger =  Loggers::toFile("engine.log") 
      *                    | LoggerTraits::IgnoreParser 
      *                    | LoggerTraits::IgnoreApplication
-     *                    | LoggerTraits::Timestamp).build();
-     *     
+     *                    | LoggerTraits::Timestamp;
+     *     auto instance = ChessEngineInstanceBuilder->build(proces, std::move(logger));  
+     * 
      *     // Pretty-formatted output with all messages
-     *     auto logger = (Loggers::toStd() | LoggerTraits::Pretty).build();
+     *     auto logger =   Loggers::toStd() | LoggerTraits::Pretty;
+     *     auto instance = ChessEngineInstanceBuilder->build(proces, std::move(logger));  
      *     
-     *     // As shown in Examples/demo/main.cpp:
+     *     // Inline usage as shown in Examples/demo/main.cpp:
      *     auto instance = ChessEngineInstanceBuilder->build(proces, 
      *                     Loggers::toFile("Logs.txt") | LoggerTraits::Pretty);
      * @endcode
