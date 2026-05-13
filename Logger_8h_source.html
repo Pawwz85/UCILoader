@@ -181,50 +181,50 @@ $(document).ready(function(){initNavTree('Logger_8h_source.html',''); initResiza
 <div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span>        };</div>
 <div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span>    };</div>
 <div class="line"><a id="l00339" name="l00339"></a><span class="lineno">  339</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno"><a class="line" href="namespaceUCILoader_1_1LoggerTraits.html">  373</a></span>    <span class="keyword">namespace </span>LoggerTraits {</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">Pretty</a>;</div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>        </div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a91b8fd240816925e88100bc7e1d5e252">IgnoreParser</a>;</div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span>        </div>
-<div class="line"><a id="l00394" name="l00394"></a><span class="lineno">  394</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#ac8247e142a93ed1d26355d953d5a375b">IgnoreEngine</a>; </div>
-<div class="line"><a id="l00395" name="l00395"></a><span class="lineno">  395</span>        </div>
-<div class="line"><a id="l00401" name="l00401"></a><span class="lineno">  401</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a5f01e07a7da84318e335475fcb552f9f">IgnoreApplication</a>;</div>
-<div class="line"><a id="l00402" name="l00402"></a><span class="lineno">  402</span>        </div>
-<div class="line"><a id="l00408" name="l00408"></a><span class="lineno">  408</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a41efe82f22309901bbb0079f3679bf2c">Timestamp</a>;   </div>
-<div class="line"><a id="l00409" name="l00409"></a><span class="lineno">  409</span>    };</div>
-<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span> </div>
-<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    <span class="comment">// Forward declaration of log buffer implementation details.</span></div>
-<div class="line"><a id="l00417" name="l00417"></a><span class="lineno"><a class="line" href="namespaceUCILoader_1_1__LogBufferPrivate.html">  417</a></span><span class="comment"></span>    <span class="keyword">namespace </span>_LogBufferPrivate {</div>
-<div class="line"><a id="l00418" name="l00418"></a><span class="lineno">  418</span>        <span class="keyword">struct </span>CriticalSection;</div>
-<div class="line"><a id="l00419" name="l00419"></a><span class="lineno">  419</span>        <span class="keyword">class </span>Friend;</div>
-<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>    };</div>
-<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span> </div>
-<div class="line"><a id="l00449" name="l00449"></a><span class="lineno"><a class="line" href="classUCILoader_1_1LogBuffer.html">  449</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1LogBuffer.html">LogBuffer</a> {</div>
-<div class="line"><a id="l00450" name="l00450"></a><span class="lineno">  450</span>        std::shared_ptr&lt;_LogBufferPrivate::CriticalSection&gt; criticalSection;</div>
-<div class="line"><a id="l00451" name="l00451"></a><span class="lineno">  451</span>        <span class="keyword">friend</span> _LogBufferPrivate::Friend;</div>
-<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00458" name="l00458"></a><span class="lineno">  458</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1LogBuffer.html#afcd16e56080035246a8d71265a05738e">push_back</a>(<span class="keyword">const</span> std::string &amp; msg);</div>
-<div class="line"><a id="l00459" name="l00459"></a><span class="lineno">  459</span>        </div>
-<div class="line"><a id="l00465" name="l00465"></a><span class="lineno">  465</span>        std::vector&lt;std::string&gt; <a class="code hl_function" href="classUCILoader_1_1LogBuffer.html#a5e9092d1c20a1fdca9b0e2a0ca9025f6">snapshot</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00466" name="l00466"></a><span class="lineno">  466</span>    };</div>
-<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span> </div>
-<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>    <span class="keyword">namespace </span>_LogBufferPrivate{</div>
-<div class="line"><a id="l00474" name="l00474"></a><span class="lineno">  474</span>        <span class="keyword">struct </span>CriticalSection {</div>
-<div class="line"><a id="l00475" name="l00475"></a><span class="lineno">  475</span>            std::mutex lock;</div>
-<div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span>            std::vector&lt;std::string&gt; buffer;</div>
-<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>        };</div>
-<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>        </div>
-<div class="line"><a id="l00484" name="l00484"></a><span class="lineno">  484</span>        <span class="keyword">class </span>Friend {</div>
-<div class="line"><a id="l00485" name="l00485"></a><span class="lineno">  485</span>            <span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span>            std::shared_ptr&lt;CriticalSection&gt; criticalSection;</div>
-<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>            <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00493" name="l00493"></a><span class="lineno">  493</span>            Friend(LogBuffer &amp; buffer) {</div>
-<div class="line"><a id="l00494" name="l00494"></a><span class="lineno">  494</span>                this-&gt;criticalSection = buffer.criticalSection;</div>
-<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>            }</div>
-<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>        };</div>
-<div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>    };</div>
-<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>};</div>
-<div class="ttc" id="aclassUCILoader_1_1LogBuffer_html"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html">UCILoader::LogBuffer</a></div><div class="ttdoc">Thread-safe buffer for storing log messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:449</div></div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno"><a class="line" href="namespaceUCILoader_1_1LoggerTraits.html">  375</a></span>    <span class="keyword">namespace </span>LoggerTraits {</div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">Pretty</a>;</div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>        </div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a91b8fd240816925e88100bc7e1d5e252">IgnoreParser</a>;</div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span>        </div>
+<div class="line"><a id="l00396" name="l00396"></a><span class="lineno">  396</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#ac8247e142a93ed1d26355d953d5a375b">IgnoreEngine</a>; </div>
+<div class="line"><a id="l00397" name="l00397"></a><span class="lineno">  397</span>        </div>
+<div class="line"><a id="l00403" name="l00403"></a><span class="lineno">  403</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a5f01e07a7da84318e335475fcb552f9f">IgnoreApplication</a>;</div>
+<div class="line"><a id="l00404" name="l00404"></a><span class="lineno">  404</span>        </div>
+<div class="line"><a id="l00410" name="l00410"></a><span class="lineno">  410</span>        <span class="keyword">extern</span> <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1LoggerTrait.html">LoggerTrait</a> &amp; <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a41efe82f22309901bbb0079f3679bf2c">Timestamp</a>;   </div>
+<div class="line"><a id="l00411" name="l00411"></a><span class="lineno">  411</span>    };</div>
+<div class="line"><a id="l00412" name="l00412"></a><span class="lineno">  412</span> </div>
+<div class="line"><a id="l00413" name="l00413"></a><span class="lineno">  413</span>    <span class="comment">// Forward declaration of log buffer implementation details.</span></div>
+<div class="line"><a id="l00419" name="l00419"></a><span class="lineno"><a class="line" href="namespaceUCILoader_1_1__LogBufferPrivate.html">  419</a></span><span class="comment"></span>    <span class="keyword">namespace </span>_LogBufferPrivate {</div>
+<div class="line"><a id="l00420" name="l00420"></a><span class="lineno">  420</span>        <span class="keyword">struct </span>CriticalSection;</div>
+<div class="line"><a id="l00421" name="l00421"></a><span class="lineno">  421</span>        <span class="keyword">class </span>Friend;</div>
+<div class="line"><a id="l00422" name="l00422"></a><span class="lineno">  422</span>    };</div>
+<div class="line"><a id="l00423" name="l00423"></a><span class="lineno">  423</span> </div>
+<div class="line"><a id="l00451" name="l00451"></a><span class="lineno"><a class="line" href="classUCILoader_1_1LogBuffer.html">  451</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1LogBuffer.html">LogBuffer</a> {</div>
+<div class="line"><a id="l00452" name="l00452"></a><span class="lineno">  452</span>        std::shared_ptr&lt;_LogBufferPrivate::CriticalSection&gt; criticalSection;</div>
+<div class="line"><a id="l00453" name="l00453"></a><span class="lineno">  453</span>        <span class="keyword">friend</span> _LogBufferPrivate::Friend;</div>
+<div class="line"><a id="l00454" name="l00454"></a><span class="lineno">  454</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00460" name="l00460"></a><span class="lineno">  460</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1LogBuffer.html#afcd16e56080035246a8d71265a05738e">push_back</a>(<span class="keyword">const</span> std::string &amp; msg);</div>
+<div class="line"><a id="l00461" name="l00461"></a><span class="lineno">  461</span>        </div>
+<div class="line"><a id="l00467" name="l00467"></a><span class="lineno">  467</span>        std::vector&lt;std::string&gt; <a class="code hl_function" href="classUCILoader_1_1LogBuffer.html#a5e9092d1c20a1fdca9b0e2a0ca9025f6">snapshot</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00468" name="l00468"></a><span class="lineno">  468</span>    };</div>
+<div class="line"><a id="l00469" name="l00469"></a><span class="lineno">  469</span> </div>
+<div class="line"><a id="l00470" name="l00470"></a><span class="lineno">  470</span>    <span class="keyword">namespace </span>_LogBufferPrivate{</div>
+<div class="line"><a id="l00476" name="l00476"></a><span class="lineno">  476</span>        <span class="keyword">struct </span>CriticalSection {</div>
+<div class="line"><a id="l00477" name="l00477"></a><span class="lineno">  477</span>            std::mutex lock;</div>
+<div class="line"><a id="l00478" name="l00478"></a><span class="lineno">  478</span>            std::vector&lt;std::string&gt; buffer;</div>
+<div class="line"><a id="l00479" name="l00479"></a><span class="lineno">  479</span>        };</div>
+<div class="line"><a id="l00480" name="l00480"></a><span class="lineno">  480</span>        </div>
+<div class="line"><a id="l00486" name="l00486"></a><span class="lineno">  486</span>        <span class="keyword">class </span>Friend {</div>
+<div class="line"><a id="l00487" name="l00487"></a><span class="lineno">  487</span>            <span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00488" name="l00488"></a><span class="lineno">  488</span>            std::shared_ptr&lt;CriticalSection&gt; criticalSection;</div>
+<div class="line"><a id="l00489" name="l00489"></a><span class="lineno">  489</span>            <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00495" name="l00495"></a><span class="lineno">  495</span>            Friend(LogBuffer &amp; buffer) {</div>
+<div class="line"><a id="l00496" name="l00496"></a><span class="lineno">  496</span>                this-&gt;criticalSection = buffer.criticalSection;</div>
+<div class="line"><a id="l00497" name="l00497"></a><span class="lineno">  497</span>            }</div>
+<div class="line"><a id="l00498" name="l00498"></a><span class="lineno">  498</span>        };</div>
+<div class="line"><a id="l00499" name="l00499"></a><span class="lineno">  499</span>    };</div>
+<div class="line"><a id="l00500" name="l00500"></a><span class="lineno">  500</span>};</div>
+<div class="ttc" id="aclassUCILoader_1_1LogBuffer_html"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html">UCILoader::LogBuffer</a></div><div class="ttdoc">Thread-safe buffer for storing log messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:451</div></div>
 <div class="ttc" id="aclassUCILoader_1_1LogBuffer_html_a5e9092d1c20a1fdca9b0e2a0ca9025f6"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html#a5e9092d1c20a1fdca9b0e2a0ca9025f6">UCILoader::LogBuffer::snapshot</a></div><div class="ttdeci">std::vector&lt; std::string &gt; snapshot() const</div><div class="ttdoc">Get a snapshot of all messages currently in the buffer.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:236</div></div>
 <div class="ttc" id="aclassUCILoader_1_1LogBuffer_html_afcd16e56080035246a8d71265a05738e"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html#afcd16e56080035246a8d71265a05738e">UCILoader::LogBuffer::push_back</a></div><div class="ttdeci">void push_back(const std::string &amp;msg)</div><div class="ttdoc">Add a message to the buffer.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:231</div></div>
 <div class="ttc" id="aclassUCILoader_1_1LoggerBuilder_html"><div class="ttname"><a href="classUCILoader_1_1LoggerBuilder.html">UCILoader::LoggerBuilder</a></div><div class="ttdoc">Builder class for constructing and composing loggers with traits.</div><div class="ttdef"><b>Definition:</b> Logger.h:158</div></div>

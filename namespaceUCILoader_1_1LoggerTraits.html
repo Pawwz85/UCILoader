@@ -131,15 +131,17 @@ Variables</h2></td></tr>
 <dd>
 <a class="el" href="namespaceUCILoader_1_1Loggers.html" title="Factory functions for creating preconfigured loggers.">Loggers</a> namespace for creating base loggers</dd></dl>
 <p>Usage Examples: </p><div class="fragment"><div class="line"><span class="comment">// Log only engine messages with timestamps</span></div>
-<div class="line"><span class="keyword">auto</span> logger = (<a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">Loggers::toFile</a>(<span class="stringliteral">&quot;engine.log&quot;</span>) </div>
+<div class="line"><span class="keyword">auto</span> logger =  <a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">Loggers::toFile</a>(<span class="stringliteral">&quot;engine.log&quot;</span>) </div>
 <div class="line">               | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a91b8fd240816925e88100bc7e1d5e252">LoggerTraits::IgnoreParser</a> </div>
 <div class="line">               | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a5f01e07a7da84318e335475fcb552f9f">LoggerTraits::IgnoreApplication</a></div>
-<div class="line">               | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a41efe82f22309901bbb0079f3679bf2c">LoggerTraits::Timestamp</a>).build();</div>
+<div class="line">               | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#a41efe82f22309901bbb0079f3679bf2c">LoggerTraits::Timestamp</a>;</div>
+<div class="line"><span class="keyword">auto</span> instance = ChessEngineInstanceBuilder-&gt;build(proces, std::move(logger));  </div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Pretty-formatted output with all messages</span></div>
-<div class="line"><span class="keyword">auto</span> logger = (<a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#af9091bf089485160cc6fc8495ae4e2f0">Loggers::toStd</a>() | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">LoggerTraits::Pretty</a>).build();</div>
+<div class="line"><span class="keyword">auto</span> logger =   <a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#af9091bf089485160cc6fc8495ae4e2f0">Loggers::toStd</a>() | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">LoggerTraits::Pretty</a>;</div>
+<div class="line"><span class="keyword">auto</span> instance = ChessEngineInstanceBuilder-&gt;build(proces, std::move(logger));  </div>
 <div class="line"> </div>
-<div class="line"><span class="comment">// As shown in Examples/demo/main.cpp:</span></div>
+<div class="line"><span class="comment">// Inline usage as shown in Examples/demo/main.cpp:</span></div>
 <div class="line"><span class="keyword">auto</span> instance = ChessEngineInstanceBuilder-&gt;build(proces, </div>
 <div class="line">                <a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">Loggers::toFile</a>(<span class="stringliteral">&quot;Logs.txt&quot;</span>) | <a class="code hl_variable" href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">LoggerTraits::Pretty</a>);</div>
 <div class="ttc" id="anamespaceUCILoader_1_1LoggerTraits_html_a41efe82f22309901bbb0079f3679bf2c"><div class="ttname"><a href="namespaceUCILoader_1_1LoggerTraits.html#a41efe82f22309901bbb0079f3679bf2c">UCILoader::LoggerTraits::Timestamp</a></div><div class="ttdeci">const LoggerTrait &amp; Timestamp</div><div class="ttdoc">Trait that prepends timestamps to all logged messages.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:169</div></div>
