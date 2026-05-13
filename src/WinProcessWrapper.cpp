@@ -24,8 +24,8 @@ public:
 		if (handle && !CloseHandle(handle)) {
 			// todo: throw some error
 		}
-
 		open = false;
+		handle = 0;
 	};
 };
 
