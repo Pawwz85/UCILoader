@@ -10,6 +10,17 @@
 #include <condition_variable>
 
 namespace UCILoader {
+
+	class MessageRelay {
+		std::shared_ptr<AbstractPipeWriter> pipeWriter;
+		std::unique_ptr<Logger> logger;
+		public:
+		MessageRelay(std::shared_ptr<AbstractPipeWriter> pipeWriter, std::unique_ptr<Logger> && logger);
+		void send(const std::string & msg);
+		void receive(const std::string & msg);
+		void logFromParser(const std::string & msg);
+	};
+
 	/*!
 	 * @brief Enumeration of possible search operation status codes.
 	 * 
@@ -212,6 +223,7 @@ namespace UCILoader {
 		
 
 		std::shared_ptr<ProcessWrapper> engine;
+		std::shared_ptr<MessageRelay> messageRelay;
 
 		void receiveBestMoveSignal(const Move* bestMove, const Move* ponderMove);
 		SearchStatusCode getStatusNoLock();
@@ -223,7 +235,7 @@ namespace UCILoader {
 		 * 
 		 * @param engine Shared pointer to the engine process
 		 */
-		SearchConnection(std::shared_ptr<ProcessWrapper> engine) : engine(engine) {};
+		SearchConnection(std::shared_ptr<ProcessWrapper> engine, std::shared_ptr<MessageRelay> relay) : engine(engine), messageRelay(relay) {};
 
 		/*!
 		 * @brief Get the current status of the search operation.
@@ -339,7 +351,7 @@ namespace UCILoader {
 			return;
 
 		status = Stopped;
-		engine->getWriter()->write("stop\n", 5);
+		messageRelay->send("stop\n");
 	}
 
 	template<class Move>
@@ -350,7 +362,7 @@ namespace UCILoader {
 		if (currentStatus != OnGoing)
 			return;
 
-		engine->getWriter()->write("ponderhit\n", 10);
+		messageRelay->send("ponderhit\n");
 	}
 
 	template<class Move>
@@ -382,7 +394,7 @@ namespace UCILoader {
 	 * @see EngineInstance::options
 	 */
 	class EngineOptionProxy {
-		std::shared_ptr<AbstractPipeWriter> writer;
+		std::shared_ptr<MessageRelay> relay;
 		Option value;
 
 		void tryWrite(const std::string& value);
@@ -420,9 +432,9 @@ namespace UCILoader {
 		 */
 		class ParsingError : public std::exception {};
 
-		EngineOptionProxy() : value(), writer(nullptr) {};
-		EngineOptionProxy(const Option& option, std::shared_ptr<AbstractPipeWriter> pipeWriter) : value(option), writer(pipeWriter) {};
-		EngineOptionProxy(const EngineOptionProxy& other) : value(other.value), writer(other.writer) {};
+		EngineOptionProxy() : value(), relay(nullptr) {};
+		EngineOptionProxy(const Option& option, std::shared_ptr<MessageRelay> msgRelay) : value(option), relay(msgRelay) {};
+		EngineOptionProxy(const EngineOptionProxy& other) : value(other.value), relay(other.relay) {};
 
 		/*!
 		 * @brief Get the option type.
@@ -578,11 +590,11 @@ namespace UCILoader {
 	class EngineOptionsMap : private IOptionConsumer {
 	private:
 		using Map = std::unordered_map<std::string, EngineOptionProxy>;
-		std::shared_ptr<AbstractPipeWriter> writer;
+		std::shared_ptr<MessageRelay> relay;
 		Map proxies;
 
 		void consume(const Option& option) override {
-			proxies.insert({ option.id(), EngineOptionProxy(option, writer) });
+			proxies.insert({ option.id(), EngineOptionProxy(option, relay) });
 		}
 
 	public:
@@ -615,8 +627,8 @@ namespace UCILoader {
 			}
 		};
 
-		explicit EngineOptionsMap(const std::shared_ptr<AbstractPipeWriter>& writer)
-			: writer(writer) {
+		explicit EngineOptionsMap(std::shared_ptr<MessageRelay> relay)
+			: relay(relay) {
 		}
 
 		EngineOptionProxy& get(const std::string& id) {
@@ -725,7 +737,8 @@ namespace UCILoader {
 		struct InstancePrivate {
 			std::shared_ptr<SearchConnection<Move>> currentConnection = nullptr;
 			std::shared_ptr<ProcessWrapper> processWrapper;
-			std::unique_ptr<Logger> logger;
+			std::shared_ptr<MessageRelay> relay;
+		
 			bool receivedReadyOk = false;
 			std::atomic_bool quitCommandSend;
 			std::string name = "<empty>";
@@ -734,7 +747,7 @@ namespace UCILoader {
 			EngineInstance<Move> * instance;
 			std::mutex lock;
 
-			InstancePrivate(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> && logger, EngineInstance<Move>* instance);
+			InstancePrivate(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::shared_ptr<MessageRelay> relay, EngineInstance<Move>* instance);
 			void sendToEngine(const std::string& msg);
 			void logFromEngine(const std::string & msg);
 			void tryReportEngineCrash();
@@ -742,6 +755,7 @@ namespace UCILoader {
 		};
 
 		std::shared_ptr<InstancePrivate> core;
+		std::shared_ptr<MessageRelay> relay;
 		void detachInstance(); 
 	public:
 		
@@ -763,9 +777,10 @@ namespace UCILoader {
 		};
 
 		EngineInstance(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> && logger) :
-			options(engineProcess->getWriter())
+			relay(new MessageRelay(engineProcess->getWriter(), std::move(logger))),
+			options(relay)
 		{
-			core = std::make_shared<InstancePrivate>(engineProcess, moveMarshaler, moveValidator, std::move(logger), this);
+			core = std::make_shared<InstancePrivate>(engineProcess, moveMarshaler, moveValidator, relay, this);
 			std::shared_ptr<AbstractEngineHandler<Move>> handler = std::static_pointer_cast<AbstractEngineHandler<Move>>(std::make_shared<EngineInstance<Move>::_CommandHandler>(core));
 			auto parser = std::make_shared<UCIParser<Move>>(handler, moveMarshaler, moveValidator);
 			auto corePtr = core;
@@ -932,20 +947,18 @@ namespace UCILoader {
 	};
 
     template <class Move>
-    inline EngineInstance<Move>::InstancePrivate::InstancePrivate(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::unique_ptr<Logger> &&logger, UCILoader::EngineInstance<Move> * instance) :
-	processWrapper(engineProcess),  logger(std::move(logger)), quitCommandSend(false), instance(instance) {
+    inline EngineInstance<Move>::InstancePrivate::InstancePrivate(std::shared_ptr<ProcessWrapper> engineProcess, std::shared_ptr<Marschaler<Move>> moveMarshaler, std::shared_ptr<PatternMatcher> moveValidator, std::shared_ptr<MessageRelay> relay, UCILoader::EngineInstance<Move> * instance) :
+		processWrapper(engineProcess),  relay(relay), quitCommandSend(false), instance(instance) {
     }
 
     template <class Move>
-    inline void EngineInstance<Move>::InstancePrivate::sendToEngine(const std::string &msg)
-    {
-		processWrapper->getWriter()->write(msg.c_str(), msg.size());	
-		logger->log(Logger::ToEngine, msg);
+    inline void EngineInstance<Move>::InstancePrivate::sendToEngine(const std::string &msg){
+		relay->send(msg);
 	}
 
     template <class Move>
     inline void EngineInstance<Move>::InstancePrivate::logFromEngine(const std::string &msg){
-		logger->log(UCILoader::Logger::FromEngine, msg + "\n");
+		relay->receive(msg + "\n");
     }
 
     template <class Move>
@@ -1000,7 +1013,7 @@ namespace UCILoader {
 		if (core->currentConnection != nullptr)
 			throw EngineBusyException();
 
-		core->currentConnection = std::make_shared<SearchConnection<Move>>(core->processWrapper);
+		core->currentConnection = std::make_shared<SearchConnection<Move>>(core->processWrapper, relay);
 
 		core->sendToEngine(UciFormatter<Move>::position(pos, moves));
 		core->sendToEngine(UciFormatter<Move>::go(params));
@@ -1166,9 +1179,9 @@ namespace UCILoader {
 	}
 
 	template<class Move>
-	inline void EngineInstance<Move>::_CommandHandler::onError(const std::string& errorMsg)
-	{
-		core->logger->log(Logger::FromParser, errorMsg + "\n");
+	inline void EngineInstance<Move>::_CommandHandler::onError(const std::string& errorMsg){
+		std::string msg = errorMsg + "\n";
+		core->relay->logFromParser(msg);
 	}
 
 	/*!

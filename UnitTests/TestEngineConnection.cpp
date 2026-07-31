@@ -81,7 +81,8 @@ public:
 };
 
 std::shared_ptr<EngineOptionProxy> makeProxy(const Option & defaultValue, std::shared_ptr<AbstractPipeWriter> writer) {
-	return std::make_shared<EngineOptionProxy>(defaultValue, writer);
+	auto relay = std::make_shared<MessageRelay>(writer, Loggers::toNoting().build());
+	return std::make_shared<EngineOptionProxy>(defaultValue, relay);
 }
 
 TEST(OptionProxy, clickButton) {

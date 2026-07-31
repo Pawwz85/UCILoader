@@ -2,15 +2,32 @@
 #include <sstream> 
 #include <algorithm> // for std::transform
 
-void UCILoader::EngineOptionProxy::tryWrite(const std::string& value)
-{
-	if (writer && writer->isOpen()) 
-		writer->write(value.c_str(), value.size());
+UCILoader::MessageRelay::MessageRelay(std::shared_ptr<AbstractPipeWriter> pipeWriter, std::unique_ptr<Logger> && logger) :
+	pipeWriter(pipeWriter), logger(std::move(logger)) {
+	};
+
+void UCILoader::MessageRelay::send(const std::string & msg) {
+	logger->log(Logger::ToEngine, msg);
+	pipeWriter->write(msg.c_str(), msg.size());
+};
+
+void UCILoader::MessageRelay::receive(const std::string & msg) {
+	logger->log(Logger::FromEngine, msg);
 }
+
+void UCILoader::MessageRelay::logFromParser(const std::string & msg) {
+	logger->log(Logger::FromParser, msg);
+}
+
+void UCILoader::EngineOptionProxy::tryWrite(const std::string& value){
+	if (relay) 
+		relay->send(value);
+}
+
 void UCILoader::EngineOptionProxy::tryWrite(const char* text)
 {
-	if (writer && writer->isOpen())
-		writer->write(text, strlen(text));
+	if (relay) 
+		relay->send(text);
 }
 
 void UCILoader::EngineOptionProxy::validateSpinCandidate(const int32_t& value) const
