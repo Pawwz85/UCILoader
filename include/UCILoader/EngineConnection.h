@@ -11,13 +11,43 @@
 
 namespace UCILoader {
 
+	/*!
+	* @brief Helper class for relaying messages from application to engine and logger
+	*
+	* @details Message relay is a class that sends provided messages to an engine and/or logger
+	* depending on the method being used. 
+	*/
 	class MessageRelay {
 		std::shared_ptr<AbstractPipeWriter> pipeWriter;
 		std::unique_ptr<Logger> logger;
 		public:
+		/*!
+		* @brief Constructor for MessageRelay
+		* 
+		* @param pipeWriter shared_ptr to engine's pipe writer, obtained by calling ProcessWrapper::getWriter() method
+		* @param logger unique pointer to Logger object. @see Loggers namespace for details
+		*/
 		MessageRelay(std::shared_ptr<AbstractPipeWriter> pipeWriter, std::unique_ptr<Logger> && logger);
+
+		/*!
+		* @brief Send the provided message to the engine, and log it as message toEngine.
+		*
+		* @param msg Message to be send & log
+		*/
 		void send(const std::string & msg);
+
+		/*!
+		* @brief Log the provided message as comming from the engine
+		*
+		* @param msg Message to be logged
+		*/
 		void receive(const std::string & msg);
+
+		/*!
+		* @brief  Log the provided message as comming from the the parser
+		*
+		* @param msg Message to be logged
+		*/
 		void logFromParser(const std::string & msg);
 	};
 
