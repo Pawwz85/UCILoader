@@ -26,6 +26,7 @@ var annotated_dup =
       [ "LoggerTrait", "classUCILoader_1_1LoggerTrait.html", "classUCILoader_1_1LoggerTrait" ],
       [ "LoggerWrapper", "classUCILoader_1_1LoggerWrapper.html", "classUCILoader_1_1LoggerWrapper" ],
       [ "Marschaler", "classUCILoader_1_1Marschaler.html", "classUCILoader_1_1Marschaler" ],
+      [ "MessageRelay", "classUCILoader_1_1MessageRelay.html", "classUCILoader_1_1MessageRelay" ],
       [ "NoPayloadEvent", "classUCILoader_1_1NoPayloadEvent.html", "classUCILoader_1_1NoPayloadEvent" ],
       [ "PatternMatcher", "classUCILoader_1_1PatternMatcher.html", null ],
       [ "PipeClosedException", "classUCILoader_1_1PipeClosedException.html", "classUCILoader_1_1PipeClosedException" ],
