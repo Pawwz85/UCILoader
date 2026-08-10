@@ -34,10 +34,7 @@ std::string toString(const Option & option) {
 	return "";
 }
 
-void displayInfo(const UCILoader::EngineEvent* e) {
-	
-	Info<StandardChessMove> info = *(Info<StandardChessMove>*)e->getPayload();
-	
+void displayInfo(const Info<StandardChessMove> & info) {	
 	switch (info.getType()) {
 	case Pv:
 		cout << "Pv: ";
@@ -92,9 +89,8 @@ int main() {
 		cout << "Engine uses by default hash table of size " << defaultHash << "\n";
 	}
 
-
 	// register callback for handling incoming infos
-	instance->connect(displayInfo, UCILoader::NamedEngineEvents::InfoReceived);
+	instance->addInfoHandler(displayInfo);
 
 	// start a search request and obtain search connection
 	cout << "Searching for best move\n";

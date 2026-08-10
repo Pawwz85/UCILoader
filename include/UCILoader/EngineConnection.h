@@ -924,7 +924,7 @@ namespace UCILoader {
 		 * moves the engine must play before reaching the actual search position.
 		 */
 		std::shared_ptr<SearchConnection<Move>> search(const GoParams<Move>& params, const PositionFormatter& pos,
-			const std::vector<Move> moves = {});
+			const std::vector<Move> & moves = {});
 		
 		/*!
 		 * @brief Get the engine's name as declared via the id name command.
@@ -974,6 +974,12 @@ namespace UCILoader {
 		 * EngineInstance after calling this method.  
 		 */
 		void quit();
+
+		void addInfoHandler(std::function<void(const Info<Move> &)> handler);
+
+		void addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler);
+
+		void addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler);
 	};
 
     template <class Move>
@@ -1034,9 +1040,10 @@ namespace UCILoader {
 		std::unique_lock<std::mutex> guard(core->lock);
 		return core->currentConnection;
 	}
+
 	template<class Move>
 	inline std::shared_ptr<SearchConnection<Move>> EngineInstance<Move>::search(const GoParams<Move>& params, const PositionFormatter& pos,
-		const std::vector<Move> moves)
+		const std::vector<Move> & moves)
 	{
 		std::unique_lock<std::mutex> guard(core->lock);
 
@@ -1049,7 +1056,7 @@ namespace UCILoader {
 		core->sendToEngine(UciFormatter<Move>::go(params));
 		core->currentConnection->status.set(OnGoing);
 
-		auto event = NamedEngineEvents::makeSearchStartedEvent();
+		auto event = NamedEngineEvents::makeSearchStartedEvent(params, pos, moves);
 		emit(&event);
 		return core->currentConnection;
 	}
@@ -1119,6 +1126,33 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::ucinewgame(){
 		core->sendToEngine("ucinewgame\n");
+	}
+
+	template <class Move>
+	inline void EngineInstance<Move>::addInfoHandler(std::function<void(const Info<Move> &)> handler){
+			connect([this, handler](const EngineEvent* event){
+				auto info = (const Info<Move>*)event->getPayload();
+				if (info != nullptr)
+					handler(*info);
+			}, NamedEngineEvents::InfoReceived);
+	};
+
+	template <class Move>
+	inline void EngineInstance<Move>::addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler){
+			connect([this, handler](const EngineEvent* event){
+				auto batch = (const std::vector<Info<Move>>*)event->getPayload();
+				if (batch != nullptr)
+					handler(*batch);
+			}, NamedEngineEvents::InfoClampReceived);
+	};
+
+	template <class Move>
+	void EngineInstance<Move>::addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler) {
+		connect([this, handler](const EngineEvent* event){
+			auto request = (const SearchRequest<Move>*)event->getPayload();
+			if (request != nullptr)
+				handler(*request);
+		}, NamedEngineEvents::SearchStarted);
 	}
 
 	template<class Move>

@@ -309,7 +309,13 @@ namespace UCILoader {
 		 * @return ConcreteEvent with the Info as payload
 		 */
 		template<class Move>
-		static ConcreteEvent<Info<Move>, InfoReceived> makeInfoEvent(const Info<Move> & i) { return ConcreteEvent<Info<Move>, InfoReceived>(i); };
+		ConcreteEvent<Info<Move>, InfoReceived> makeInfoEvent(const Info<Move> & i) { return ConcreteEvent<Info<Move>, InfoReceived>(i); };
+	
+		template <class Move>
+		ConcreteEvent<SearchRequest<Move>, SearchStarted> makeSearchStartedEvent(const GoParams<Move>& params, const PositionFormatter& pos,
+		const std::vector<Move> & moves) {
+			return ConcreteEvent<SearchRequest<Move>, SearchStarted>({params, pos.toFen(), moves});
+		};
 	};
 	
 	class EventEmitter;

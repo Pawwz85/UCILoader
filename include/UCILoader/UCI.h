@@ -457,4 +457,11 @@ namespace UCILoader {
 		result.Depth = result.Mate = result.Nodes = result.MoveTime = result.MovesToGo = 0u;
 		result.Infinite = result.Ponder = false;
 	}
+
+	template <class Move>
+	struct SearchRequest {
+		GoParams<Move> params;
+		std::string fen;
+		std::vector<Move> moves;
+	};
 }
