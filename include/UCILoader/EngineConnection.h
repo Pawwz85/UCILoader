@@ -975,11 +975,92 @@ namespace UCILoader {
 		 */
 		void quit();
 		
-		
+		 /*!
+			* @brief Register a callback function that is invoked when an info message arrives from the engine.
+			* 
+			* @tparam Move The move type used by this engine instance (StandardChessMove, variant moves, etc.)
+			* @param handler A callable object accepting a single Info<Move> parameter and returning void
+			* 
+			* @details
+			* This method allows you to receive individual info messages emitted during an active search.
+			* Each time the engine sends an 'info' UCI command (e.g., "depth 10 score cp -50"), this handler will be called.
+			* 
+			* Info messages typically contain: depth, nodes searched, selDepth, mate in N, evaluation scores, and other search statistics.
+			* These are useful for building GUI progress indicators or logging detailed search information.
+			* 
+			* **Multiple Handlers:** You can register multiple handlers. Each will be invoked for every info message received.
+			* This enables different components (GUI thread, logging system, analysis tools) to react independently.
+			* 
+			* **Thread Safety:** The handler is called from the engine's communication thread. If you need to update GUI elements or perform blocking operations, ensure proper synchronization.
+			* 
+			* @see addInfoBatchHandler for handling batches of info messages instead of individual ones
+			* @see SearchConnection::getStatus() for checking search completion status
+		*/
 		void addInfoHandler(std::function<void(const Info<Move> &)> handler);
-
+		
+		/*!
+		* @brief Register a callback function that is invoked when multiple info messages arrive together.
+		* 
+		* @tparam Move The move type used by this engine instance (StandardChessMove, variant moves, etc.)
+		* @param handler A callable object accepting a std::vector<Info<Move>> parameter and returning void
+		* 
+		* @details
+		* This method allows you to receive batches of info messages that the engine sends together.
+		* Some engines emit multiple 'info' commands in one line (e.g., for each depth level), which may be delivered as a batch rather than individually.
+		* 
+		* **Comparison with addInfoHandler:** Use this method when you want to reduce callback overhead or process info messages in bulk. For simple logging of each message individually, use `addInfoHandler` instead.
+		* 
+		* **Thread Safety:** Like individual handlers, batch callbacks are invoked from the engine's communication thread and should avoid blocking operations that could delay search progress.
+		* 
+		* @see addInfoHandler for handling individual info messages
+		*/
 		void addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler);
-
+		
+		/*!
+		* @brief Register a callback function that is invoked when the engine starts processing a new search request.
+		* 
+		* @tparam Move The move type used by this engine instance (StandardChessMove, variant moves, etc.)
+		* @param handler A callable object accepting a SearchRequest<Move> parameter and returning void
+		* 
+		* @details
+		* This method allows you to react when the user or application initiates a new search operation. The callback is invoked immediately after `search()`.
+		* 
+		* **Use Cases:**
+		* - Initialize GUI progress bars and status indicators for the upcoming search
+		* - Reset internal counters, timers, or statistics tracking structures
+		* - Log that a new analysis session has begun
+		* 
+		* **Example Usage:**
+		* @code
+		*     auto engine = builder.build(process, Loggers::toStd());
+		*     
+		*     // Register handler for new search requests
+		*     engine->addSearchRequestHandler([](const SearchRequest<Move>& request) {
+		*         std::cout << "Starting analysis of position: ";
+		*         
+		*         if (request.params.depth > 0) {
+		*             std::cout << "Depth limit: " << request.params.depth;
+		*         } else if (request.params.timeMs > 0) {
+		*             std::cout << "Time control: " << request.params.timeMs / 1000.0 
+		*                      << " seconds";
+		*         }
+		*         
+		*         // Initialize progress bar for GUI
+		*         gui.setProgressBar(request);
+		*     });
+		*     
+		*     auto search = engine->search(params, position);
+		* @endcode
+		* 
+		* **SearchRequest Structure:** The SearchRequest object contains:
+		* - `params`: GoParams specifying depth/time limits and other constraints
+		* - `pos`: PositionFormatter describing the root board state to analyze
+		* - `moves`: Sequence of moves to be played from root search position before searching
+		* 
+		* **Multiple Handlers:** You can register multiple handlers. Each will be invoked when a new search begins, enabling different components to prepare independently for analysis workloads.
+		* 
+		* @see SearchConnection::getStatus() for monitoring ongoing searches
+		*/
 		void addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler);
 	};
 
