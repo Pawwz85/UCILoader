@@ -974,7 +974,8 @@ namespace UCILoader {
 		 * EngineInstance after calling this method.  
 		 */
 		void quit();
-
+		
+		
 		void addInfoHandler(std::function<void(const Info<Move> &)> handler);
 
 		void addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler);

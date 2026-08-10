@@ -21,7 +21,7 @@ tools and application for both regular and variant chess.
 <!-- Prerequisites -->
 #### Prerequisites
 
-This project uses cmake build system, so in order to build the library make sure you have cmake installed.
+You need to have cmake installed to build this project. 
 
 <!-- Installation -->
 #### Building from source
@@ -34,8 +34,7 @@ cd UCILoader
 cmake -B build
 ```
 
-Depending on your OS and your build system the next step will differ. On windows, if you are using visual studio, enter generated build folder
-and open .sln file in visual studio then compile the solution (you can use ctrl+shift+b shortcut). On Linux simply execute following commands:
+Depending on your OS and your build system the next step will differ. On windows, if you are using visual studio, enter generated build folder and open .sln file in visual studio then compile the solution (you can use ctrl+shift+b shortcut). On Linux simply execute following commands:
 
 ```bash
   cd build
@@ -265,8 +264,7 @@ For specialized logging needs, implement a custom logger and use `Loggers::from<
 
 #### Defining a callback for capturing engine info
 ```cpp
-  void displayPV(const UCILoader::EngineEvent* e) {
-  	Info<StandardChessMove> info = *(Info<StandardChessMove>*)e->getPayload();
+  void displayPV(const UCILoader::Info<Move> & e) {
   	
   	if (info.getType() == Pv) {
   		cout << "Pv: ";
@@ -280,7 +278,7 @@ For specialized logging needs, implement a custom logger and use `Loggers::from<
 
 #### Registering a callback capturing engine info
 ```cpp
-  	instance->connect(displayPv, UCILoader::NamedEngineEvents::InfoReceived);
+  	instance->addInfoHandler(displayPv);
 ```
 
 #### Closing Engine
