@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actua
 
 project(UCILoader 
                   VERSION 1.1.3
-                  DESCRIPTION "UCI Engine Loader Library for C++"
+                  DESCRIPTION "Small C++ library that allows user to connect to a chess engines via UCI protocol."
                   LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 14)
@@ -99,3 +99,5 @@ configure_package_config_file(${CMAKE_CURRENT_SOURCE_DIR}/Config.cmake.in
 install( FILES "UCILoaderConfig.cmake" "${CMAKE_CURRENT_BINARY_DIR}/UCILoaderConfigVersion.cmake" 
     DESTINATION cmake
 )
+
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in" "${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile" @ONLY)
