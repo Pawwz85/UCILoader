@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actually
 
 project(UCILoader 
-                  VERSION 1.1.3
+                  VERSION 1.2.0
                   DESCRIPTION "Small C++ library that allows user to connect to a chess engines via UCI protocol."
                   LANGUAGES CXX)
 
