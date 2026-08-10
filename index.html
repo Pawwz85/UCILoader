@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.1.3</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.0</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -105,7 +105,7 @@ About the Project</h2>
 Getting Started</h2>
 <h4><a class="anchor" id="autotoc_md2"></a>
 Prerequisites</h4>
-<p>This project uses cmake build system, so in order to build the library make sure you have cmake installed.</p>
+<p>You need to have cmake installed to build this project.</p>
 <h4><a class="anchor" id="autotoc_md3"></a>
 Building from source</h4>
 <p>In order to build the library from source code you should clone this repository then use cmake to generate build files for you:</p>
@@ -297,8 +297,7 @@ Query Engine for best move</h4>
 <div class="ttc" id="aclassStandardChess_1_1StartPos_html"><div class="ttname"><a href="classStandardChess_1_1StartPos.html">StandardChess::StartPos</a></div><div class="ttdoc">Position formatter for the standard chess starting position.</div><div class="ttdef"><b>Definition:</b> StandardChess.h:250</div></div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md11"></a>
 Defining a callback for capturing engine info</h4>
-<div class="fragment"><div class="line"><span class="keywordtype">void</span> displayPV(<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">UCILoader::EngineEvent</a>* e) {</div>
-<div class="line">  Info&lt;StandardChessMove&gt; info = *(Info&lt;StandardChessMove&gt;*)e-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
+<div class="fragment"><div class="line"><span class="keywordtype">void</span> displayPV(<span class="keyword">const</span> UCILoader::Info&lt;Move&gt; &amp; e) {</div>
 <div class="line">  </div>
 <div class="line">  <span class="keywordflow">if</span> (info.getType() == Pv) {</div>
 <div class="line">      cout &lt;&lt; <span class="stringliteral">&quot;Pv: &quot;</span>;</div>
@@ -308,11 +307,9 @@ Defining a callback for capturing engine info</h4>
 <div class="line">      cout &lt;&lt; <span class="stringliteral">&quot;\n&quot;</span>;</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassUCILoader_1_1EngineEvent_html"><div class="ttname"><a href="classUCILoader_1_1EngineEvent.html">UCILoader::EngineEvent</a></div><div class="ttdoc">Base class for events emitted by an EngineInstance.</div><div class="ttdef"><b>Definition:</b> EngineEvent.h:42</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineEvent_html_aa9e078f7d02e0c01b00362b6fb98b672"><div class="ttname"><a href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">UCILoader::EngineEvent::getPayload</a></div><div class="ttdeci">virtual const void * getPayload() const =0</div><div class="ttdoc">Get the payload data associated with this event.</div></div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md12"></a>
 Registering a callback capturing engine info</h4>
-<div class="fragment"><div class="line">instance-&gt;connect(displayPv, UCILoader::NamedEngineEvents::InfoReceived);</div>
+<div class="fragment"><div class="line">instance-&gt;addInfoHandler(displayPv);</div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md13"></a>
 Closing Engine</h4>
 <div class="fragment"><div class="line"><span class="comment">// Engine will be closed automatically when the instance&#39;s destructor will be called</span></div>
