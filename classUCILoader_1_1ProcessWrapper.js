@@ -1,6 +1,6 @@
 var classUCILoader_1_1ProcessWrapper =
 [
-    [ "~ProcessWrapper", "classUCILoader_1_1ProcessWrapper.html#ae0cc7bf88942d969aa74d9872c3363fb", null ],
+    [ "~ProcessWrapper", "classUCILoader_1_1ProcessWrapper.html#a1d87eeb3759790f8c74d481816e5e58d", null ],
     [ "getReader", "classUCILoader_1_1ProcessWrapper.html#a87193f39a6cee6f06d132a94bbea3352", null ],
     [ "getWriter", "classUCILoader_1_1ProcessWrapper.html#aa4b43939c7a3eb0c29bafd4b6899e148", null ],
     [ "healthCheck", "classUCILoader_1_1ProcessWrapper.html#affafc0cdca53c1b0674f38f953892c5a", null ],

@@ -7,5 +7,5 @@ var searchData=
   ['_7eeventreceiver_4',['~EventReceiver',['../classUCILoader_1_1EventReceiver.html#ad83e76823459a171535e5c24e4d4560d',1,'UCILoader::EventReceiver']]],
   ['_7elogger_5',['~Logger',['../classUCILoader_1_1Logger.html#a11867cee7a0aab51340fbc84c3828cd8',1,'UCILoader::Logger']]],
   ['_7eloggertrait_6',['~LoggerTrait',['../classUCILoader_1_1LoggerTrait.html#ae2189ab209e695d15ee467e77ca954e7',1,'UCILoader::LoggerTrait']]],
-  ['_7eprocesswrapper_7',['~ProcessWrapper',['../classUCILoader_1_1ProcessWrapper.html#ae0cc7bf88942d969aa74d9872c3363fb',1,'UCILoader::ProcessWrapper']]]
+  ['_7eprocesswrapper_7',['~ProcessWrapper',['../classUCILoader_1_1ProcessWrapper.html#a1d87eeb3759790f8c74d481816e5e58d',1,'UCILoader::ProcessWrapper']]]
 ];

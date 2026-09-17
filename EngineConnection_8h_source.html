@@ -180,13 +180,13 @@ $(document).ready(function(){initNavTree('EngineConnection_8h_source.html',''); 
 <div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            std::unique_lock&lt;std::mutex&gt; guard(statusLock);</div>
 <div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
 <div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span> </div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            <span class="keywordflow">if</span> (status != OnGoing) </div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            <span class="keywordflow">if</span> (status != OnGoing &amp;&amp; status != Stopped) </div>
 <div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>                <span class="keywordflow">return</span> status;</div>
 <div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>            </div>
 <div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
 <div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>            var.wait_for(guard, dur);</div>
 <div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>            </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            <span class="keywordflow">if</span> (status == OnGoing) </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>            <span class="keywordflow">if</span> (status == OnGoing || status == Stopped) </div>
 <div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>                status = TimedOut;</div>
 <div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>            </div>
 <div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>            <span class="keywordflow">return</span> status;</div>
@@ -448,409 +448,422 @@ $(document).ready(function(){initNavTree('EngineConnection_8h_source.html',''); 
 <div class="line"><a id="l00768" name="l00768"></a><span class="lineno">  768</span>            std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; currentConnection = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a id="l00769" name="l00769"></a><span class="lineno">  769</span>            std::shared_ptr&lt;ProcessWrapper&gt; processWrapper;</div>
 <div class="line"><a id="l00770" name="l00770"></a><span class="lineno">  770</span>            std::shared_ptr&lt;MessageRelay&gt; relay;</div>
-<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>        </div>
-<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>            <span class="keywordtype">bool</span> receivedReadyOk = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>            std::atomic_bool quitCommandSend;</div>
-<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>            std::string name = <span class="stringliteral">&quot;&lt;empty&gt;&quot;</span>;</div>
-<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>            std::string author = <span class="stringliteral">&quot;&lt;empty&gt;&quot;</span>;</div>
-<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>            std::condition_variable conditional_var;</div>
-<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>            <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a> * instance;</div>
-<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>            std::mutex lock;</div>
-<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span> </div>
-<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span>            InstancePrivate(std::shared_ptr&lt;ProcessWrapper&gt; engineProcess, std::shared_ptr&lt;<a class="code hl_class" href="classUCILoader_1_1Marschaler.html">Marschaler&lt;Move&gt;</a>&gt; moveMarshaler, std::shared_ptr&lt;PatternMatcher&gt; moveValidator, std::shared_ptr&lt;MessageRelay&gt; relay, <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* instance);</div>
-<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>            <span class="keywordtype">void</span> sendToEngine(<span class="keyword">const</span> std::string&amp; msg);</div>
-<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>            <span class="keywordtype">void</span> logFromEngine(<span class="keyword">const</span> std::string &amp; msg);</div>
-<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>            <span class="keywordtype">void</span> tryReportEngineCrash();</div>
-<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>            <span class="keywordtype">void</span> emit(<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event);</div>
-<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>        };</div>
-<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span> </div>
-<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span>        std::shared_ptr&lt;InstancePrivate&gt; core;</div>
-<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>        std::shared_ptr&lt;MessageRelay&gt; relay;</div>
-<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>        <span class="keywordtype">void</span> detachInstance(); </div>
-<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>        </div>
-<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>        <span class="keyword">class </span>_CommandHandler : <span class="keyword">public</span> AbstractEngineHandler&lt;Move&gt; {</div>
-<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>            std::shared_ptr&lt;InstancePrivate&gt; core;</div>
-<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>        <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>            _CommandHandler(std::shared_ptr&lt;InstancePrivate&gt; core) : core(core) {};</div>
-<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>            <span class="keywordtype">void</span> onEngineName(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>            <span class="keywordtype">void</span> onEngineAuthor(<span class="keyword">const</span> std::string&amp; author) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>            <span class="keywordtype">void</span> onUCIOK() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>            <span class="keywordtype">void</span> onReadyOK() <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>            <span class="keywordtype">void</span> onBestMove(<span class="keyword">const</span> Move&amp; bestMove) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span>            <span class="keywordtype">void</span> onBestMove(<span class="keyword">const</span> Move&amp; bestMove, <span class="keyword">const</span> Move&amp; ponderMove) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>            <span class="keywordtype">void</span> onInfo(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt;&amp; infos) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>            <span class="keywordtype">void</span> onCopyProtection(ProcedureStatus status) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>            <span class="keywordtype">void</span> onRegistration(ProcedureStatus status) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span>            <span class="keywordtype">void</span> onOption(<span class="keyword">const</span> Option&amp; option) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>            <span class="keywordtype">void</span> onError(<span class="keyword">const</span> std::string&amp; errorMsg) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>        };</div>
-<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span> </div>
-<div class="line"><a id="l00809" name="l00809"></a><span class="lineno">  809</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance</a>(std::shared_ptr&lt;ProcessWrapper&gt; engineProcess, std::shared_ptr&lt;<a class="code hl_class" href="classUCILoader_1_1Marschaler.html">Marschaler&lt;Move&gt;</a>&gt; moveMarshaler, std::shared_ptr&lt;PatternMatcher&gt; moveValidator, std::unique_ptr&lt;Logger&gt; &amp;&amp; logger) :</div>
-<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>            relay(<span class="keyword">new</span> <a class="code hl_class" href="classUCILoader_1_1MessageRelay.html">MessageRelay</a>(engineProcess-&gt;getWriter(), std::move(logger))),</div>
-<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>            <a class="code hl_variable" href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">options</a>(relay)</div>
-<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>        {</div>
-<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span>            core = std::make_shared&lt;InstancePrivate&gt;(engineProcess, moveMarshaler, moveValidator, relay, <span class="keyword">this</span>);</div>
-<div class="line"><a id="l00814" name="l00814"></a><span class="lineno">  814</span>            std::shared_ptr&lt;AbstractEngineHandler&lt;Move&gt;&gt; handler = std::static_pointer_cast&lt;AbstractEngineHandler&lt;Move&gt;&gt;(std::make_shared&lt;EngineInstance&lt;Move&gt;::_CommandHandler&gt;(core));</div>
-<div class="line"><a id="l00815" name="l00815"></a><span class="lineno">  815</span>            <span class="keyword">auto</span> parser = std::make_shared&lt;UCIParser&lt;Move&gt;&gt;(handler, moveMarshaler, moveValidator);</div>
-<div class="line"><a id="l00816" name="l00816"></a><span class="lineno">  816</span>            <span class="keyword">auto</span> corePtr = core;</div>
-<div class="line"><a id="l00817" name="l00817"></a><span class="lineno">  817</span>            engineProcess-&gt;listen([parser, corePtr](std::string line) {</div>
-<div class="line"><a id="l00818" name="l00818"></a><span class="lineno">  818</span>                corePtr-&gt;logFromEngine(line);</div>
-<div class="line"><a id="l00819" name="l00819"></a><span class="lineno">  819</span>                parser-&gt;parseLine(line);</div>
-<div class="line"><a id="l00820" name="l00820"></a><span class="lineno">  820</span>            },</div>
-<div class="line"><a id="l00821" name="l00821"></a><span class="lineno">  821</span>            [corePtr](){corePtr-&gt;tryReportEngineCrash();});</div>
-<div class="line"><a id="l00822" name="l00822"></a><span class="lineno">  822</span>            core-&gt;sendToEngine(<span class="stringliteral">&quot;uci\n&quot;</span>);</div>
-<div class="line"><a id="l00823" name="l00823"></a><span class="lineno">  823</span>        };</div>
-<div class="line"><a id="l00824" name="l00824"></a><span class="lineno">  824</span>        </div>
-<div class="line"><a id="l00825" name="l00825"></a><span class="lineno">  825</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">~EngineInstance</a>() {</div>
-<div class="line"><a id="l00826" name="l00826"></a><span class="lineno">  826</span>            <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">quit</a>();</div>
-<div class="line"><a id="l00827" name="l00827"></a><span class="lineno">  827</span>            detachInstance();</div>
-<div class="line"><a id="l00828" name="l00828"></a><span class="lineno">  828</span>        }</div>
-<div class="line"><a id="l00829" name="l00829"></a><span class="lineno">  829</span> </div>
-<div class="line"><a id="l00836" name="l00836"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">  836</a></span>        <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a> : <span class="keyword">public</span> std::exception {};</div>
-<div class="line"><a id="l00837" name="l00837"></a><span class="lineno">  837</span> </div>
-<div class="line"><a id="l00844" name="l00844"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">  844</a></span>        <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">EngineBusyException</a> : <span class="keyword">public</span> std::exception{};</div>
-<div class="line"><a id="l00845" name="l00845"></a><span class="lineno">  845</span> </div>
-<div class="line"><a id="l00851" name="l00851"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">  851</a></span>        <a class="code hl_class" href="classUCILoader_1_1EngineOptionsMap.html">EngineOptionsMap</a> <a class="code hl_variable" href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">options</a>;</div>
-<div class="line"><a id="l00852" name="l00852"></a><span class="lineno">  852</span> </div>
-<div class="line"><a id="l00869" name="l00869"></a><span class="lineno">  869</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295">sync</a>(std::chrono::milliseconds timeout = std::chrono::milliseconds(10000));</div>
-<div class="line"><a id="l00870" name="l00870"></a><span class="lineno">  870</span>        </div>
-<div class="line"><a id="l00877" name="l00877"></a><span class="lineno">  877</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b">ucinewgame</a>();</div>
-<div class="line"><a id="l00878" name="l00878"></a><span class="lineno">  878</span> </div>
-<div class="line"><a id="l00888" name="l00888"></a><span class="lineno">  888</span>        std::chrono::milliseconds <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b">ping</a>(std::chrono::milliseconds timeout = std::chrono::milliseconds(10000));</div>
-<div class="line"><a id="l00894" name="l00894"></a><span class="lineno">  894</span>        std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3">getCurrentSearch</a>();</div>
-<div class="line"><a id="l00895" name="l00895"></a><span class="lineno">  895</span>        </div>
-<div class="line"><a id="l00926" name="l00926"></a><span class="lineno">  926</span>        std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a>(<span class="keyword">const</span> GoParams&lt;Move&gt;&amp; params, <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a>&amp; pos,</div>
-<div class="line"><a id="l00927" name="l00927"></a><span class="lineno">  927</span>            <span class="keyword">const</span> std::vector&lt;Move&gt; &amp; moves = {});</div>
-<div class="line"><a id="l00928" name="l00928"></a><span class="lineno">  928</span>        </div>
-<div class="line"><a id="l00938" name="l00938"></a><span class="lineno">  938</span>        std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">getName</a>();</div>
-<div class="line"><a id="l00939" name="l00939"></a><span class="lineno">  939</span> </div>
-<div class="line"><a id="l00949" name="l00949"></a><span class="lineno">  949</span>        std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4">getAuthor</a>();</div>
-<div class="line"><a id="l00950" name="l00950"></a><span class="lineno">  950</span> </div>
-<div class="line"><a id="l00959" name="l00959"></a><span class="lineno">  959</span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">healthCheck</a>();</div>
-<div class="line"><a id="l00960" name="l00960"></a><span class="lineno">  960</span> </div>
-<div class="line"><a id="l00976" name="l00976"></a><span class="lineno">  976</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">quit</a>();</div>
-<div class="line"><a id="l00977" name="l00977"></a><span class="lineno">  977</span>        </div>
-<div class="line"><a id="l00999" name="l00999"></a><span class="lineno">  999</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">addInfoHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> Info&lt;Move&gt; &amp;)&gt; handler);</div>
-<div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>        </div>
-<div class="line"><a id="l01017" name="l01017"></a><span class="lineno"> 1017</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">addInfoBatchHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt; &amp;)&gt; handler);</div>
-<div class="line"><a id="l01018" name="l01018"></a><span class="lineno"> 1018</span>        </div>
-<div class="line"><a id="l01064" name="l01064"></a><span class="lineno"> 1064</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">addSearchRequestHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> SearchRequest&lt;Move&gt; &amp;)&gt; handler);</div>
-<div class="line"><a id="l01065" name="l01065"></a><span class="lineno"> 1065</span>    };</div>
+<div class="line"><a id="l00771" name="l00771"></a><span class="lineno">  771</span>            </div>
+<div class="line"><a id="l00772" name="l00772"></a><span class="lineno">  772</span>            <span class="keywordtype">bool</span> receivedUCIOK = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00773" name="l00773"></a><span class="lineno">  773</span>            <span class="keywordtype">bool</span> receivedReadyOk = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00774" name="l00774"></a><span class="lineno">  774</span>            std::atomic_bool quitCommandSend;</div>
+<div class="line"><a id="l00775" name="l00775"></a><span class="lineno">  775</span>            std::string name = <span class="stringliteral">&quot;&lt;empty&gt;&quot;</span>;</div>
+<div class="line"><a id="l00776" name="l00776"></a><span class="lineno">  776</span>            std::string author = <span class="stringliteral">&quot;&lt;empty&gt;&quot;</span>;</div>
+<div class="line"><a id="l00777" name="l00777"></a><span class="lineno">  777</span>            std::condition_variable conditional_var;</div>
+<div class="line"><a id="l00778" name="l00778"></a><span class="lineno">  778</span>            <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a> * instance;</div>
+<div class="line"><a id="l00779" name="l00779"></a><span class="lineno">  779</span>            std::mutex lock;</div>
+<div class="line"><a id="l00780" name="l00780"></a><span class="lineno">  780</span> </div>
+<div class="line"><a id="l00781" name="l00781"></a><span class="lineno">  781</span>            InstancePrivate(std::shared_ptr&lt;ProcessWrapper&gt; engineProcess, std::shared_ptr&lt;<a class="code hl_class" href="classUCILoader_1_1Marschaler.html">Marschaler&lt;Move&gt;</a>&gt; moveMarshaler, std::shared_ptr&lt;PatternMatcher&gt; moveValidator, std::shared_ptr&lt;MessageRelay&gt; relay, <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* instance);</div>
+<div class="line"><a id="l00782" name="l00782"></a><span class="lineno">  782</span>            <span class="keywordtype">void</span> sendToEngine(<span class="keyword">const</span> std::string&amp; msg);</div>
+<div class="line"><a id="l00783" name="l00783"></a><span class="lineno">  783</span>            <span class="keywordtype">void</span> logFromEngine(<span class="keyword">const</span> std::string &amp; msg);</div>
+<div class="line"><a id="l00784" name="l00784"></a><span class="lineno">  784</span>            <span class="keywordtype">void</span> tryReportEngineCrash();</div>
+<div class="line"><a id="l00785" name="l00785"></a><span class="lineno">  785</span>            <span class="keywordtype">void</span> emit(<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event);</div>
+<div class="line"><a id="l00786" name="l00786"></a><span class="lineno">  786</span>        };</div>
+<div class="line"><a id="l00787" name="l00787"></a><span class="lineno">  787</span> </div>
+<div class="line"><a id="l00788" name="l00788"></a><span class="lineno">  788</span>        std::shared_ptr&lt;InstancePrivate&gt; core;</div>
+<div class="line"><a id="l00789" name="l00789"></a><span class="lineno">  789</span>        std::shared_ptr&lt;MessageRelay&gt; relay;</div>
+<div class="line"><a id="l00790" name="l00790"></a><span class="lineno">  790</span>        <span class="keywordtype">void</span> detachInstance(); </div>
+<div class="line"><a id="l00791" name="l00791"></a><span class="lineno">  791</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00792" name="l00792"></a><span class="lineno">  792</span>        </div>
+<div class="line"><a id="l00793" name="l00793"></a><span class="lineno">  793</span>        <span class="keyword">class </span>_CommandHandler : <span class="keyword">public</span> AbstractEngineHandler&lt;Move&gt; {</div>
+<div class="line"><a id="l00794" name="l00794"></a><span class="lineno">  794</span>            std::shared_ptr&lt;InstancePrivate&gt; core;</div>
+<div class="line"><a id="l00795" name="l00795"></a><span class="lineno">  795</span>        <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00796" name="l00796"></a><span class="lineno">  796</span>            _CommandHandler(std::shared_ptr&lt;InstancePrivate&gt; core) : core(core) {};</div>
+<div class="line"><a id="l00797" name="l00797"></a><span class="lineno">  797</span>            <span class="keywordtype">void</span> onEngineName(<span class="keyword">const</span> std::string&amp; name) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00798" name="l00798"></a><span class="lineno">  798</span>            <span class="keywordtype">void</span> onEngineAuthor(<span class="keyword">const</span> std::string&amp; author) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00799" name="l00799"></a><span class="lineno">  799</span>            <span class="keywordtype">void</span> onUCIOK() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00800" name="l00800"></a><span class="lineno">  800</span>            <span class="keywordtype">void</span> onReadyOK() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00801" name="l00801"></a><span class="lineno">  801</span>            <span class="keywordtype">void</span> onBestMove(<span class="keyword">const</span> Move&amp; bestMove) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00802" name="l00802"></a><span class="lineno">  802</span>            <span class="keywordtype">void</span> onBestMove(<span class="keyword">const</span> Move&amp; bestMove, <span class="keyword">const</span> Move&amp; ponderMove) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00803" name="l00803"></a><span class="lineno">  803</span>            <span class="keywordtype">void</span> onInfo(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt;&amp; infos) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00804" name="l00804"></a><span class="lineno">  804</span>            <span class="keywordtype">void</span> onCopyProtection(ProcedureStatus status) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00805" name="l00805"></a><span class="lineno">  805</span>            <span class="keywordtype">void</span> onRegistration(ProcedureStatus status) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00806" name="l00806"></a><span class="lineno">  806</span>            <span class="keywordtype">void</span> onOption(<span class="keyword">const</span> Option&amp; option) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00807" name="l00807"></a><span class="lineno">  807</span>            <span class="keywordtype">void</span> onError(<span class="keyword">const</span> std::string&amp; errorMsg) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00808" name="l00808"></a><span class="lineno">  808</span>        };</div>
+<div class="line"><a id="l00809" name="l00809"></a><span class="lineno">  809</span> </div>
+<div class="line"><a id="l00810" name="l00810"></a><span class="lineno">  810</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance</a>(std::shared_ptr&lt;ProcessWrapper&gt; engineProcess, std::shared_ptr&lt;<a class="code hl_class" href="classUCILoader_1_1Marschaler.html">Marschaler&lt;Move&gt;</a>&gt; moveMarshaler, std::shared_ptr&lt;PatternMatcher&gt; moveValidator, std::unique_ptr&lt;Logger&gt; &amp;&amp; logger) :</div>
+<div class="line"><a id="l00811" name="l00811"></a><span class="lineno">  811</span>            relay(<span class="keyword">new</span> <a class="code hl_class" href="classUCILoader_1_1MessageRelay.html">MessageRelay</a>(engineProcess-&gt;getWriter(), std::move(logger))),</div>
+<div class="line"><a id="l00812" name="l00812"></a><span class="lineno">  812</span>            <a class="code hl_variable" href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">options</a>(relay)</div>
+<div class="line"><a id="l00813" name="l00813"></a><span class="lineno">  813</span>        {</div>
+<div class="line"><a id="l00814" name="l00814"></a><span class="lineno">  814</span>            core = std::make_shared&lt;InstancePrivate&gt;(engineProcess, moveMarshaler, moveValidator, relay, <span class="keyword">this</span>);</div>
+<div class="line"><a id="l00815" name="l00815"></a><span class="lineno">  815</span>            std::shared_ptr&lt;AbstractEngineHandler&lt;Move&gt;&gt; handler = std::static_pointer_cast&lt;AbstractEngineHandler&lt;Move&gt;&gt;(std::make_shared&lt;EngineInstance&lt;Move&gt;::_CommandHandler&gt;(core));</div>
+<div class="line"><a id="l00816" name="l00816"></a><span class="lineno">  816</span>            <span class="keyword">auto</span> parser = std::make_shared&lt;UCIParser&lt;Move&gt;&gt;(handler, moveMarshaler, moveValidator);</div>
+<div class="line"><a id="l00817" name="l00817"></a><span class="lineno">  817</span>            <span class="keyword">auto</span> corePtr = core;</div>
+<div class="line"><a id="l00818" name="l00818"></a><span class="lineno">  818</span>            engineProcess-&gt;listen([parser, corePtr](std::string line) {</div>
+<div class="line"><a id="l00819" name="l00819"></a><span class="lineno">  819</span>                corePtr-&gt;logFromEngine(line);</div>
+<div class="line"><a id="l00820" name="l00820"></a><span class="lineno">  820</span>                parser-&gt;parseLine(line);</div>
+<div class="line"><a id="l00821" name="l00821"></a><span class="lineno">  821</span>            },</div>
+<div class="line"><a id="l00822" name="l00822"></a><span class="lineno">  822</span>            [corePtr](){corePtr-&gt;tryReportEngineCrash();});</div>
+<div class="line"><a id="l00823" name="l00823"></a><span class="lineno">  823</span>            core-&gt;sendToEngine(<span class="stringliteral">&quot;uci\n&quot;</span>);</div>
+<div class="line"><a id="l00824" name="l00824"></a><span class="lineno">  824</span>        };</div>
+<div class="line"><a id="l00825" name="l00825"></a><span class="lineno">  825</span>        </div>
+<div class="line"><a id="l00826" name="l00826"></a><span class="lineno">  826</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">~EngineInstance</a>() {</div>
+<div class="line"><a id="l00827" name="l00827"></a><span class="lineno">  827</span>            <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">quit</a>();</div>
+<div class="line"><a id="l00828" name="l00828"></a><span class="lineno">  828</span>            detachInstance();</div>
+<div class="line"><a id="l00829" name="l00829"></a><span class="lineno">  829</span>        }</div>
+<div class="line"><a id="l00830" name="l00830"></a><span class="lineno">  830</span> </div>
+<div class="line"><a id="l00837" name="l00837"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">  837</a></span>        <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a> : <span class="keyword">public</span> std::exception {};</div>
+<div class="line"><a id="l00838" name="l00838"></a><span class="lineno">  838</span> </div>
+<div class="line"><a id="l00845" name="l00845"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">  845</a></span>        <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">EngineBusyException</a> : <span class="keyword">public</span> std::exception{};</div>
+<div class="line"><a id="l00846" name="l00846"></a><span class="lineno">  846</span> </div>
+<div class="line"><a id="l00852" name="l00852"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">  852</a></span>        <a class="code hl_class" href="classUCILoader_1_1EngineOptionsMap.html">EngineOptionsMap</a> <a class="code hl_variable" href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">options</a>;</div>
+<div class="line"><a id="l00853" name="l00853"></a><span class="lineno">  853</span> </div>
+<div class="line"><a id="l00870" name="l00870"></a><span class="lineno">  870</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295">sync</a>(std::chrono::milliseconds timeout = std::chrono::milliseconds(10000));</div>
+<div class="line"><a id="l00871" name="l00871"></a><span class="lineno">  871</span>        </div>
+<div class="line"><a id="l00878" name="l00878"></a><span class="lineno">  878</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b">ucinewgame</a>();</div>
+<div class="line"><a id="l00879" name="l00879"></a><span class="lineno">  879</span> </div>
+<div class="line"><a id="l00889" name="l00889"></a><span class="lineno">  889</span>        std::chrono::milliseconds <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b">ping</a>(std::chrono::milliseconds timeout = std::chrono::milliseconds(10000));</div>
+<div class="line"><a id="l00895" name="l00895"></a><span class="lineno">  895</span>        std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3">getCurrentSearch</a>();</div>
+<div class="line"><a id="l00896" name="l00896"></a><span class="lineno">  896</span>        </div>
+<div class="line"><a id="l00927" name="l00927"></a><span class="lineno">  927</span>        std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a>(<span class="keyword">const</span> GoParams&lt;Move&gt;&amp; params, <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a>&amp; pos,</div>
+<div class="line"><a id="l00928" name="l00928"></a><span class="lineno">  928</span>            <span class="keyword">const</span> std::vector&lt;Move&gt; &amp; moves = {});</div>
+<div class="line"><a id="l00929" name="l00929"></a><span class="lineno">  929</span>        </div>
+<div class="line"><a id="l00939" name="l00939"></a><span class="lineno">  939</span>        std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">getName</a>();</div>
+<div class="line"><a id="l00940" name="l00940"></a><span class="lineno">  940</span> </div>
+<div class="line"><a id="l00950" name="l00950"></a><span class="lineno">  950</span>        std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4">getAuthor</a>();</div>
+<div class="line"><a id="l00951" name="l00951"></a><span class="lineno">  951</span> </div>
+<div class="line"><a id="l00960" name="l00960"></a><span class="lineno">  960</span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">healthCheck</a>();</div>
+<div class="line"><a id="l00961" name="l00961"></a><span class="lineno">  961</span> </div>
+<div class="line"><a id="l00977" name="l00977"></a><span class="lineno">  977</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">quit</a>();</div>
+<div class="line"><a id="l00978" name="l00978"></a><span class="lineno">  978</span>        </div>
+<div class="line"><a id="l01000" name="l01000"></a><span class="lineno"> 1000</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">addInfoHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> Info&lt;Move&gt; &amp;)&gt; handler);</div>
+<div class="line"><a id="l01001" name="l01001"></a><span class="lineno"> 1001</span>        </div>
+<div class="line"><a id="l01018" name="l01018"></a><span class="lineno"> 1018</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">addInfoBatchHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt; &amp;)&gt; handler);</div>
+<div class="line"><a id="l01019" name="l01019"></a><span class="lineno"> 1019</span>        </div>
+<div class="line"><a id="l01065" name="l01065"></a><span class="lineno"> 1065</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">addSearchRequestHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> SearchRequest&lt;Move&gt; &amp;)&gt; handler);</div>
 <div class="line"><a id="l01066" name="l01066"></a><span class="lineno"> 1066</span> </div>
-<div class="line"><a id="l01067" name="l01067"></a><span class="lineno"> 1067</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01068" name="l01068"></a><span class="lineno"> 1068</span>    <span class="keyword">inline</span> EngineInstance&lt;Move&gt;::InstancePrivate::InstancePrivate(std::shared_ptr&lt;ProcessWrapper&gt; engineProcess, std::shared_ptr&lt;Marschaler&lt;Move&gt;&gt; moveMarshaler, std::shared_ptr&lt;PatternMatcher&gt; moveValidator, std::shared_ptr&lt;MessageRelay&gt; relay, <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance&lt;Move&gt;</a> * instance) :</div>
-<div class="line"><a id="l01069" name="l01069"></a><span class="lineno"> 1069</span>        processWrapper(engineProcess),  relay(relay), quitCommandSend(false), instance(instance) {</div>
-<div class="line"><a id="l01070" name="l01070"></a><span class="lineno"> 1070</span>    }</div>
-<div class="line"><a id="l01071" name="l01071"></a><span class="lineno"> 1071</span> </div>
-<div class="line"><a id="l01072" name="l01072"></a><span class="lineno"> 1072</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01073" name="l01073"></a><span class="lineno"> 1073</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::InstancePrivate::sendToEngine(<span class="keyword">const</span> std::string &amp;msg){</div>
-<div class="line"><a id="l01074" name="l01074"></a><span class="lineno"> 1074</span>        relay-&gt;send(msg);</div>
-<div class="line"><a id="l01075" name="l01075"></a><span class="lineno"> 1075</span>    }</div>
-<div class="line"><a id="l01076" name="l01076"></a><span class="lineno"> 1076</span> </div>
-<div class="line"><a id="l01077" name="l01077"></a><span class="lineno"> 1077</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01078" name="l01078"></a><span class="lineno"> 1078</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::InstancePrivate::logFromEngine(<span class="keyword">const</span> std::string &amp;msg){</div>
-<div class="line"><a id="l01079" name="l01079"></a><span class="lineno"> 1079</span>        relay-&gt;receive(msg + <span class="stringliteral">&quot;\n&quot;</span>);</div>
-<div class="line"><a id="l01080" name="l01080"></a><span class="lineno"> 1080</span>    }</div>
-<div class="line"><a id="l01081" name="l01081"></a><span class="lineno"> 1081</span> </div>
-<div class="line"><a id="l01082" name="l01082"></a><span class="lineno"> 1082</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01083" name="l01083"></a><span class="lineno"> 1083</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::detachInstance()</div>
-<div class="line"><a id="l01084" name="l01084"></a><span class="lineno"> 1084</span>    {</div>
-<div class="line"><a id="l01085" name="l01085"></a><span class="lineno"> 1085</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01086" name="l01086"></a><span class="lineno"> 1086</span>        core-&gt;instance = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l01087" name="l01087"></a><span class="lineno"> 1087</span>    }</div>
-<div class="line"><a id="l01088" name="l01088"></a><span class="lineno"> 1088</span> </div>
-<div class="line"><a id="l01089" name="l01089"></a><span class="lineno"> 1089</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01090" name="l01090"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295"> 1090</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295">EngineInstance&lt;Move&gt;::sync</a>(std::chrono::milliseconds timeout)</div>
-<div class="line"><a id="l01091" name="l01091"></a><span class="lineno"> 1091</span>    {</div>
-<div class="line"><a id="l01092" name="l01092"></a><span class="lineno"> 1092</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01093" name="l01093"></a><span class="lineno"> 1093</span>        core-&gt;receivedReadyOk = <span class="keyword">false</span>;</div>
-<div class="line"><a id="l01094" name="l01094"></a><span class="lineno"> 1094</span> </div>
-<div class="line"><a id="l01095" name="l01095"></a><span class="lineno"> 1095</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l01096" name="l01096"></a><span class="lineno"> 1096</span>            core-&gt;sendToEngine(<span class="stringliteral">&quot;isready\n&quot;</span>);</div>
-<div class="line"><a id="l01097" name="l01097"></a><span class="lineno"> 1097</span>        }</div>
-<div class="line"><a id="l01098" name="l01098"></a><span class="lineno"> 1098</span>        <span class="keywordflow">catch</span> (<a class="code hl_class" href="classUCILoader_1_1PipeClosedException.html">PipeClosedException</a> e) {</div>
-<div class="line"><a id="l01099" name="l01099"></a><span class="lineno"> 1099</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a>(); </div>
-<div class="line"><a id="l01100" name="l01100"></a><span class="lineno"> 1100</span>        }</div>
-<div class="line"><a id="l01101" name="l01101"></a><span class="lineno"> 1101</span>        </div>
-<div class="line"><a id="l01102" name="l01102"></a><span class="lineno"> 1102</span>        core-&gt;conditional_var.wait_for(guard, timeout);</div>
-<div class="line"><a id="l01103" name="l01103"></a><span class="lineno"> 1103</span>        <span class="keywordflow">if</span> (!core-&gt;receivedReadyOk) {</div>
-<div class="line"><a id="l01104" name="l01104"></a><span class="lineno"> 1104</span>            core-&gt;processWrapper-&gt;kill();</div>
-<div class="line"><a id="l01105" name="l01105"></a><span class="lineno"> 1105</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a>();</div>
-<div class="line"><a id="l01106" name="l01106"></a><span class="lineno"> 1106</span>        }</div>
-<div class="line"><a id="l01107" name="l01107"></a><span class="lineno"> 1107</span> </div>
-<div class="line"><a id="l01108" name="l01108"></a><span class="lineno"> 1108</span>        <span class="keyword">auto</span> e = NamedEngineEvents::makeSynchronizedEvent();</div>
-<div class="line"><a id="l01109" name="l01109"></a><span class="lineno"> 1109</span>        emit(&amp;e);</div>
-<div class="line"><a id="l01110" name="l01110"></a><span class="lineno"> 1110</span>    }</div>
-<div class="line"><a id="l01111" name="l01111"></a><span class="lineno"> 1111</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01112" name="l01112"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b"> 1112</a></span>    <span class="keyword">inline</span> std::chrono::milliseconds <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b">EngineInstance&lt;Move&gt;::ping</a>(std::chrono::milliseconds timeout)</div>
-<div class="line"><a id="l01113" name="l01113"></a><span class="lineno"> 1113</span>    {</div>
-<div class="line"><a id="l01114" name="l01114"></a><span class="lineno"> 1114</span>        <span class="keyword">auto</span> start = std::chrono::steady_clock::now();</div>
-<div class="line"><a id="l01115" name="l01115"></a><span class="lineno"> 1115</span>        sync(timeout);</div>
-<div class="line"><a id="l01116" name="l01116"></a><span class="lineno"> 1116</span>        <span class="keywordflow">return</span> std::chrono::milliseconds((std::chrono::steady_clock::now() - start).count()/1000000);</div>
-<div class="line"><a id="l01117" name="l01117"></a><span class="lineno"> 1117</span>    }</div>
-<div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span> </div>
+<div class="line"><a id="l01072" name="l01072"></a><span class="lineno"> 1072</span>        <span class="keywordtype">bool</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a3e6a9b96ec4961f6aab2b6a022e338f3">receivedUCIOK</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l01073" name="l01073"></a><span class="lineno"> 1073</span>    };</div>
+<div class="line"><a id="l01074" name="l01074"></a><span class="lineno"> 1074</span> </div>
+<div class="line"><a id="l01075" name="l01075"></a><span class="lineno"> 1075</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01076" name="l01076"></a><span class="lineno"> 1076</span>    <span class="keyword">inline</span> EngineInstance&lt;Move&gt;::InstancePrivate::InstancePrivate(std::shared_ptr&lt;ProcessWrapper&gt; engineProcess, std::shared_ptr&lt;Marschaler&lt;Move&gt;&gt; moveMarshaler, std::shared_ptr&lt;PatternMatcher&gt; moveValidator, std::shared_ptr&lt;MessageRelay&gt; relay, <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance&lt;Move&gt;</a> * instance) :</div>
+<div class="line"><a id="l01077" name="l01077"></a><span class="lineno"> 1077</span>        processWrapper(engineProcess),  relay(relay), quitCommandSend(false), instance(instance) {</div>
+<div class="line"><a id="l01078" name="l01078"></a><span class="lineno"> 1078</span>    }</div>
+<div class="line"><a id="l01079" name="l01079"></a><span class="lineno"> 1079</span> </div>
+<div class="line"><a id="l01080" name="l01080"></a><span class="lineno"> 1080</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01081" name="l01081"></a><span class="lineno"> 1081</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::InstancePrivate::sendToEngine(<span class="keyword">const</span> std::string &amp;msg){</div>
+<div class="line"><a id="l01082" name="l01082"></a><span class="lineno"> 1082</span>        relay-&gt;send(msg);</div>
+<div class="line"><a id="l01083" name="l01083"></a><span class="lineno"> 1083</span>    }</div>
+<div class="line"><a id="l01084" name="l01084"></a><span class="lineno"> 1084</span> </div>
+<div class="line"><a id="l01085" name="l01085"></a><span class="lineno"> 1085</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01086" name="l01086"></a><span class="lineno"> 1086</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::InstancePrivate::logFromEngine(<span class="keyword">const</span> std::string &amp;msg){</div>
+<div class="line"><a id="l01087" name="l01087"></a><span class="lineno"> 1087</span>        relay-&gt;receive(msg + <span class="stringliteral">&quot;\n&quot;</span>);</div>
+<div class="line"><a id="l01088" name="l01088"></a><span class="lineno"> 1088</span>    }</div>
+<div class="line"><a id="l01089" name="l01089"></a><span class="lineno"> 1089</span> </div>
+<div class="line"><a id="l01090" name="l01090"></a><span class="lineno"> 1090</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01091" name="l01091"></a><span class="lineno"> 1091</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::detachInstance()</div>
+<div class="line"><a id="l01092" name="l01092"></a><span class="lineno"> 1092</span>    {</div>
+<div class="line"><a id="l01093" name="l01093"></a><span class="lineno"> 1093</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01094" name="l01094"></a><span class="lineno"> 1094</span>        core-&gt;instance = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l01095" name="l01095"></a><span class="lineno"> 1095</span>    }</div>
+<div class="line"><a id="l01096" name="l01096"></a><span class="lineno"> 1096</span> </div>
+<div class="line"><a id="l01097" name="l01097"></a><span class="lineno"> 1097</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01098" name="l01098"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295"> 1098</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295">EngineInstance&lt;Move&gt;::sync</a>(std::chrono::milliseconds timeout)</div>
+<div class="line"><a id="l01099" name="l01099"></a><span class="lineno"> 1099</span>    {</div>
+<div class="line"><a id="l01100" name="l01100"></a><span class="lineno"> 1100</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01101" name="l01101"></a><span class="lineno"> 1101</span>        core-&gt;receivedReadyOk = <span class="keyword">false</span>;</div>
+<div class="line"><a id="l01102" name="l01102"></a><span class="lineno"> 1102</span> </div>
+<div class="line"><a id="l01103" name="l01103"></a><span class="lineno"> 1103</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l01104" name="l01104"></a><span class="lineno"> 1104</span>            core-&gt;sendToEngine(<span class="stringliteral">&quot;isready\n&quot;</span>);</div>
+<div class="line"><a id="l01105" name="l01105"></a><span class="lineno"> 1105</span>        }</div>
+<div class="line"><a id="l01106" name="l01106"></a><span class="lineno"> 1106</span>        <span class="keywordflow">catch</span> (<a class="code hl_class" href="classUCILoader_1_1PipeClosedException.html">PipeClosedException</a> e) {</div>
+<div class="line"><a id="l01107" name="l01107"></a><span class="lineno"> 1107</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a>(); </div>
+<div class="line"><a id="l01108" name="l01108"></a><span class="lineno"> 1108</span>        }</div>
+<div class="line"><a id="l01109" name="l01109"></a><span class="lineno"> 1109</span>        </div>
+<div class="line"><a id="l01110" name="l01110"></a><span class="lineno"> 1110</span>        core-&gt;conditional_var.wait_for(guard, timeout);</div>
+<div class="line"><a id="l01111" name="l01111"></a><span class="lineno"> 1111</span>        <span class="keywordflow">if</span> (!core-&gt;receivedReadyOk) {</div>
+<div class="line"><a id="l01112" name="l01112"></a><span class="lineno"> 1112</span>            core-&gt;processWrapper-&gt;kill();</div>
+<div class="line"><a id="l01113" name="l01113"></a><span class="lineno"> 1113</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a>();</div>
+<div class="line"><a id="l01114" name="l01114"></a><span class="lineno"> 1114</span>        }</div>
+<div class="line"><a id="l01115" name="l01115"></a><span class="lineno"> 1115</span> </div>
+<div class="line"><a id="l01116" name="l01116"></a><span class="lineno"> 1116</span>        <span class="keyword">auto</span> e = NamedEngineEvents::makeSynchronizedEvent();</div>
+<div class="line"><a id="l01117" name="l01117"></a><span class="lineno"> 1117</span>        emit(&amp;e);</div>
+<div class="line"><a id="l01118" name="l01118"></a><span class="lineno"> 1118</span>    }</div>
 <div class="line"><a id="l01119" name="l01119"></a><span class="lineno"> 1119</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01120" name="l01120"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3"> 1120</a></span>    <span class="keyword">inline</span> std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3">EngineInstance&lt;Move&gt;::getCurrentSearch</a>()</div>
+<div class="line"><a id="l01120" name="l01120"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b"> 1120</a></span>    <span class="keyword">inline</span> std::chrono::milliseconds <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b">EngineInstance&lt;Move&gt;::ping</a>(std::chrono::milliseconds timeout)</div>
 <div class="line"><a id="l01121" name="l01121"></a><span class="lineno"> 1121</span>    {</div>
-<div class="line"><a id="l01122" name="l01122"></a><span class="lineno"> 1122</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01123" name="l01123"></a><span class="lineno"> 1123</span>        <span class="keywordflow">return</span> core-&gt;currentConnection;</div>
-<div class="line"><a id="l01124" name="l01124"></a><span class="lineno"> 1124</span>    }</div>
-<div class="line"><a id="l01125" name="l01125"></a><span class="lineno"> 1125</span> </div>
-<div class="line"><a id="l01126" name="l01126"></a><span class="lineno"> 1126</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01127" name="l01127"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177"> 1127</a></span>    <span class="keyword">inline</span> std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">EngineInstance&lt;Move&gt;::search</a>(<span class="keyword">const</span> GoParams&lt;Move&gt;&amp; params, <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a>&amp; pos,</div>
-<div class="line"><a id="l01128" name="l01128"></a><span class="lineno"> 1128</span>        <span class="keyword">const</span> std::vector&lt;Move&gt; &amp; moves)</div>
+<div class="line"><a id="l01122" name="l01122"></a><span class="lineno"> 1122</span>        <span class="keyword">auto</span> start = std::chrono::steady_clock::now();</div>
+<div class="line"><a id="l01123" name="l01123"></a><span class="lineno"> 1123</span>        sync(timeout);</div>
+<div class="line"><a id="l01124" name="l01124"></a><span class="lineno"> 1124</span>        <span class="keywordflow">return</span> std::chrono::milliseconds((std::chrono::steady_clock::now() - start).count()/1000000);</div>
+<div class="line"><a id="l01125" name="l01125"></a><span class="lineno"> 1125</span>    }</div>
+<div class="line"><a id="l01126" name="l01126"></a><span class="lineno"> 1126</span> </div>
+<div class="line"><a id="l01127" name="l01127"></a><span class="lineno"> 1127</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01128" name="l01128"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3"> 1128</a></span>    <span class="keyword">inline</span> std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3">EngineInstance&lt;Move&gt;::getCurrentSearch</a>()</div>
 <div class="line"><a id="l01129" name="l01129"></a><span class="lineno"> 1129</span>    {</div>
 <div class="line"><a id="l01130" name="l01130"></a><span class="lineno"> 1130</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01131" name="l01131"></a><span class="lineno"> 1131</span> </div>
-<div class="line"><a id="l01132" name="l01132"></a><span class="lineno"> 1132</span>        <span class="keywordflow">if</span> (core-&gt;currentConnection != <span class="keyword">nullptr</span>)</div>
-<div class="line"><a id="l01133" name="l01133"></a><span class="lineno"> 1133</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">EngineBusyException</a>();</div>
-<div class="line"><a id="l01134" name="l01134"></a><span class="lineno"> 1134</span> </div>
-<div class="line"><a id="l01135" name="l01135"></a><span class="lineno"> 1135</span>        core-&gt;currentConnection = std::make_shared&lt;SearchConnection&lt;Move&gt;&gt;(core-&gt;processWrapper, relay);</div>
-<div class="line"><a id="l01136" name="l01136"></a><span class="lineno"> 1136</span> </div>
-<div class="line"><a id="l01137" name="l01137"></a><span class="lineno"> 1137</span>        core-&gt;sendToEngine(UciFormatter&lt;Move&gt;::position(pos, moves));</div>
-<div class="line"><a id="l01138" name="l01138"></a><span class="lineno"> 1138</span>        core-&gt;sendToEngine(UciFormatter&lt;Move&gt;::go(params));</div>
-<div class="line"><a id="l01139" name="l01139"></a><span class="lineno"> 1139</span>        core-&gt;currentConnection-&gt;status.set(OnGoing);</div>
-<div class="line"><a id="l01140" name="l01140"></a><span class="lineno"> 1140</span> </div>
-<div class="line"><a id="l01141" name="l01141"></a><span class="lineno"> 1141</span>        <span class="keyword">auto</span> <span class="keyword">event</span> = NamedEngineEvents::makeSearchStartedEvent(params, pos, moves);</div>
-<div class="line"><a id="l01142" name="l01142"></a><span class="lineno"> 1142</span>        emit(&amp;event);</div>
-<div class="line"><a id="l01143" name="l01143"></a><span class="lineno"> 1143</span>        <span class="keywordflow">return</span> core-&gt;currentConnection;</div>
-<div class="line"><a id="l01144" name="l01144"></a><span class="lineno"> 1144</span>    }</div>
-<div class="line"><a id="l01145" name="l01145"></a><span class="lineno"> 1145</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01146" name="l01146"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145"> 1146</a></span>    <span class="keyword">inline</span> std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">EngineInstance&lt;Move&gt;::getName</a>()</div>
-<div class="line"><a id="l01147" name="l01147"></a><span class="lineno"> 1147</span>    {</div>
-<div class="line"><a id="l01148" name="l01148"></a><span class="lineno"> 1148</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01149" name="l01149"></a><span class="lineno"> 1149</span>        <span class="keywordflow">return</span> core-&gt;name;</div>
-<div class="line"><a id="l01150" name="l01150"></a><span class="lineno"> 1150</span>    }</div>
-<div class="line"><a id="l01151" name="l01151"></a><span class="lineno"> 1151</span> </div>
-<div class="line"><a id="l01152" name="l01152"></a><span class="lineno"> 1152</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01153" name="l01153"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4"> 1153</a></span>    <span class="keyword">inline</span> std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4">EngineInstance&lt;Move&gt;::getAuthor</a>()</div>
-<div class="line"><a id="l01154" name="l01154"></a><span class="lineno"> 1154</span>    {</div>
-<div class="line"><a id="l01155" name="l01155"></a><span class="lineno"> 1155</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01156" name="l01156"></a><span class="lineno"> 1156</span>        <span class="keywordflow">return</span> core-&gt;author;</div>
-<div class="line"><a id="l01157" name="l01157"></a><span class="lineno"> 1157</span>    }</div>
-<div class="line"><a id="l01158" name="l01158"></a><span class="lineno"> 1158</span> </div>
-<div class="line"><a id="l01159" name="l01159"></a><span class="lineno"> 1159</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01160" name="l01160"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230"> 1160</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">EngineInstance&lt;Move&gt;::quit</a>()</div>
-<div class="line"><a id="l01161" name="l01161"></a><span class="lineno"> 1161</span>    {</div>
-<div class="line"><a id="l01162" name="l01162"></a><span class="lineno"> 1162</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01163" name="l01163"></a><span class="lineno"> 1163</span> </div>
-<div class="line"><a id="l01164" name="l01164"></a><span class="lineno"> 1164</span>        <span class="keywordflow">if</span> (core-&gt;quitCommandSend)</div>
-<div class="line"><a id="l01165" name="l01165"></a><span class="lineno"> 1165</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l01131" name="l01131"></a><span class="lineno"> 1131</span>        <span class="keywordflow">return</span> core-&gt;currentConnection;</div>
+<div class="line"><a id="l01132" name="l01132"></a><span class="lineno"> 1132</span>    }</div>
+<div class="line"><a id="l01133" name="l01133"></a><span class="lineno"> 1133</span> </div>
+<div class="line"><a id="l01134" name="l01134"></a><span class="lineno"> 1134</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01135" name="l01135"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177"> 1135</a></span>    <span class="keyword">inline</span> std::shared_ptr&lt;SearchConnection&lt;Move&gt;&gt; <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">EngineInstance&lt;Move&gt;::search</a>(<span class="keyword">const</span> GoParams&lt;Move&gt;&amp; params, <span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a>&amp; pos,</div>
+<div class="line"><a id="l01136" name="l01136"></a><span class="lineno"> 1136</span>        <span class="keyword">const</span> std::vector&lt;Move&gt; &amp; moves)</div>
+<div class="line"><a id="l01137" name="l01137"></a><span class="lineno"> 1137</span>    {</div>
+<div class="line"><a id="l01138" name="l01138"></a><span class="lineno"> 1138</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01139" name="l01139"></a><span class="lineno"> 1139</span> </div>
+<div class="line"><a id="l01140" name="l01140"></a><span class="lineno"> 1140</span>        <span class="keywordflow">if</span> (core-&gt;currentConnection != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l01141" name="l01141"></a><span class="lineno"> 1141</span>            <span class="keywordflow">throw</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">EngineBusyException</a>();</div>
+<div class="line"><a id="l01142" name="l01142"></a><span class="lineno"> 1142</span> </div>
+<div class="line"><a id="l01143" name="l01143"></a><span class="lineno"> 1143</span>        core-&gt;currentConnection = std::make_shared&lt;SearchConnection&lt;Move&gt;&gt;(core-&gt;processWrapper, relay);</div>
+<div class="line"><a id="l01144" name="l01144"></a><span class="lineno"> 1144</span> </div>
+<div class="line"><a id="l01145" name="l01145"></a><span class="lineno"> 1145</span>        core-&gt;sendToEngine(UciFormatter&lt;Move&gt;::position(pos, moves));</div>
+<div class="line"><a id="l01146" name="l01146"></a><span class="lineno"> 1146</span>        core-&gt;sendToEngine(UciFormatter&lt;Move&gt;::go(params));</div>
+<div class="line"><a id="l01147" name="l01147"></a><span class="lineno"> 1147</span>        core-&gt;currentConnection-&gt;status.set(OnGoing);</div>
+<div class="line"><a id="l01148" name="l01148"></a><span class="lineno"> 1148</span> </div>
+<div class="line"><a id="l01149" name="l01149"></a><span class="lineno"> 1149</span>        <span class="keyword">auto</span> <span class="keyword">event</span> = NamedEngineEvents::makeSearchStartedEvent(params, pos, moves);</div>
+<div class="line"><a id="l01150" name="l01150"></a><span class="lineno"> 1150</span>        emit(&amp;event);</div>
+<div class="line"><a id="l01151" name="l01151"></a><span class="lineno"> 1151</span>        <span class="keywordflow">return</span> core-&gt;currentConnection;</div>
+<div class="line"><a id="l01152" name="l01152"></a><span class="lineno"> 1152</span>    }</div>
+<div class="line"><a id="l01153" name="l01153"></a><span class="lineno"> 1153</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01154" name="l01154"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145"> 1154</a></span>    <span class="keyword">inline</span> std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">EngineInstance&lt;Move&gt;::getName</a>()</div>
+<div class="line"><a id="l01155" name="l01155"></a><span class="lineno"> 1155</span>    {</div>
+<div class="line"><a id="l01156" name="l01156"></a><span class="lineno"> 1156</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01157" name="l01157"></a><span class="lineno"> 1157</span>        <span class="keywordflow">return</span> core-&gt;name;</div>
+<div class="line"><a id="l01158" name="l01158"></a><span class="lineno"> 1158</span>    }</div>
+<div class="line"><a id="l01159" name="l01159"></a><span class="lineno"> 1159</span> </div>
+<div class="line"><a id="l01160" name="l01160"></a><span class="lineno"> 1160</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01161" name="l01161"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4"> 1161</a></span>    <span class="keyword">inline</span> std::string <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4">EngineInstance&lt;Move&gt;::getAuthor</a>()</div>
+<div class="line"><a id="l01162" name="l01162"></a><span class="lineno"> 1162</span>    {</div>
+<div class="line"><a id="l01163" name="l01163"></a><span class="lineno"> 1163</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01164" name="l01164"></a><span class="lineno"> 1164</span>        <span class="keywordflow">return</span> core-&gt;author;</div>
+<div class="line"><a id="l01165" name="l01165"></a><span class="lineno"> 1165</span>    }</div>
 <div class="line"><a id="l01166" name="l01166"></a><span class="lineno"> 1166</span> </div>
-<div class="line"><a id="l01167" name="l01167"></a><span class="lineno"> 1167</span>        core-&gt;quitCommandSend = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l01168" name="l01168"></a><span class="lineno"> 1168</span>        <span class="keywordflow">try</span> {</div>
-<div class="line"><a id="l01169" name="l01169"></a><span class="lineno"> 1169</span>            core-&gt;sendToEngine(<span class="stringliteral">&quot;quit\n&quot;</span>);</div>
-<div class="line"><a id="l01170" name="l01170"></a><span class="lineno"> 1170</span>        }</div>
-<div class="line"><a id="l01171" name="l01171"></a><span class="lineno"> 1171</span>        <span class="keywordflow">catch</span> (<a class="code hl_class" href="classUCILoader_1_1PipeClosedException.html">PipeClosedException</a> ignored) {</div>
-<div class="line"><a id="l01172" name="l01172"></a><span class="lineno"> 1172</span>            <span class="comment">// If we got here, the engine process in in unstable state, but since we are already killing it, we can ignore it.</span></div>
-<div class="line"><a id="l01173" name="l01173"></a><span class="lineno"> 1173</span>        };</div>
-<div class="line"><a id="l01174" name="l01174"></a><span class="lineno"> 1174</span>        </div>
-<div class="line"><a id="l01175" name="l01175"></a><span class="lineno"> 1175</span> </div>
-<div class="line"><a id="l01176" name="l01176"></a><span class="lineno"> 1176</span>        <span class="keywordtype">int</span> counter = 0;</div>
-<div class="line"><a id="l01177" name="l01177"></a><span class="lineno"> 1177</span>        </div>
-<div class="line"><a id="l01178" name="l01178"></a><span class="lineno"> 1178</span>        <span class="keywordflow">while</span> (core-&gt;processWrapper-&gt;healthCheck()) {</div>
-<div class="line"><a id="l01179" name="l01179"></a><span class="lineno"> 1179</span>            </div>
-<div class="line"><a id="l01180" name="l01180"></a><span class="lineno"> 1180</span>            <span class="keywordflow">if</span> (counter == 10) {</div>
-<div class="line"><a id="l01181" name="l01181"></a><span class="lineno"> 1181</span>                core-&gt;processWrapper-&gt;kill();</div>
-<div class="line"><a id="l01182" name="l01182"></a><span class="lineno"> 1182</span>                <span class="keywordflow">break</span>;</div>
-<div class="line"><a id="l01183" name="l01183"></a><span class="lineno"> 1183</span>            }</div>
-<div class="line"><a id="l01184" name="l01184"></a><span class="lineno"> 1184</span>            std::this_thread::sleep_for(std::chrono::milliseconds(100));</div>
-<div class="line"><a id="l01185" name="l01185"></a><span class="lineno"> 1185</span>            ++counter;</div>
-<div class="line"><a id="l01186" name="l01186"></a><span class="lineno"> 1186</span>        };</div>
-<div class="line"><a id="l01187" name="l01187"></a><span class="lineno"> 1187</span>    }</div>
-<div class="line"><a id="l01188" name="l01188"></a><span class="lineno"> 1188</span> </div>
-<div class="line"><a id="l01189" name="l01189"></a><span class="lineno"> 1189</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01190" name="l01190"></a><span class="lineno"> 1190</span>    <span class="keywordtype">void</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;::InstancePrivate::tryReportEngineCrash</a>() {</div>
-<div class="line"><a id="l01191" name="l01191"></a><span class="lineno"> 1191</span>        <span class="keywordflow">if</span> (quitCommandSend == <span class="keyword">false</span>) {</div>
-<div class="line"><a id="l01192" name="l01192"></a><span class="lineno"> 1192</span>            <span class="keyword">auto</span> <span class="keyword">event</span> = NamedEngineEvents::makeEngineCrashedEvent();</div>
-<div class="line"><a id="l01193" name="l01193"></a><span class="lineno"> 1193</span>            emit(&amp;event);</div>
+<div class="line"><a id="l01167" name="l01167"></a><span class="lineno"> 1167</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01168" name="l01168"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230"> 1168</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">EngineInstance&lt;Move&gt;::quit</a>()</div>
+<div class="line"><a id="l01169" name="l01169"></a><span class="lineno"> 1169</span>    {</div>
+<div class="line"><a id="l01170" name="l01170"></a><span class="lineno"> 1170</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01171" name="l01171"></a><span class="lineno"> 1171</span> </div>
+<div class="line"><a id="l01172" name="l01172"></a><span class="lineno"> 1172</span>        <span class="keywordflow">if</span> (core-&gt;quitCommandSend)</div>
+<div class="line"><a id="l01173" name="l01173"></a><span class="lineno"> 1173</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l01174" name="l01174"></a><span class="lineno"> 1174</span> </div>
+<div class="line"><a id="l01175" name="l01175"></a><span class="lineno"> 1175</span>        core-&gt;quitCommandSend = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l01176" name="l01176"></a><span class="lineno"> 1176</span>        <span class="keywordflow">try</span> {</div>
+<div class="line"><a id="l01177" name="l01177"></a><span class="lineno"> 1177</span>            core-&gt;sendToEngine(<span class="stringliteral">&quot;quit\n&quot;</span>);</div>
+<div class="line"><a id="l01178" name="l01178"></a><span class="lineno"> 1178</span>        }</div>
+<div class="line"><a id="l01179" name="l01179"></a><span class="lineno"> 1179</span>        <span class="keywordflow">catch</span> (<a class="code hl_class" href="classUCILoader_1_1PipeClosedException.html">PipeClosedException</a> ignored) {</div>
+<div class="line"><a id="l01180" name="l01180"></a><span class="lineno"> 1180</span>            <span class="comment">// If we got here, the engine process in in unstable state, but since we are already killing it, we can ignore it.</span></div>
+<div class="line"><a id="l01181" name="l01181"></a><span class="lineno"> 1181</span>        };</div>
+<div class="line"><a id="l01182" name="l01182"></a><span class="lineno"> 1182</span>        </div>
+<div class="line"><a id="l01183" name="l01183"></a><span class="lineno"> 1183</span> </div>
+<div class="line"><a id="l01184" name="l01184"></a><span class="lineno"> 1184</span>        <span class="keywordtype">int</span> counter = 0;</div>
+<div class="line"><a id="l01185" name="l01185"></a><span class="lineno"> 1185</span>        </div>
+<div class="line"><a id="l01186" name="l01186"></a><span class="lineno"> 1186</span>        <span class="keywordflow">while</span> (core-&gt;processWrapper-&gt;healthCheck()) {</div>
+<div class="line"><a id="l01187" name="l01187"></a><span class="lineno"> 1187</span>            </div>
+<div class="line"><a id="l01188" name="l01188"></a><span class="lineno"> 1188</span>            <span class="keywordflow">if</span> (counter == 10) {</div>
+<div class="line"><a id="l01189" name="l01189"></a><span class="lineno"> 1189</span>                core-&gt;processWrapper-&gt;kill();</div>
+<div class="line"><a id="l01190" name="l01190"></a><span class="lineno"> 1190</span>                <span class="keywordflow">break</span>;</div>
+<div class="line"><a id="l01191" name="l01191"></a><span class="lineno"> 1191</span>            }</div>
+<div class="line"><a id="l01192" name="l01192"></a><span class="lineno"> 1192</span>            std::this_thread::sleep_for(std::chrono::milliseconds(100));</div>
+<div class="line"><a id="l01193" name="l01193"></a><span class="lineno"> 1193</span>            ++counter;</div>
 <div class="line"><a id="l01194" name="l01194"></a><span class="lineno"> 1194</span>        };</div>
 <div class="line"><a id="l01195" name="l01195"></a><span class="lineno"> 1195</span>    }</div>
-<div class="line"><a id="l01196" name="l01196"></a><span class="lineno"> 1196</span>    </div>
-<div class="line"><a id="l01197" name="l01197"></a><span class="lineno"> 1197</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01198" name="l01198"></a><span class="lineno"> 1198</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::InstancePrivate::emit(<span class="keyword">const</span> EngineEvent *event) {</div>
-<div class="line"><a id="l01199" name="l01199"></a><span class="lineno"> 1199</span>        <span class="keywordflow">if</span>(instance)</div>
-<div class="line"><a id="l01200" name="l01200"></a><span class="lineno"> 1200</span>            instance-&gt;emit(event);</div>
-<div class="line"><a id="l01201" name="l01201"></a><span class="lineno"> 1201</span>    };</div>
-<div class="line"><a id="l01202" name="l01202"></a><span class="lineno"> 1202</span> </div>
-<div class="line"><a id="l01203" name="l01203"></a><span class="lineno"> 1203</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01204" name="l01204"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2"> 1204</a></span>    <span class="keyword">inline</span> <span class="keywordtype">bool</span>  <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">EngineInstance&lt;Move&gt;::healthCheck</a>() {</div>
-<div class="line"><a id="l01205" name="l01205"></a><span class="lineno"> 1205</span>        <span class="keywordflow">return</span> core-&gt;processWrapper-&gt;healthCheck();</div>
-<div class="line"><a id="l01206" name="l01206"></a><span class="lineno"> 1206</span>    }</div>
-<div class="line"><a id="l01207" name="l01207"></a><span class="lineno"> 1207</span> </div>
-<div class="line"><a id="l01208" name="l01208"></a><span class="lineno"> 1208</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01209" name="l01209"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b"> 1209</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b">EngineInstance&lt;Move&gt;::ucinewgame</a>(){</div>
-<div class="line"><a id="l01210" name="l01210"></a><span class="lineno"> 1210</span>        core-&gt;sendToEngine(<span class="stringliteral">&quot;ucinewgame\n&quot;</span>);</div>
-<div class="line"><a id="l01211" name="l01211"></a><span class="lineno"> 1211</span>    }</div>
-<div class="line"><a id="l01212" name="l01212"></a><span class="lineno"> 1212</span> </div>
-<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473"> 1214</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">EngineInstance&lt;Move&gt;::addInfoHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> Info&lt;Move&gt; &amp;)&gt; handler){</div>
-<div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span>            connect([<span class="keyword">this</span>, handler](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event){</div>
-<div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span>                <span class="keyword">auto</span> info = (<span class="keyword">const</span> Info&lt;Move&gt;*)event-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
-<div class="line"><a id="l01217" name="l01217"></a><span class="lineno"> 1217</span>                <span class="keywordflow">if</span> (info != <span class="keyword">nullptr</span>)</div>
-<div class="line"><a id="l01218" name="l01218"></a><span class="lineno"> 1218</span>                    handler(*info);</div>
-<div class="line"><a id="l01219" name="l01219"></a><span class="lineno"> 1219</span>            }, NamedEngineEvents::InfoReceived);</div>
-<div class="line"><a id="l01220" name="l01220"></a><span class="lineno"> 1220</span>    };</div>
-<div class="line"><a id="l01221" name="l01221"></a><span class="lineno"> 1221</span> </div>
-<div class="line"><a id="l01222" name="l01222"></a><span class="lineno"> 1222</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01223" name="l01223"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1"> 1223</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">EngineInstance&lt;Move&gt;::addInfoBatchHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt; &amp;)&gt; handler){</div>
-<div class="line"><a id="l01224" name="l01224"></a><span class="lineno"> 1224</span>            connect([<span class="keyword">this</span>, handler](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event){</div>
-<div class="line"><a id="l01225" name="l01225"></a><span class="lineno"> 1225</span>                <span class="keyword">auto</span> batch = (<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt;*)event-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
-<div class="line"><a id="l01226" name="l01226"></a><span class="lineno"> 1226</span>                <span class="keywordflow">if</span> (batch != <span class="keyword">nullptr</span>)</div>
-<div class="line"><a id="l01227" name="l01227"></a><span class="lineno"> 1227</span>                    handler(*batch);</div>
-<div class="line"><a id="l01228" name="l01228"></a><span class="lineno"> 1228</span>            }, NamedEngineEvents::InfoClampReceived);</div>
-<div class="line"><a id="l01229" name="l01229"></a><span class="lineno"> 1229</span>    };</div>
-<div class="line"><a id="l01230" name="l01230"></a><span class="lineno"> 1230</span> </div>
-<div class="line"><a id="l01231" name="l01231"></a><span class="lineno"> 1231</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01232" name="l01232"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"> 1232</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">EngineInstance&lt;Move&gt;::addSearchRequestHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> SearchRequest&lt;Move&gt; &amp;)&gt; handler) {</div>
-<div class="line"><a id="l01233" name="l01233"></a><span class="lineno"> 1233</span>        connect([<span class="keyword">this</span>, handler](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event){</div>
-<div class="line"><a id="l01234" name="l01234"></a><span class="lineno"> 1234</span>            <span class="keyword">auto</span> request = (<span class="keyword">const</span> SearchRequest&lt;Move&gt;*)event-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
-<div class="line"><a id="l01235" name="l01235"></a><span class="lineno"> 1235</span>            <span class="keywordflow">if</span> (request != <span class="keyword">nullptr</span>)</div>
-<div class="line"><a id="l01236" name="l01236"></a><span class="lineno"> 1236</span>                handler(*request);</div>
-<div class="line"><a id="l01237" name="l01237"></a><span class="lineno"> 1237</span>        }, NamedEngineEvents::SearchStarted);</div>
-<div class="line"><a id="l01238" name="l01238"></a><span class="lineno"> 1238</span>    }</div>
-<div class="line"><a id="l01239" name="l01239"></a><span class="lineno"> 1239</span> </div>
-<div class="line"><a id="l01240" name="l01240"></a><span class="lineno"> 1240</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01241" name="l01241"></a><span class="lineno"> 1241</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;::_CommandHandler::onEngineName</a>(<span class="keyword">const</span> std::string&amp; name)</div>
-<div class="line"><a id="l01242" name="l01242"></a><span class="lineno"> 1242</span>    {</div>
-<div class="line"><a id="l01243" name="l01243"></a><span class="lineno"> 1243</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01244" name="l01244"></a><span class="lineno"> 1244</span>        core-&gt;name = name;</div>
-<div class="line"><a id="l01245" name="l01245"></a><span class="lineno"> 1245</span>    }</div>
-<div class="line"><a id="l01246" name="l01246"></a><span class="lineno"> 1246</span> </div>
-<div class="line"><a id="l01247" name="l01247"></a><span class="lineno"> 1247</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01248" name="l01248"></a><span class="lineno"> 1248</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onEngineAuthor(<span class="keyword">const</span> std::string&amp; author)</div>
-<div class="line"><a id="l01249" name="l01249"></a><span class="lineno"> 1249</span>    {</div>
+<div class="line"><a id="l01196" name="l01196"></a><span class="lineno"> 1196</span> </div>
+<div class="line"><a id="l01197" name="l01197"></a><span class="lineno"> 1197</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01198" name="l01198"></a><span class="lineno"> 1198</span>    <span class="keywordtype">void</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;::InstancePrivate::tryReportEngineCrash</a>() {</div>
+<div class="line"><a id="l01199" name="l01199"></a><span class="lineno"> 1199</span>        <span class="keywordflow">if</span> (quitCommandSend == <span class="keyword">false</span>) {</div>
+<div class="line"><a id="l01200" name="l01200"></a><span class="lineno"> 1200</span>            <span class="keyword">auto</span> <span class="keyword">event</span> = NamedEngineEvents::makeEngineCrashedEvent();</div>
+<div class="line"><a id="l01201" name="l01201"></a><span class="lineno"> 1201</span>            emit(&amp;event);</div>
+<div class="line"><a id="l01202" name="l01202"></a><span class="lineno"> 1202</span>        };</div>
+<div class="line"><a id="l01203" name="l01203"></a><span class="lineno"> 1203</span>    }</div>
+<div class="line"><a id="l01204" name="l01204"></a><span class="lineno"> 1204</span>    </div>
+<div class="line"><a id="l01205" name="l01205"></a><span class="lineno"> 1205</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01206" name="l01206"></a><span class="lineno"> 1206</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::InstancePrivate::emit(<span class="keyword">const</span> EngineEvent *event) {</div>
+<div class="line"><a id="l01207" name="l01207"></a><span class="lineno"> 1207</span>        <span class="keywordflow">if</span>(instance)</div>
+<div class="line"><a id="l01208" name="l01208"></a><span class="lineno"> 1208</span>            instance-&gt;emit(event);</div>
+<div class="line"><a id="l01209" name="l01209"></a><span class="lineno"> 1209</span>    };</div>
+<div class="line"><a id="l01210" name="l01210"></a><span class="lineno"> 1210</span> </div>
+<div class="line"><a id="l01211" name="l01211"></a><span class="lineno"> 1211</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01212" name="l01212"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2"> 1212</a></span>    <span class="keyword">inline</span> <span class="keywordtype">bool</span>  <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">EngineInstance&lt;Move&gt;::healthCheck</a>() {</div>
+<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span>        <span class="keywordflow">return</span> core-&gt;processWrapper-&gt;healthCheck();</div>
+<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span>    }</div>
+<div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span> </div>
+<div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01217" name="l01217"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b"> 1217</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b">EngineInstance&lt;Move&gt;::ucinewgame</a>(){</div>
+<div class="line"><a id="l01218" name="l01218"></a><span class="lineno"> 1218</span>        core-&gt;sendToEngine(<span class="stringliteral">&quot;ucinewgame\n&quot;</span>);</div>
+<div class="line"><a id="l01219" name="l01219"></a><span class="lineno"> 1219</span>    }</div>
+<div class="line"><a id="l01220" name="l01220"></a><span class="lineno"> 1220</span> </div>
+<div class="line"><a id="l01221" name="l01221"></a><span class="lineno"> 1221</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01222" name="l01222"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473"> 1222</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">EngineInstance&lt;Move&gt;::addInfoHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> Info&lt;Move&gt; &amp;)&gt; handler){</div>
+<div class="line"><a id="l01223" name="l01223"></a><span class="lineno"> 1223</span>            connect([<span class="keyword">this</span>, handler](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event){</div>
+<div class="line"><a id="l01224" name="l01224"></a><span class="lineno"> 1224</span>                <span class="keyword">auto</span> info = (<span class="keyword">const</span> Info&lt;Move&gt;*)event-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
+<div class="line"><a id="l01225" name="l01225"></a><span class="lineno"> 1225</span>                <span class="keywordflow">if</span> (info != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l01226" name="l01226"></a><span class="lineno"> 1226</span>                    handler(*info);</div>
+<div class="line"><a id="l01227" name="l01227"></a><span class="lineno"> 1227</span>            }, NamedEngineEvents::InfoReceived);</div>
+<div class="line"><a id="l01228" name="l01228"></a><span class="lineno"> 1228</span>    };</div>
+<div class="line"><a id="l01229" name="l01229"></a><span class="lineno"> 1229</span> </div>
+<div class="line"><a id="l01230" name="l01230"></a><span class="lineno"> 1230</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01231" name="l01231"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1"> 1231</a></span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">EngineInstance&lt;Move&gt;::addInfoBatchHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt; &amp;)&gt; handler){</div>
+<div class="line"><a id="l01232" name="l01232"></a><span class="lineno"> 1232</span>            connect([<span class="keyword">this</span>, handler](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event){</div>
+<div class="line"><a id="l01233" name="l01233"></a><span class="lineno"> 1233</span>                <span class="keyword">auto</span> batch = (<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt;*)event-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
+<div class="line"><a id="l01234" name="l01234"></a><span class="lineno"> 1234</span>                <span class="keywordflow">if</span> (batch != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l01235" name="l01235"></a><span class="lineno"> 1235</span>                    handler(*batch);</div>
+<div class="line"><a id="l01236" name="l01236"></a><span class="lineno"> 1236</span>            }, NamedEngineEvents::InfoClampReceived);</div>
+<div class="line"><a id="l01237" name="l01237"></a><span class="lineno"> 1237</span>    };</div>
+<div class="line"><a id="l01238" name="l01238"></a><span class="lineno"> 1238</span> </div>
+<div class="line"><a id="l01239" name="l01239"></a><span class="lineno"> 1239</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01240" name="l01240"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"> 1240</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">EngineInstance&lt;Move&gt;::addSearchRequestHandler</a>(std::function&lt;<span class="keywordtype">void</span>(<span class="keyword">const</span> SearchRequest&lt;Move&gt; &amp;)&gt; handler) {</div>
+<div class="line"><a id="l01241" name="l01241"></a><span class="lineno"> 1241</span>        connect([<span class="keyword">this</span>, handler](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* event){</div>
+<div class="line"><a id="l01242" name="l01242"></a><span class="lineno"> 1242</span>            <span class="keyword">auto</span> request = (<span class="keyword">const</span> SearchRequest&lt;Move&gt;*)event-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">getPayload</a>();</div>
+<div class="line"><a id="l01243" name="l01243"></a><span class="lineno"> 1243</span>            <span class="keywordflow">if</span> (request != <span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l01244" name="l01244"></a><span class="lineno"> 1244</span>                handler(*request);</div>
+<div class="line"><a id="l01245" name="l01245"></a><span class="lineno"> 1245</span>        }, NamedEngineEvents::SearchStarted);</div>
+<div class="line"><a id="l01246" name="l01246"></a><span class="lineno"> 1246</span>    }</div>
+<div class="line"><a id="l01247" name="l01247"></a><span class="lineno"> 1247</span> </div>
+<div class="line"><a id="l01248" name="l01248"></a><span class="lineno"> 1248</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01249" name="l01249"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstance.html#a3e6a9b96ec4961f6aab2b6a022e338f3"> 1249</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a3e6a9b96ec4961f6aab2b6a022e338f3">EngineInstance&lt;Move&gt;::receivedUCIOK</a>()<span class="keyword"> const </span>{</div>
 <div class="line"><a id="l01250" name="l01250"></a><span class="lineno"> 1250</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01251" name="l01251"></a><span class="lineno"> 1251</span>        core-&gt;author = author;</div>
+<div class="line"><a id="l01251" name="l01251"></a><span class="lineno"> 1251</span>        <span class="keywordflow">return</span> core-&gt;receivedUCIOK;</div>
 <div class="line"><a id="l01252" name="l01252"></a><span class="lineno"> 1252</span>    }</div>
 <div class="line"><a id="l01253" name="l01253"></a><span class="lineno"> 1253</span> </div>
 <div class="line"><a id="l01254" name="l01254"></a><span class="lineno"> 1254</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01255" name="l01255"></a><span class="lineno"> 1255</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onUCIOK()</div>
+<div class="line"><a id="l01255" name="l01255"></a><span class="lineno"> 1255</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;::_CommandHandler::onEngineName</a>(<span class="keyword">const</span> std::string&amp; name)</div>
 <div class="line"><a id="l01256" name="l01256"></a><span class="lineno"> 1256</span>    {</div>
-<div class="line"><a id="l01257" name="l01257"></a><span class="lineno"> 1257</span>        <span class="comment">// TODO: do something</span></div>
-<div class="line"><a id="l01258" name="l01258"></a><span class="lineno"> 1258</span>    }</div>
-<div class="line"><a id="l01259" name="l01259"></a><span class="lineno"> 1259</span> </div>
-<div class="line"><a id="l01260" name="l01260"></a><span class="lineno"> 1260</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01261" name="l01261"></a><span class="lineno"> 1261</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onReadyOK()</div>
-<div class="line"><a id="l01262" name="l01262"></a><span class="lineno"> 1262</span>    {</div>
-<div class="line"><a id="l01263" name="l01263"></a><span class="lineno"> 1263</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01264" name="l01264"></a><span class="lineno"> 1264</span>        core-&gt;receivedReadyOk = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l01265" name="l01265"></a><span class="lineno"> 1265</span>        core-&gt;conditional_var.notify_all();</div>
+<div class="line"><a id="l01257" name="l01257"></a><span class="lineno"> 1257</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01258" name="l01258"></a><span class="lineno"> 1258</span>        core-&gt;name = name;</div>
+<div class="line"><a id="l01259" name="l01259"></a><span class="lineno"> 1259</span>    }</div>
+<div class="line"><a id="l01260" name="l01260"></a><span class="lineno"> 1260</span> </div>
+<div class="line"><a id="l01261" name="l01261"></a><span class="lineno"> 1261</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01262" name="l01262"></a><span class="lineno"> 1262</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onEngineAuthor(<span class="keyword">const</span> std::string&amp; author)</div>
+<div class="line"><a id="l01263" name="l01263"></a><span class="lineno"> 1263</span>    {</div>
+<div class="line"><a id="l01264" name="l01264"></a><span class="lineno"> 1264</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01265" name="l01265"></a><span class="lineno"> 1265</span>        core-&gt;author = author;</div>
 <div class="line"><a id="l01266" name="l01266"></a><span class="lineno"> 1266</span>    }</div>
 <div class="line"><a id="l01267" name="l01267"></a><span class="lineno"> 1267</span> </div>
 <div class="line"><a id="l01268" name="l01268"></a><span class="lineno"> 1268</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01269" name="l01269"></a><span class="lineno"> 1269</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onBestMove(<span class="keyword">const</span> Move&amp; bestMove)</div>
+<div class="line"><a id="l01269" name="l01269"></a><span class="lineno"> 1269</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onUCIOK()</div>
 <div class="line"><a id="l01270" name="l01270"></a><span class="lineno"> 1270</span>    {</div>
 <div class="line"><a id="l01271" name="l01271"></a><span class="lineno"> 1271</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01272" name="l01272"></a><span class="lineno"> 1272</span>        <span class="keyword">static</span> <span class="keyword">auto</span> searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();</div>
-<div class="line"><a id="l01273" name="l01273"></a><span class="lineno"> 1273</span> </div>
-<div class="line"><a id="l01274" name="l01274"></a><span class="lineno"> 1274</span>        <span class="keywordflow">if</span> (core-&gt;currentConnection != <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a id="l01275" name="l01275"></a><span class="lineno"> 1275</span>            core-&gt;currentConnection-&gt;receiveBestMoveSignal(&amp;bestMove, <span class="keyword">nullptr</span>);</div>
-<div class="line"><a id="l01276" name="l01276"></a><span class="lineno"> 1276</span>            core-&gt;currentConnection = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l01277" name="l01277"></a><span class="lineno"> 1277</span>            core-&gt;emit(&amp;searchCompletedEvent);</div>
-<div class="line"><a id="l01278" name="l01278"></a><span class="lineno"> 1278</span>        }</div>
-<div class="line"><a id="l01279" name="l01279"></a><span class="lineno"> 1279</span>    }</div>
-<div class="line"><a id="l01280" name="l01280"></a><span class="lineno"> 1280</span> </div>
-<div class="line"><a id="l01281" name="l01281"></a><span class="lineno"> 1281</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01282" name="l01282"></a><span class="lineno"> 1282</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onBestMove(<span class="keyword">const</span> Move&amp; bestMove, <span class="keyword">const</span> Move&amp; ponderMove)</div>
-<div class="line"><a id="l01283" name="l01283"></a><span class="lineno"> 1283</span>    {</div>
-<div class="line"><a id="l01284" name="l01284"></a><span class="lineno"> 1284</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01285" name="l01285"></a><span class="lineno"> 1285</span>        <span class="keyword">static</span> <span class="keyword">auto</span> searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();</div>
-<div class="line"><a id="l01286" name="l01286"></a><span class="lineno"> 1286</span>        <span class="keywordflow">if</span> (core-&gt;currentConnection != <span class="keyword">nullptr</span>) {</div>
-<div class="line"><a id="l01287" name="l01287"></a><span class="lineno"> 1287</span>            core-&gt;currentConnection-&gt;receiveBestMoveSignal(&amp;bestMove, &amp;ponderMove);</div>
-<div class="line"><a id="l01288" name="l01288"></a><span class="lineno"> 1288</span>            core-&gt;currentConnection = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a id="l01289" name="l01289"></a><span class="lineno"> 1289</span>            core-&gt;emit(&amp;searchCompletedEvent);</div>
-<div class="line"><a id="l01290" name="l01290"></a><span class="lineno"> 1290</span>        }</div>
-<div class="line"><a id="l01291" name="l01291"></a><span class="lineno"> 1291</span>    }</div>
-<div class="line"><a id="l01292" name="l01292"></a><span class="lineno"> 1292</span> </div>
-<div class="line"><a id="l01293" name="l01293"></a><span class="lineno"> 1293</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01294" name="l01294"></a><span class="lineno"> 1294</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onInfo(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt;&amp; infos)</div>
-<div class="line"><a id="l01295" name="l01295"></a><span class="lineno"> 1295</span>    {</div>
-<div class="line"><a id="l01296" name="l01296"></a><span class="lineno"> 1296</span>        std::unique_lock&lt;std::mutex&gt;guard(core-&gt;lock);</div>
+<div class="line"><a id="l01272" name="l01272"></a><span class="lineno"> 1272</span>        core-&gt;receivedUCIOK = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l01273" name="l01273"></a><span class="lineno"> 1273</span>        <span class="keyword">static</span> <span class="keyword">auto</span> <span class="keyword">event</span> = NamedEngineEvents::makeUCIOKReceivedEvent();</div>
+<div class="line"><a id="l01274" name="l01274"></a><span class="lineno"> 1274</span>        core-&gt;emit(&amp;event);</div>
+<div class="line"><a id="l01275" name="l01275"></a><span class="lineno"> 1275</span>    }</div>
+<div class="line"><a id="l01276" name="l01276"></a><span class="lineno"> 1276</span> </div>
+<div class="line"><a id="l01277" name="l01277"></a><span class="lineno"> 1277</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01278" name="l01278"></a><span class="lineno"> 1278</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onReadyOK()</div>
+<div class="line"><a id="l01279" name="l01279"></a><span class="lineno"> 1279</span>    {</div>
+<div class="line"><a id="l01280" name="l01280"></a><span class="lineno"> 1280</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01281" name="l01281"></a><span class="lineno"> 1281</span>        core-&gt;receivedReadyOk = <span class="keyword">true</span>;</div>
+<div class="line"><a id="l01282" name="l01282"></a><span class="lineno"> 1282</span>        core-&gt;conditional_var.notify_all();</div>
+<div class="line"><a id="l01283" name="l01283"></a><span class="lineno"> 1283</span>    }</div>
+<div class="line"><a id="l01284" name="l01284"></a><span class="lineno"> 1284</span> </div>
+<div class="line"><a id="l01285" name="l01285"></a><span class="lineno"> 1285</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01286" name="l01286"></a><span class="lineno"> 1286</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onBestMove(<span class="keyword">const</span> Move&amp; bestMove)</div>
+<div class="line"><a id="l01287" name="l01287"></a><span class="lineno"> 1287</span>    {</div>
+<div class="line"><a id="l01288" name="l01288"></a><span class="lineno"> 1288</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01289" name="l01289"></a><span class="lineno"> 1289</span>        <span class="keyword">static</span> <span class="keyword">auto</span> searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();</div>
+<div class="line"><a id="l01290" name="l01290"></a><span class="lineno"> 1290</span> </div>
+<div class="line"><a id="l01291" name="l01291"></a><span class="lineno"> 1291</span>        <span class="keywordflow">if</span> (core-&gt;currentConnection != <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a id="l01292" name="l01292"></a><span class="lineno"> 1292</span>            core-&gt;currentConnection-&gt;receiveBestMoveSignal(&amp;bestMove, <span class="keyword">nullptr</span>);</div>
+<div class="line"><a id="l01293" name="l01293"></a><span class="lineno"> 1293</span>            core-&gt;currentConnection = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l01294" name="l01294"></a><span class="lineno"> 1294</span>            core-&gt;emit(&amp;searchCompletedEvent);</div>
+<div class="line"><a id="l01295" name="l01295"></a><span class="lineno"> 1295</span>        }</div>
+<div class="line"><a id="l01296" name="l01296"></a><span class="lineno"> 1296</span>    }</div>
 <div class="line"><a id="l01297" name="l01297"></a><span class="lineno"> 1297</span> </div>
-<div class="line"><a id="l01298" name="l01298"></a><span class="lineno"> 1298</span>        <span class="keyword">auto</span> clampEvent = UCILoader::NamedEngineEvents::makeInfoClampEvent&lt;Move&gt;(infos);</div>
-<div class="line"><a id="l01299" name="l01299"></a><span class="lineno"> 1299</span>        core-&gt;emit(&amp;clampEvent);</div>
-<div class="line"><a id="l01300" name="l01300"></a><span class="lineno"> 1300</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; info : infos) {</div>
-<div class="line"><a id="l01301" name="l01301"></a><span class="lineno"> 1301</span>            <span class="keyword">auto</span> infoEvent = UCILoader::NamedEngineEvents::makeInfoEvent&lt;Move&gt;(info);</div>
-<div class="line"><a id="l01302" name="l01302"></a><span class="lineno"> 1302</span>            core-&gt;emit(&amp;infoEvent);</div>
-<div class="line"><a id="l01303" name="l01303"></a><span class="lineno"> 1303</span>        }</div>
-<div class="line"><a id="l01304" name="l01304"></a><span class="lineno"> 1304</span>    }</div>
-<div class="line"><a id="l01305" name="l01305"></a><span class="lineno"> 1305</span> </div>
-<div class="line"><a id="l01306" name="l01306"></a><span class="lineno"> 1306</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01307" name="l01307"></a><span class="lineno"> 1307</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onCopyProtection(ProcedureStatus status)</div>
-<div class="line"><a id="l01308" name="l01308"></a><span class="lineno"> 1308</span>    {</div>
-<div class="line"><a id="l01309" name="l01309"></a><span class="lineno"> 1309</span>    }</div>
-<div class="line"><a id="l01310" name="l01310"></a><span class="lineno"> 1310</span> </div>
-<div class="line"><a id="l01311" name="l01311"></a><span class="lineno"> 1311</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01312" name="l01312"></a><span class="lineno"> 1312</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onRegistration(ProcedureStatus status)</div>
-<div class="line"><a id="l01313" name="l01313"></a><span class="lineno"> 1313</span>    {</div>
-<div class="line"><a id="l01314" name="l01314"></a><span class="lineno"> 1314</span>    }</div>
-<div class="line"><a id="l01315" name="l01315"></a><span class="lineno"> 1315</span> </div>
-<div class="line"><a id="l01316" name="l01316"></a><span class="lineno"> 1316</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01317" name="l01317"></a><span class="lineno"> 1317</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onOption(<span class="keyword">const</span> Option&amp; option)</div>
-<div class="line"><a id="l01318" name="l01318"></a><span class="lineno"> 1318</span>    {</div>
-<div class="line"><a id="l01319" name="l01319"></a><span class="lineno"> 1319</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
-<div class="line"><a id="l01320" name="l01320"></a><span class="lineno"> 1320</span>        <span class="keywordflow">if</span> (core-&gt;instance){</div>
-<div class="line"><a id="l01321" name="l01321"></a><span class="lineno"> 1321</span>            IOptionConsumer* consumer = (IOptionConsumer*)(&amp;core-&gt;instance-&gt;options);</div>
-<div class="line"><a id="l01322" name="l01322"></a><span class="lineno"> 1322</span>            consumer-&gt;consume(option);</div>
-<div class="line"><a id="l01323" name="l01323"></a><span class="lineno"> 1323</span>        };</div>
-<div class="line"><a id="l01324" name="l01324"></a><span class="lineno"> 1324</span>        </div>
-<div class="line"><a id="l01325" name="l01325"></a><span class="lineno"> 1325</span>    }</div>
-<div class="line"><a id="l01326" name="l01326"></a><span class="lineno"> 1326</span> </div>
-<div class="line"><a id="l01327" name="l01327"></a><span class="lineno"> 1327</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01328" name="l01328"></a><span class="lineno"> 1328</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onError(<span class="keyword">const</span> std::string&amp; errorMsg){</div>
-<div class="line"><a id="l01329" name="l01329"></a><span class="lineno"> 1329</span>        std::string msg = errorMsg + <span class="stringliteral">&quot;\n&quot;</span>;</div>
-<div class="line"><a id="l01330" name="l01330"></a><span class="lineno"> 1330</span>        core-&gt;relay-&gt;logFromParser(msg);</div>
+<div class="line"><a id="l01298" name="l01298"></a><span class="lineno"> 1298</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01299" name="l01299"></a><span class="lineno"> 1299</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onBestMove(<span class="keyword">const</span> Move&amp; bestMove, <span class="keyword">const</span> Move&amp; ponderMove)</div>
+<div class="line"><a id="l01300" name="l01300"></a><span class="lineno"> 1300</span>    {</div>
+<div class="line"><a id="l01301" name="l01301"></a><span class="lineno"> 1301</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01302" name="l01302"></a><span class="lineno"> 1302</span>        <span class="keyword">static</span> <span class="keyword">auto</span> searchCompletedEvent = NamedEngineEvents::makeSearchCompletedEvent();</div>
+<div class="line"><a id="l01303" name="l01303"></a><span class="lineno"> 1303</span>        <span class="keywordflow">if</span> (core-&gt;currentConnection != <span class="keyword">nullptr</span>) {</div>
+<div class="line"><a id="l01304" name="l01304"></a><span class="lineno"> 1304</span>            core-&gt;currentConnection-&gt;receiveBestMoveSignal(&amp;bestMove, &amp;ponderMove);</div>
+<div class="line"><a id="l01305" name="l01305"></a><span class="lineno"> 1305</span>            core-&gt;currentConnection = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a id="l01306" name="l01306"></a><span class="lineno"> 1306</span>            core-&gt;emit(&amp;searchCompletedEvent);</div>
+<div class="line"><a id="l01307" name="l01307"></a><span class="lineno"> 1307</span>        }</div>
+<div class="line"><a id="l01308" name="l01308"></a><span class="lineno"> 1308</span>    }</div>
+<div class="line"><a id="l01309" name="l01309"></a><span class="lineno"> 1309</span> </div>
+<div class="line"><a id="l01310" name="l01310"></a><span class="lineno"> 1310</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01311" name="l01311"></a><span class="lineno"> 1311</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onInfo(<span class="keyword">const</span> std::vector&lt;Info&lt;Move&gt;&gt;&amp; infos)</div>
+<div class="line"><a id="l01312" name="l01312"></a><span class="lineno"> 1312</span>    {</div>
+<div class="line"><a id="l01313" name="l01313"></a><span class="lineno"> 1313</span>        std::unique_lock&lt;std::mutex&gt;guard(core-&gt;lock);</div>
+<div class="line"><a id="l01314" name="l01314"></a><span class="lineno"> 1314</span> </div>
+<div class="line"><a id="l01315" name="l01315"></a><span class="lineno"> 1315</span>        <span class="keyword">auto</span> clampEvent = UCILoader::NamedEngineEvents::makeInfoClampEvent&lt;Move&gt;(infos);</div>
+<div class="line"><a id="l01316" name="l01316"></a><span class="lineno"> 1316</span>        core-&gt;emit(&amp;clampEvent);</div>
+<div class="line"><a id="l01317" name="l01317"></a><span class="lineno"> 1317</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; info : infos) {</div>
+<div class="line"><a id="l01318" name="l01318"></a><span class="lineno"> 1318</span>            <span class="keyword">auto</span> infoEvent = UCILoader::NamedEngineEvents::makeInfoEvent&lt;Move&gt;(info);</div>
+<div class="line"><a id="l01319" name="l01319"></a><span class="lineno"> 1319</span>            core-&gt;emit(&amp;infoEvent);</div>
+<div class="line"><a id="l01320" name="l01320"></a><span class="lineno"> 1320</span>        }</div>
+<div class="line"><a id="l01321" name="l01321"></a><span class="lineno"> 1321</span>    }</div>
+<div class="line"><a id="l01322" name="l01322"></a><span class="lineno"> 1322</span> </div>
+<div class="line"><a id="l01323" name="l01323"></a><span class="lineno"> 1323</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01324" name="l01324"></a><span class="lineno"> 1324</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onCopyProtection(ProcedureStatus status)</div>
+<div class="line"><a id="l01325" name="l01325"></a><span class="lineno"> 1325</span>    {</div>
+<div class="line"><a id="l01326" name="l01326"></a><span class="lineno"> 1326</span>    }</div>
+<div class="line"><a id="l01327" name="l01327"></a><span class="lineno"> 1327</span> </div>
+<div class="line"><a id="l01328" name="l01328"></a><span class="lineno"> 1328</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01329" name="l01329"></a><span class="lineno"> 1329</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onRegistration(ProcedureStatus status)</div>
+<div class="line"><a id="l01330" name="l01330"></a><span class="lineno"> 1330</span>    {</div>
 <div class="line"><a id="l01331" name="l01331"></a><span class="lineno"> 1331</span>    }</div>
 <div class="line"><a id="l01332" name="l01332"></a><span class="lineno"> 1332</span> </div>
-<div class="line"><a id="l01369" name="l01369"></a><span class="lineno"> 1369</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01370" name="l01370"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html"> 1370</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1EngineInstanceBuilder.html">EngineInstanceBuilder</a> {</div>
-<div class="line"><a id="l01371" name="l01371"></a><span class="lineno"> 1371</span>        std::shared_ptr&lt;PatternMatcher&gt; moveValidator;</div>
-<div class="line"><a id="l01372" name="l01372"></a><span class="lineno"> 1372</span>        std::shared_ptr&lt;Marschaler&lt;Move&gt;&gt; moveMarshaler;</div>
-<div class="line"><a id="l01373" name="l01373"></a><span class="lineno"> 1373</span>    <span class="keyword">public</span>:</div>
-<div class="line"><a id="l01380" name="l01380"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html#a5741b7fa79a960e7cd67b62e1924b6d8"> 1380</a></span>        <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#a5741b7fa79a960e7cd67b62e1924b6d8">EngineInstanceBuilder</a>(std::shared_ptr&lt;PatternMatcher&gt; validator, std::shared_ptr&lt;<a class="code hl_class" href="classUCILoader_1_1Marschaler.html">Marschaler&lt;Move&gt;</a>&gt; marschaler) :</div>
-<div class="line"><a id="l01381" name="l01381"></a><span class="lineno"> 1381</span>            moveValidator(validator), moveMarshaler(marschaler) {};</div>
-<div class="line"><a id="l01382" name="l01382"></a><span class="lineno"> 1382</span>        </div>
-<div class="line"><a id="l01398" name="l01398"></a><span class="lineno"> 1398</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess);</div>
-<div class="line"><a id="l01399" name="l01399"></a><span class="lineno"> 1399</span> </div>
-<div class="line"><a id="l01427" name="l01427"></a><span class="lineno"> 1427</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess, <a class="code hl_class" href="classUCILoader_1_1LoggerBuilder.html">LoggerBuilder</a> logger);</div>
-<div class="line"><a id="l01428" name="l01428"></a><span class="lineno"> 1428</span>    };</div>
-<div class="line"><a id="l01429" name="l01429"></a><span class="lineno"> 1429</span> </div>
-<div class="line"><a id="l01430" name="l01430"></a><span class="lineno"> 1430</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01431" name="l01431"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e"> 1431</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">EngineInstanceBuilder&lt;Move&gt;::build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess) {</div>
-<div class="line"><a id="l01432" name="l01432"></a><span class="lineno"> 1432</span>        <span class="keywordflow">return</span> build(engineProcess, <a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#afad720d4a4248835dee6f438de760e6b">Loggers::toNoting</a>());</div>
-<div class="line"><a id="l01433" name="l01433"></a><span class="lineno"> 1433</span>    };</div>
-<div class="line"><a id="l01434" name="l01434"></a><span class="lineno"> 1434</span> </div>
-<div class="line"><a id="l01435" name="l01435"></a><span class="lineno"> 1435</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
-<div class="line"><a id="l01436" name="l01436"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html#ae4c053807838098c5fb2d27cc132ba3b"> 1436</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">EngineInstanceBuilder&lt;Move&gt;::build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess, <a class="code hl_class" href="classUCILoader_1_1LoggerBuilder.html">LoggerBuilder</a> logger)</div>
-<div class="line"><a id="l01437" name="l01437"></a><span class="lineno"> 1437</span>    {</div>
-<div class="line"><a id="l01438" name="l01438"></a><span class="lineno"> 1438</span>        std::shared_ptr&lt;ProcessWrapper&gt; proces(engineProcess);</div>
-<div class="line"><a id="l01439" name="l01439"></a><span class="lineno"> 1439</span>        <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>(proces, moveMarshaler, moveValidator, std::move(logger.<a class="code hl_function" href="classUCILoader_1_1LoggerBuilder.html#ad093d0af34997d79766089d782b6cda9">build</a>()));</div>
-<div class="line"><a id="l01440" name="l01440"></a><span class="lineno"> 1440</span>    }</div>
-<div class="line"><a id="l01441" name="l01441"></a><span class="lineno"> 1441</span> </div>
-<div class="line"><a id="l01442" name="l01442"></a><span class="lineno"> 1442</span>}</div>
+<div class="line"><a id="l01333" name="l01333"></a><span class="lineno"> 1333</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01334" name="l01334"></a><span class="lineno"> 1334</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onOption(<span class="keyword">const</span> Option&amp; option)</div>
+<div class="line"><a id="l01335" name="l01335"></a><span class="lineno"> 1335</span>    {</div>
+<div class="line"><a id="l01336" name="l01336"></a><span class="lineno"> 1336</span>        std::unique_lock&lt;std::mutex&gt; guard(core-&gt;lock);</div>
+<div class="line"><a id="l01337" name="l01337"></a><span class="lineno"> 1337</span>        <span class="keywordflow">if</span> (core-&gt;instance){</div>
+<div class="line"><a id="l01338" name="l01338"></a><span class="lineno"> 1338</span>            IOptionConsumer* consumer = (IOptionConsumer*)(&amp;core-&gt;instance-&gt;options);</div>
+<div class="line"><a id="l01339" name="l01339"></a><span class="lineno"> 1339</span>            consumer-&gt;consume(option);</div>
+<div class="line"><a id="l01340" name="l01340"></a><span class="lineno"> 1340</span>        };</div>
+<div class="line"><a id="l01341" name="l01341"></a><span class="lineno"> 1341</span>        </div>
+<div class="line"><a id="l01342" name="l01342"></a><span class="lineno"> 1342</span>    }</div>
+<div class="line"><a id="l01343" name="l01343"></a><span class="lineno"> 1343</span> </div>
+<div class="line"><a id="l01344" name="l01344"></a><span class="lineno"> 1344</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01345" name="l01345"></a><span class="lineno"> 1345</span>    <span class="keyword">inline</span> <span class="keywordtype">void</span> EngineInstance&lt;Move&gt;::_CommandHandler::onError(<span class="keyword">const</span> std::string&amp; errorMsg){</div>
+<div class="line"><a id="l01346" name="l01346"></a><span class="lineno"> 1346</span>        std::string msg = errorMsg + <span class="stringliteral">&quot;\n&quot;</span>;</div>
+<div class="line"><a id="l01347" name="l01347"></a><span class="lineno"> 1347</span>        core-&gt;relay-&gt;logFromParser(msg);</div>
+<div class="line"><a id="l01348" name="l01348"></a><span class="lineno"> 1348</span>    }</div>
+<div class="line"><a id="l01349" name="l01349"></a><span class="lineno"> 1349</span> </div>
+<div class="line"><a id="l01386" name="l01386"></a><span class="lineno"> 1386</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01387" name="l01387"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html"> 1387</a></span>    <span class="keyword">class </span><a class="code hl_class" href="classUCILoader_1_1EngineInstanceBuilder.html">EngineInstanceBuilder</a> {</div>
+<div class="line"><a id="l01388" name="l01388"></a><span class="lineno"> 1388</span>        std::shared_ptr&lt;PatternMatcher&gt; moveValidator;</div>
+<div class="line"><a id="l01389" name="l01389"></a><span class="lineno"> 1389</span>        std::shared_ptr&lt;Marschaler&lt;Move&gt;&gt; moveMarshaler;</div>
+<div class="line"><a id="l01390" name="l01390"></a><span class="lineno"> 1390</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l01397" name="l01397"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html#a5741b7fa79a960e7cd67b62e1924b6d8"> 1397</a></span>        <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#a5741b7fa79a960e7cd67b62e1924b6d8">EngineInstanceBuilder</a>(std::shared_ptr&lt;PatternMatcher&gt; validator, std::shared_ptr&lt;<a class="code hl_class" href="classUCILoader_1_1Marschaler.html">Marschaler&lt;Move&gt;</a>&gt; marschaler) :</div>
+<div class="line"><a id="l01398" name="l01398"></a><span class="lineno"> 1398</span>            moveValidator(validator), moveMarshaler(marschaler) {};</div>
+<div class="line"><a id="l01399" name="l01399"></a><span class="lineno"> 1399</span>        </div>
+<div class="line"><a id="l01415" name="l01415"></a><span class="lineno"> 1415</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess);</div>
+<div class="line"><a id="l01416" name="l01416"></a><span class="lineno"> 1416</span> </div>
+<div class="line"><a id="l01444" name="l01444"></a><span class="lineno"> 1444</span>        <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess, <a class="code hl_class" href="classUCILoader_1_1LoggerBuilder.html">LoggerBuilder</a> logger);</div>
+<div class="line"><a id="l01445" name="l01445"></a><span class="lineno"> 1445</span>    };</div>
+<div class="line"><a id="l01446" name="l01446"></a><span class="lineno"> 1446</span> </div>
+<div class="line"><a id="l01447" name="l01447"></a><span class="lineno"> 1447</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01448" name="l01448"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e"> 1448</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">EngineInstanceBuilder&lt;Move&gt;::build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess) {</div>
+<div class="line"><a id="l01449" name="l01449"></a><span class="lineno"> 1449</span>        <span class="keywordflow">return</span> build(engineProcess, <a class="code hl_function" href="namespaceUCILoader_1_1Loggers.html#afad720d4a4248835dee6f438de760e6b">Loggers::toNoting</a>());</div>
+<div class="line"><a id="l01450" name="l01450"></a><span class="lineno"> 1450</span>    };</div>
+<div class="line"><a id="l01451" name="l01451"></a><span class="lineno"> 1451</span> </div>
+<div class="line"><a id="l01452" name="l01452"></a><span class="lineno"> 1452</span>    <span class="keyword">template</span>&lt;<span class="keyword">class</span> Move&gt;</div>
+<div class="line"><a id="l01453" name="l01453"></a><span class="lineno"><a class="line" href="classUCILoader_1_1EngineInstanceBuilder.html#ae4c053807838098c5fb2d27cc132ba3b"> 1453</a></span>    <span class="keyword">inline</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>* <a class="code hl_function" href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">EngineInstanceBuilder&lt;Move&gt;::build</a>(<a class="code hl_class" href="classUCILoader_1_1ProcessWrapper.html">ProcessWrapper</a>* engineProcess, <a class="code hl_class" href="classUCILoader_1_1LoggerBuilder.html">LoggerBuilder</a> logger)</div>
+<div class="line"><a id="l01454" name="l01454"></a><span class="lineno"> 1454</span>    {</div>
+<div class="line"><a id="l01455" name="l01455"></a><span class="lineno"> 1455</span>        std::shared_ptr&lt;ProcessWrapper&gt; proces(engineProcess);</div>
+<div class="line"><a id="l01456" name="l01456"></a><span class="lineno"> 1456</span>        <span class="keywordflow">return</span> <span class="keyword">new</span> <a class="code hl_class" href="classUCILoader_1_1EngineInstance.html">EngineInstance&lt;Move&gt;</a>(proces, moveMarshaler, moveValidator, std::move(logger.<a class="code hl_function" href="classUCILoader_1_1LoggerBuilder.html#ad093d0af34997d79766089d782b6cda9">build</a>()));</div>
+<div class="line"><a id="l01457" name="l01457"></a><span class="lineno"> 1457</span>    }</div>
+<div class="line"><a id="l01458" name="l01458"></a><span class="lineno"> 1458</span> </div>
+<div class="line"><a id="l01459" name="l01459"></a><span class="lineno"> 1459</span>}</div>
 <div class="ttc" id="aclassUCILoader_1_1EngineEvent_html"><div class="ttname"><a href="classUCILoader_1_1EngineEvent.html">UCILoader::EngineEvent</a></div><div class="ttdoc">Base class for events emitted by an EngineInstance.</div><div class="ttdef"><b>Definition:</b> EngineEvent.h:42</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineEvent_html_aa9e078f7d02e0c01b00362b6fb98b672"><div class="ttname"><a href="classUCILoader_1_1EngineEvent.html#aa9e078f7d02e0c01b00362b6fb98b672">UCILoader::EngineEvent::getPayload</a></div><div class="ttdeci">virtual const void * getPayload() const =0</div><div class="ttdoc">Get the payload data associated with this event.</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstanceBuilder_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstanceBuilder.html">UCILoader::EngineInstanceBuilder</a></div><div class="ttdoc">Factory builder for creating EngineInstance objects.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1370</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstanceBuilder_html_a5741b7fa79a960e7cd67b62e1924b6d8"><div class="ttname"><a href="classUCILoader_1_1EngineInstanceBuilder.html#a5741b7fa79a960e7cd67b62e1924b6d8">UCILoader::EngineInstanceBuilder::EngineInstanceBuilder</a></div><div class="ttdeci">EngineInstanceBuilder(std::shared_ptr&lt; PatternMatcher &gt; validator, std::shared_ptr&lt; Marschaler&lt; Move &gt; &gt; marschaler)</div><div class="ttdoc">Constructor for the builder.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1380</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstanceBuilder_html_adbd0d083ba2e46107bc5dd51020e734e"><div class="ttname"><a href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">UCILoader::EngineInstanceBuilder::build</a></div><div class="ttdeci">EngineInstance&lt; Move &gt; * build(ProcessWrapper *engineProcess)</div><div class="ttdoc">Build an EngineInstance with default logging (no-op logger).</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1431</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_1_1EngineBusyException_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">UCILoader::EngineInstance::EngineBusyException</a></div><div class="ttdoc">Exception thrown when attempting to start a search while one is already in progress.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:844</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_1_1TimeoutException_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">UCILoader::EngineInstance::TimeoutException</a></div><div class="ttdoc">Exception thrown when a sync() or ping() operation times out.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:836</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstanceBuilder_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstanceBuilder.html">UCILoader::EngineInstanceBuilder</a></div><div class="ttdoc">Factory builder for creating EngineInstance objects.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1387</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstanceBuilder_html_a5741b7fa79a960e7cd67b62e1924b6d8"><div class="ttname"><a href="classUCILoader_1_1EngineInstanceBuilder.html#a5741b7fa79a960e7cd67b62e1924b6d8">UCILoader::EngineInstanceBuilder::EngineInstanceBuilder</a></div><div class="ttdeci">EngineInstanceBuilder(std::shared_ptr&lt; PatternMatcher &gt; validator, std::shared_ptr&lt; Marschaler&lt; Move &gt; &gt; marschaler)</div><div class="ttdoc">Constructor for the builder.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1397</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstanceBuilder_html_adbd0d083ba2e46107bc5dd51020e734e"><div class="ttname"><a href="classUCILoader_1_1EngineInstanceBuilder.html#adbd0d083ba2e46107bc5dd51020e734e">UCILoader::EngineInstanceBuilder::build</a></div><div class="ttdeci">EngineInstance&lt; Move &gt; * build(ProcessWrapper *engineProcess)</div><div class="ttdoc">Build an EngineInstance with default logging (no-op logger).</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1448</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_1_1EngineBusyException_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">UCILoader::EngineInstance::EngineBusyException</a></div><div class="ttdoc">Exception thrown when attempting to start a search while one is already in progress.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:845</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_1_1TimeoutException_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">UCILoader::EngineInstance::TimeoutException</a></div><div class="ttdoc">Exception thrown when a sync() or ping() operation times out.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:837</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineInstance_html"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a></div><div class="ttdoc">Top-level interface for managing and interacting with a UCI chess engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:765</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a136246a3dfc805a5cc5ae69b363d2145"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">UCILoader::EngineInstance::getName</a></div><div class="ttdeci">std::string getName()</div><div class="ttdoc">Get the engine's name as declared via the id name command.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1146</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a1f0171ebc0eff8c285744dea7ce254e2"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">UCILoader::EngineInstance::healthCheck</a></div><div class="ttdeci">bool healthCheck()</div><div class="ttdoc">Check the health status of the underlying engine process.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1204</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a21def7eda21c1498606eb0155bdea6b1"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">UCILoader::EngineInstance::addInfoBatchHandler</a></div><div class="ttdeci">void addInfoBatchHandler(std::function&lt; void(const std::vector&lt; Info&lt; Move &gt; &gt; &amp;)&gt; handler)</div><div class="ttdoc">Register a callback function that is invoked when multiple info messages arrive together.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1223</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">UCILoader::EngineInstance::addSearchRequestHandler</a></div><div class="ttdeci">void addSearchRequestHandler(std::function&lt; void(const SearchRequest&lt; Move &gt; &amp;)&gt; handler)</div><div class="ttdoc">Register a callback function that is invoked when the engine starts processing a new search request.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1232</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a32081db0bf87f046ab54b59dcddac6b3"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3">UCILoader::EngineInstance::getCurrentSearch</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; getCurrentSearch()</div><div class="ttdoc">Get the currently active search connection.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1120</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a4faf15259f4052e4c988e7d614dbd90b"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b">UCILoader::EngineInstance::ucinewgame</a></div><div class="ttdeci">void ucinewgame()</div><div class="ttdoc">Send the ucinewgame command to the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1209</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a792b4715fb8831a9d0d76ee0d3f9c473"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">UCILoader::EngineInstance::addInfoHandler</a></div><div class="ttdeci">void addInfoHandler(std::function&lt; void(const Info&lt; Move &gt; &amp;)&gt; handler)</div><div class="ttdoc">Register a callback function that is invoked when an info message arrives from the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1214</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a883dc1684175074ad7bf04b0c8750295"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295">UCILoader::EngineInstance::sync</a></div><div class="ttdeci">void sync(std::chrono::milliseconds timeout=std::chrono::milliseconds(10000))</div><div class="ttdoc">Synchronize engine state with local representation.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1090</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a8c94548d670ee5044d8af9b112dc971b"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b">UCILoader::EngineInstance::ping</a></div><div class="ttdeci">std::chrono::milliseconds ping(std::chrono::milliseconds timeout=std::chrono::milliseconds(10000))</div><div class="ttdoc">Measure engine latency by performing a ping operation.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1112</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a96c7b8a18879044ee18a8af7c9929230"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">UCILoader::EngineInstance::quit</a></div><div class="ttdeci">void quit()</div><div class="ttdoc">Manually terminate the engine process.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1160</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a9b966a808539bc72af6061c29890c177"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1127</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_ac8a4ccdec041aba8b0f11da0d2df8fb4"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4">UCILoader::EngineInstance::getAuthor</a></div><div class="ttdeci">std::string getAuthor()</div><div class="ttdoc">Get the engine author's name as declared via the id author command.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1153</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_acb5ed1eda3cf6902eb423e1824059d7f"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">UCILoader::EngineInstance::options</a></div><div class="ttdeci">EngineOptionsMap options</div><div class="ttdoc">Map of available engine options.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:851</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a136246a3dfc805a5cc5ae69b363d2145"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">UCILoader::EngineInstance::getName</a></div><div class="ttdeci">std::string getName()</div><div class="ttdoc">Get the engine's name as declared via the id name command.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1154</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a1f0171ebc0eff8c285744dea7ce254e2"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a1f0171ebc0eff8c285744dea7ce254e2">UCILoader::EngineInstance::healthCheck</a></div><div class="ttdeci">bool healthCheck()</div><div class="ttdoc">Check the health status of the underlying engine process.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1212</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a21def7eda21c1498606eb0155bdea6b1"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">UCILoader::EngineInstance::addInfoBatchHandler</a></div><div class="ttdeci">void addInfoBatchHandler(std::function&lt; void(const std::vector&lt; Info&lt; Move &gt; &gt; &amp;)&gt; handler)</div><div class="ttdoc">Register a callback function that is invoked when multiple info messages arrive together.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1231</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">UCILoader::EngineInstance::addSearchRequestHandler</a></div><div class="ttdeci">void addSearchRequestHandler(std::function&lt; void(const SearchRequest&lt; Move &gt; &amp;)&gt; handler)</div><div class="ttdoc">Register a callback function that is invoked when the engine starts processing a new search request.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1240</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a32081db0bf87f046ab54b59dcddac6b3"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3">UCILoader::EngineInstance::getCurrentSearch</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; getCurrentSearch()</div><div class="ttdoc">Get the currently active search connection.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1128</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a3e6a9b96ec4961f6aab2b6a022e338f3"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a3e6a9b96ec4961f6aab2b6a022e338f3">UCILoader::EngineInstance::receivedUCIOK</a></div><div class="ttdeci">bool receivedUCIOK() const</div><div class="ttdoc">Check if engine has send 'uciok' message.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1249</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a4faf15259f4052e4c988e7d614dbd90b"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a4faf15259f4052e4c988e7d614dbd90b">UCILoader::EngineInstance::ucinewgame</a></div><div class="ttdeci">void ucinewgame()</div><div class="ttdoc">Send the ucinewgame command to the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1217</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a792b4715fb8831a9d0d76ee0d3f9c473"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">UCILoader::EngineInstance::addInfoHandler</a></div><div class="ttdeci">void addInfoHandler(std::function&lt; void(const Info&lt; Move &gt; &amp;)&gt; handler)</div><div class="ttdoc">Register a callback function that is invoked when an info message arrives from the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1222</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a883dc1684175074ad7bf04b0c8750295"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295">UCILoader::EngineInstance::sync</a></div><div class="ttdeci">void sync(std::chrono::milliseconds timeout=std::chrono::milliseconds(10000))</div><div class="ttdoc">Synchronize engine state with local representation.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1098</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a8c94548d670ee5044d8af9b112dc971b"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b">UCILoader::EngineInstance::ping</a></div><div class="ttdeci">std::chrono::milliseconds ping(std::chrono::milliseconds timeout=std::chrono::milliseconds(10000))</div><div class="ttdoc">Measure engine latency by performing a ping operation.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1120</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a96c7b8a18879044ee18a8af7c9929230"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">UCILoader::EngineInstance::quit</a></div><div class="ttdeci">void quit()</div><div class="ttdoc">Manually terminate the engine process.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1168</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a9b966a808539bc72af6061c29890c177"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1135</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_ac8a4ccdec041aba8b0f11da0d2df8fb4"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4">UCILoader::EngineInstance::getAuthor</a></div><div class="ttdeci">std::string getAuthor()</div><div class="ttdoc">Get the engine author's name as declared via the id author command.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1161</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_acb5ed1eda3cf6902eb423e1824059d7f"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#acb5ed1eda3cf6902eb423e1824059d7f">UCILoader::EngineInstance::options</a></div><div class="ttdeci">EngineOptionsMap options</div><div class="ttdoc">Map of available engine options.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:852</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineOptionProxy_1_1NotSupportedValueException_html"><div class="ttname"><a href="classUCILoader_1_1EngineOptionProxy_1_1NotSupportedValueException.html">UCILoader::EngineOptionProxy::NotSupportedValueException</a></div><div class="ttdoc">Exception thrown when setting an option to an unsupported value.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:457</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineOptionProxy_1_1ParsingError_html"><div class="ttname"><a href="classUCILoader_1_1EngineOptionProxy_1_1ParsingError.html">UCILoader::EngineOptionProxy::ParsingError</a></div><div class="ttdoc">Exception thrown when parsing fails for a miscellaneus reason.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:463</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineOptionProxy_1_1WrongTypeError_html"><div class="ttname"><a href="classUCILoader_1_1EngineOptionProxy_1_1WrongTypeError.html">UCILoader::EngineOptionProxy::WrongTypeError</a></div><div class="ttdoc">Exception thrown when an operation is incompatible with the option type.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:445</div></div>
@@ -866,7 +879,7 @@ $(document).ready(function(){initNavTree('EngineConnection_8h_source.html',''); 
 <div class="ttc" id="aclassUCILoader_1_1EngineOptionsMap_html_ae375993e6e36bc3c12389ed87dfd809b"><div class="ttname"><a href="classUCILoader_1_1EngineOptionsMap.html#ae375993e6e36bc3c12389ed87dfd809b">UCILoader::EngineOptionsMap::end</a></div><div class="ttdeci">iterator end()</div><div class="ttdoc">Get iterator to one past the last option.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:694</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineOptionsMap_html_ae96a46955219e2d173d0abad59ccac84"><div class="ttname"><a href="classUCILoader_1_1EngineOptionsMap.html#ae96a46955219e2d173d0abad59ccac84">UCILoader::EngineOptionsMap::operator[]</a></div><div class="ttdeci">EngineOptionProxy &amp; operator[](const std::string &amp;id)</div><div class="ttdoc">Access option by name using bracket notation.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:703</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineOptionsMap_html_af01ccf54caec8c09f1bebac063bd0216"><div class="ttname"><a href="classUCILoader_1_1EngineOptionsMap.html#af01ccf54caec8c09f1bebac063bd0216">UCILoader::EngineOptionsMap::begin</a></div><div class="ttdeci">iterator begin()</div><div class="ttdoc">Get iterator to the first option.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:687</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EventEmitter_html"><div class="ttname"><a href="classUCILoader_1_1EventEmitter.html">UCILoader::EventEmitter</a></div><div class="ttdoc">Base class for objects that emit engine events.</div><div class="ttdef"><b>Definition:</b> EngineEvent.h:500</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EventEmitter_html"><div class="ttname"><a href="classUCILoader_1_1EventEmitter.html">UCILoader::EventEmitter</a></div><div class="ttdoc">Base class for objects that emit engine events.</div><div class="ttdef"><b>Definition:</b> EngineEvent.h:515</div></div>
 <div class="ttc" id="aclassUCILoader_1_1IOptionConsumer_html"><div class="ttname"><a href="classUCILoader_1_1IOptionConsumer.html">UCILoader::IOptionConsumer</a></div><div class="ttdoc">Internal interface for consuming option updates from the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:582</div></div>
 <div class="ttc" id="aclassUCILoader_1_1IOptionConsumer_html_a1d174f1cb262e201a498a7ff800b260c"><div class="ttname"><a href="classUCILoader_1_1IOptionConsumer.html#a1d174f1cb262e201a498a7ff800b260c">UCILoader::IOptionConsumer::consume</a></div><div class="ttdeci">virtual void consume(const Option &amp;o)=0</div><div class="ttdoc">Process a newly discovered engine option.</div></div>
 <div class="ttc" id="aclassUCILoader_1_1LoggerBuilder_html"><div class="ttname"><a href="classUCILoader_1_1LoggerBuilder.html">UCILoader::LoggerBuilder</a></div><div class="ttdoc">Builder class for constructing and composing loggers with traits.</div><div class="ttdef"><b>Definition:</b> Logger.h:158</div></div>
@@ -878,7 +891,7 @@ $(document).ready(function(){initNavTree('EngineConnection_8h_source.html',''); 
 <div class="ttc" id="aclassUCILoader_1_1MessageRelay_html_abc3f66aa043ea0cda3eab660277151c7"><div class="ttname"><a href="classUCILoader_1_1MessageRelay.html#abc3f66aa043ea0cda3eab660277151c7">UCILoader::MessageRelay::receive</a></div><div class="ttdeci">void receive(const std::string &amp;msg)</div><div class="ttdoc">Log the provided message as comming from the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.cpp:14</div></div>
 <div class="ttc" id="aclassUCILoader_1_1PipeClosedException_html"><div class="ttname"><a href="classUCILoader_1_1PipeClosedException.html">UCILoader::PipeClosedException</a></div><div class="ttdoc">Exception thrown when a pipe operation fails due to pipe closure.</div><div class="ttdef"><b>Definition:</b> AbstractPipe.h:21</div></div>
 <div class="ttc" id="aclassUCILoader_1_1PositionFormatter_html"><div class="ttname"><a href="classUCILoader_1_1PositionFormatter.html">UCILoader::PositionFormatter</a></div><div class="ttdef"><b>Definition:</b> UCI.h:363</div></div>
-<div class="ttc" id="aclassUCILoader_1_1ProcessWrapper_html"><div class="ttname"><a href="classUCILoader_1_1ProcessWrapper.html">UCILoader::ProcessWrapper</a></div><div class="ttdoc">Cross-platform wrapper for managing a chess engine process.</div><div class="ttdef"><b>Definition:</b> ProcessWrapper.h:88</div></div>
+<div class="ttc" id="aclassUCILoader_1_1ProcessWrapper_html"><div class="ttname"><a href="classUCILoader_1_1ProcessWrapper.html">UCILoader::ProcessWrapper</a></div><div class="ttdoc">Cross-platform wrapper for managing a chess engine process.</div><div class="ttdef"><b>Definition:</b> ProcessWrapper.h:89</div></div>
 <div class="ttc" id="aclassUCILoader_1_1SearchConnection_1_1ResultNotReadyException_html"><div class="ttname"><a href="classUCILoader_1_1SearchConnection_1_1ResultNotReadyException.html">UCILoader::SearchConnection::ResultNotReadyException</a></div><div class="ttdoc">Exception thrown when attempting to retrieve results before search completes.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:245</div></div>
 <div class="ttc" id="aclassUCILoader_1_1SearchConnection_html"><div class="ttname"><a href="classUCILoader_1_1SearchConnection.html">UCILoader::SearchConnection</a></div><div class="ttdoc">Manages and controls an ongoing chess engine search operation.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:240</div></div>
 <div class="ttc" id="aclassUCILoader_1_1SearchConnection_html_a0519f069321cfd3c96d40dc86fad96a4"><div class="ttname"><a href="classUCILoader_1_1SearchConnection.html#a0519f069321cfd3c96d40dc86fad96a4">UCILoader::SearchConnection::ponderhit</a></div><div class="ttdeci">void ponderhit()</div><div class="ttdoc">Send a ponderhit command to the engine.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:388</div></div>
