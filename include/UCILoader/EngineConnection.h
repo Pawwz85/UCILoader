@@ -184,13 +184,13 @@ namespace UCILoader {
 			std::unique_lock<std::mutex> guard(statusLock);
 
 
-			if (status != OnGoing) 
+			if (status != OnGoing && status != Stopped) 
 				return status;
 			
 
 			var.wait_for(guard, dur);
 			
-			if (status == OnGoing) 
+			if (status == OnGoing || status == Stopped) 
 				status = TimedOut;
 			
 			return status;
