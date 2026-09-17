@@ -205,6 +205,8 @@ namespace UCILoader {
 		const uint32_t InfoClampReceived = 64u;
 		//! @brief Event emitted for individual info responses
 		const uint32_t InfoReceived = 128u;
+		//! @brief Event emitted after UCIOK
+		const uint32_t UCIOKReceived = 128u;
 
 
 		/*!
@@ -269,6 +271,12 @@ namespace UCILoader {
 		 */
 		// InfoReceived event type defined above
 
+		/*!
+		 * @brief Event emitted when the engine has send 'uciok' token.
+		 * 
+		 * No payload.
+		 */
+		using UCIOKReceivedEvent = NoPayloadEvent;
 
 		/*!
 		 * @brief Factory function to create an EngineSynchronized event.
@@ -291,6 +299,13 @@ namespace UCILoader {
 		 */
 		static EngineCrashedEvent makeEngineCrashedEvent() { return NoPayloadEvent(EngineCrashed); };
 		
+		/*!
+		 * @brief Factory function to create an UCIOKReceived event.
+		 * @return UCIOKReceivedEvent instance
+		 */
+		static UCIOKReceivedEvent makeUCIOKReceivedEvent() { return NoPayloadEvent(UCIOKReceived); };
+
+
 		/*!
 		 * @brief Factory function to create an InfoClamp event with multiple Info objects.
 		 * 

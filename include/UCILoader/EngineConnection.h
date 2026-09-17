@@ -1270,7 +1270,8 @@ namespace UCILoader {
 	{
 		std::unique_lock<std::mutex> guard(core->lock);
 		core->receivedUCIOK = true;
-		// TODO: do something
+		static auto event = NamedEngineEvents::makeUCIOKReceivedEvent();
+		core->emit(&event);
 	}
 
 	template<class Move>
