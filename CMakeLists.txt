@@ -32,6 +32,7 @@ set(lib_source_files
     "src/EngineConnection.cpp"
     "src/Logger.cpp"
     "src/Parser.cpp"
+    "src/ProcessWrapper.cpp"
     "src/StandardChess.cpp"
     "src/UCI.cpp"
     ${process_wrapper_impl}

@@ -4,6 +4,7 @@
 
 #include <thread>
 #include <memory>
+#include <vector>
 #include <cassert>
 #include <cstring>
 #include <functional>
@@ -86,7 +87,6 @@ namespace UCILoader {
 	 * @see openProcess for creating instances
 	 */
 	class ProcessWrapper {
-
 		std::unique_ptr<std::thread> listener = nullptr;
 		bool healthCheckFailed = false;
 
@@ -106,10 +106,15 @@ namespace UCILoader {
 
 	public:
 
+		/*
+		* @brief ProcessWrapper's constructor registers the instance in the static list of created instances. 
+		*/
+		ProcessWrapper();
+
 		/*!
-		 * @brief Virtual destructor that ensures listening thread is properly joined.
+		 * @brief Virtual destructor that ensures the instance is properly unregistered
 		 */
-		virtual ~ProcessWrapper() = default;
+		virtual ~ProcessWrapper();
 
 		/*!
 		 * @brief Get the pipe writer for the process's standard input.
@@ -219,6 +224,15 @@ namespace UCILoader {
 			);
 			listener->detach(); // Listener will stop on its own when engine kills itself
 		};
+		
+		/*!
+		 * @brief Terminate all process wrapper instances created by the application.
+		 *
+		 * @details
+		 * This method can be used from a signal handler to close all child processes
+		 * when the parent process receives a SIGTERM signal.
+		 */
+		static void killAll();
 	};
 
 	/*!
