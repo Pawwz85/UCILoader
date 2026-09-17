@@ -768,7 +768,8 @@ namespace UCILoader {
 			std::shared_ptr<SearchConnection<Move>> currentConnection = nullptr;
 			std::shared_ptr<ProcessWrapper> processWrapper;
 			std::shared_ptr<MessageRelay> relay;
-		
+			
+			bool receivedUCIOK = false;
 			bool receivedReadyOk = false;
 			std::atomic_bool quitCommandSend;
 			std::string name = "<empty>";
@@ -1062,6 +1063,13 @@ namespace UCILoader {
 		* @see SearchConnection::getStatus() for monitoring ongoing searches
 		*/
 		void addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler);
+
+		/*!
+		* @brief Check if engine has send 'uciok' message
+		* 
+		* @return true if engine has send 'uciok' token, false otherwise	
+		*/
+		bool receivedUCIOK() const;
 	};
 
     template <class Move>
@@ -1237,6 +1245,12 @@ namespace UCILoader {
 		}, NamedEngineEvents::SearchStarted);
 	}
 
+	template <class Move>
+	bool EngineInstance<Move>::receivedUCIOK() const {
+		std::unique_lock<std::mutex> guard(core->lock);
+		return core->receivedUCIOK;
+	}
+
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onEngineName(const std::string& name)
 	{
@@ -1254,6 +1268,8 @@ namespace UCILoader {
 	template<class Move>
 	inline void EngineInstance<Move>::_CommandHandler::onUCIOK()
 	{
+		std::unique_lock<std::mutex> guard(core->lock);
+		core->receivedUCIOK = true;
 		// TODO: do something
 	}
 
