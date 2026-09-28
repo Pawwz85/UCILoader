@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.0</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.1</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -117,15 +117,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab55696b1aa30e58c3ce67f19388a3be7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#ab55696b1aa30e58c3ce67f19388a3be7">unlink</a> (const <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> *receiver)</td></tr>
 <tr class="memdesc:ab55696b1aa30e58c3ce67f19388a3be7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect a specific receiver from future events.  <br /></td></tr>
 <tr class="separator:ab55696b1aa30e58c3ce67f19388a3be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a181dc0a6ad8a0812540f634069d78aae"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a181dc0a6ad8a0812540f634069d78aae">connect</a> (std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; receiver)</td></tr>
-<tr class="memdesc:a181dc0a6ad8a0812540f634069d78aae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a custom event receiver.  <br /></td></tr>
-<tr class="separator:a181dc0a6ad8a0812540f634069d78aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4690730108128b484206b717fb93f81"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#ae4690730108128b484206b717fb93f81">connect</a> (std::function&lt; void(const <a class="el" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a> *)&gt; callback, uint32_t eventFilter)</td></tr>
-<tr class="memdesc:ae4690730108128b484206b717fb93f81"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a callback function that receives the full event.  <br /></td></tr>
-<tr class="separator:ae4690730108128b484206b717fb93f81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7bf0aaef6d0f16ab71a7b3e24a922836"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a7bf0aaef6d0f16ab71a7b3e24a922836">connect</a> (std::function&lt; void()&gt; callback, uint32_t eventFilter)</td></tr>
-<tr class="memdesc:a7bf0aaef6d0f16ab71a7b3e24a922836"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a simple parameterless callback function.  <br /></td></tr>
-<tr class="separator:a7bf0aaef6d0f16ab71a7b3e24a922836"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addfbf2ebc01373d6296f2ccd58f350b5"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#addfbf2ebc01373d6296f2ccd58f350b5">connect</a> (std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; receiver)</td></tr>
+<tr class="memdesc:addfbf2ebc01373d6296f2ccd58f350b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a custom event receiver.  <br /></td></tr>
+<tr class="separator:addfbf2ebc01373d6296f2ccd58f350b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73cded349c218c2cc31628c0707c9021"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a73cded349c218c2cc31628c0707c9021">connect</a> (std::function&lt; void(const <a class="el" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a> *)&gt; callback, uint32_t eventFilter)</td></tr>
+<tr class="memdesc:a73cded349c218c2cc31628c0707c9021"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a callback function that receives the full event.  <br /></td></tr>
+<tr class="separator:a73cded349c218c2cc31628c0707c9021"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b68e870ab911efe2839356459816edc"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a6b68e870ab911efe2839356459816edc">connect</a> (std::function&lt; void()&gt; callback, uint32_t eventFilter)</td></tr>
+<tr class="memdesc:a6b68e870ab911efe2839356459816edc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a simple parameterless callback function.  <br /></td></tr>
+<tr class="separator:a6b68e870ab911efe2839356459816edc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
@@ -144,7 +144,7 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~EventEmitter</b> 
 <p><b>Usage Pattern:</b> </p><div class="fragment"><div class="line"><a class="code hl_class" href="classUCILoader_1_1EventEmitter.html">EventEmitter</a> emitter;</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Connect with lambda</span></div>
-<div class="line">emitter.<a class="code hl_function" href="classUCILoader_1_1EventEmitter.html#a181dc0a6ad8a0812540f634069d78aae">connect</a>(</div>
+<div class="line">emitter.<a class="code hl_function" href="classUCILoader_1_1EventEmitter.html#addfbf2ebc01373d6296f2ccd58f350b5">connect</a>(</div>
 <div class="line">    [](<span class="keyword">const</span> <a class="code hl_class" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a>* e) {</div>
 <div class="line">        std::cout &lt;&lt; <span class="stringliteral">&quot;Event type: &quot;</span> &lt;&lt; e-&gt;<a class="code hl_function" href="classUCILoader_1_1EngineEvent.html#a67d761a8d8861582f64e1a493a46e0a0">getType</a>() &lt;&lt; std::endl;</div>
 <div class="line">    },</div>
@@ -153,23 +153,23 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~EventEmitter</b> 
 <div class="line"> </div>
 <div class="line"><span class="comment">// Connect custom receiver</span></div>
 <div class="line"><span class="keyword">auto</span> receiver = std::make_shared&lt;MyEventReceiver&gt;();</div>
-<div class="line">emitter.<a class="code hl_function" href="classUCILoader_1_1EventEmitter.html#a181dc0a6ad8a0812540f634069d78aae">connect</a>(receiver);</div>
+<div class="line">emitter.<a class="code hl_function" href="classUCILoader_1_1EventEmitter.html#addfbf2ebc01373d6296f2ccd58f350b5">connect</a>(receiver);</div>
 <div class="ttc" id="aclassUCILoader_1_1EngineEvent_html"><div class="ttname"><a href="classUCILoader_1_1EngineEvent.html">UCILoader::EngineEvent</a></div><div class="ttdoc">Base class for events emitted by an EngineInstance.</div><div class="ttdef"><b>Definition:</b> EngineEvent.h:42</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EngineEvent_html_a67d761a8d8861582f64e1a493a46e0a0"><div class="ttname"><a href="classUCILoader_1_1EngineEvent.html#a67d761a8d8861582f64e1a493a46e0a0">UCILoader::EngineEvent::getType</a></div><div class="ttdeci">virtual uint32_t getType() const =0</div><div class="ttdoc">Get the type code of this event.</div></div>
 <div class="ttc" id="aclassUCILoader_1_1EventEmitter_html"><div class="ttname"><a href="classUCILoader_1_1EventEmitter.html">UCILoader::EventEmitter</a></div><div class="ttdoc">Base class for objects that emit engine events.</div><div class="ttdef"><b>Definition:</b> EngineEvent.h:515</div></div>
-<div class="ttc" id="aclassUCILoader_1_1EventEmitter_html_a181dc0a6ad8a0812540f634069d78aae"><div class="ttname"><a href="classUCILoader_1_1EventEmitter.html#a181dc0a6ad8a0812540f634069d78aae">UCILoader::EventEmitter::connect</a></div><div class="ttdeci">void connect(std::shared_ptr&lt; EventReceiver &gt; receiver)</div><div class="ttdoc">Connect a custom event receiver.</div><div class="ttdef"><b>Definition:</b> EngineEvent.cpp:59</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EventEmitter_html_addfbf2ebc01373d6296f2ccd58f350b5"><div class="ttname"><a href="classUCILoader_1_1EventEmitter.html#addfbf2ebc01373d6296f2ccd58f350b5">UCILoader::EventEmitter::connect</a></div><div class="ttdeci">std::shared_ptr&lt; EventReceiver &gt; connect(std::shared_ptr&lt; EventReceiver &gt; receiver)</div><div class="ttdoc">Connect a custom event receiver.</div><div class="ttdef"><b>Definition:</b> EngineEvent.cpp:60</div></div>
 </div><!-- fragment --><dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1EventReceiver.html" title="Base class for event observers that receive engine events.">EventReceiver</a> for implementing custom receivers </dd>
 <dd>
 <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> for a real-world user of <a class="el" href="classUCILoader_1_1EventEmitter.html" title="Base class for objects that emit engine events.">EventEmitter</a> </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7bf0aaef6d0f16ab71a7b3e24a922836" name="a7bf0aaef6d0f16ab71a7b3e24a922836"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7bf0aaef6d0f16ab71a7b3e24a922836">&#9670;&#160;</a></span>connect() <span class="overload">[1/3]</span></h2>
+<a id="a6b68e870ab911efe2839356459816edc" name="a6b68e870ab911efe2839356459816edc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b68e870ab911efe2839356459816edc">&#9670;&#160;</a></span>connect() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void UCILoader::EventEmitter::connect </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">UCILoader::EventReceiver</a> &gt; UCILoader::EventEmitter::connect </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; void()&gt;&#160;</td>
           <td class="paramname"><em>callback</em>, </td>
@@ -201,17 +201,18 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~EventEmitter</b> 
 <div class="line">    []() { std::cout &lt;&lt; <span class="stringliteral">&quot;Search done!&quot;</span> &lt;&lt; std::endl; },</div>
 <div class="line">    NamedEngineEvents::SearchCompleted</div>
 <div class="line">);</div>
-</div><!-- fragment --> 
+</div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>Registered event received </dd></dl>
+
 </div>
 </div>
-<a id="ae4690730108128b484206b717fb93f81" name="ae4690730108128b484206b717fb93f81"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4690730108128b484206b717fb93f81">&#9670;&#160;</a></span>connect() <span class="overload">[2/3]</span></h2>
+<a id="a73cded349c218c2cc31628c0707c9021" name="a73cded349c218c2cc31628c0707c9021"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73cded349c218c2cc31628c0707c9021">&#9670;&#160;</a></span>connect() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void UCILoader::EventEmitter::connect </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">UCILoader::EventReceiver</a> &gt; UCILoader::EventEmitter::connect </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; void(const <a class="el" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a> *)&gt;&#160;</td>
           <td class="paramname"><em>callback</em>, </td>
@@ -245,17 +246,18 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~EventEmitter</b> 
 <div class="line">    },</div>
 <div class="line">    NamedEngineEvents::SearchCompleted | NamedEngineEvents::EngineCrashed</div>
 <div class="line">);</div>
-</div><!-- fragment --> 
+</div><!-- fragment --><dl class="section return"><dt>Returns</dt><dd>Registered event received </dd></dl>
+
 </div>
 </div>
-<a id="a181dc0a6ad8a0812540f634069d78aae" name="a181dc0a6ad8a0812540f634069d78aae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a181dc0a6ad8a0812540f634069d78aae">&#9670;&#160;</a></span>connect() <span class="overload">[3/3]</span></h2>
+<a id="addfbf2ebc01373d6296f2ccd58f350b5" name="addfbf2ebc01373d6296f2ccd58f350b5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addfbf2ebc01373d6296f2ccd58f350b5">&#9670;&#160;</a></span>connect() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void UCILoader::EventEmitter::connect </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">UCILoader::EventReceiver</a> &gt; UCILoader::EventEmitter::connect </td>
           <td>(</td>
           <td class="paramtype">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td>
           <td class="paramname"><em>receiver</em></td><td>)</td>
@@ -273,7 +275,8 @@ virtual&#160;</td><td class="memItemRight" valign="bottom"><b>~EventEmitter</b> 
 </dl>
 <p>Registers a custom <a class="el" href="classUCILoader_1_1EventReceiver.html" title="Base class for event observers that receive engine events.">EventReceiver</a> to receive events. The emitter maintains a shared_ptr to the receiver, ensuring it remains alive as long as connected.</p>
 <p>The first event sent will be EmitterConnected with no payload.</p>
-<p>See <a class="el" href="classUCILoader_1_1EventReceiver.html" title="Base class for event observers that receive engine events.">EventReceiver</a> documentation for implementing custom receivers. </p>
+<p>See <a class="el" href="classUCILoader_1_1EventReceiver.html" title="Base class for event observers that receive engine events.">EventReceiver</a> documentation for implementing custom receivers.</p>
+<dl class="section return"><dt>Returns</dt><dd>Registered event received </dd></dl>
 
 </div>
 </div>

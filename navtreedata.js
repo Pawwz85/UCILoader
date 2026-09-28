@@ -32,8 +32,18 @@ var NAVTREE =
         [ "Running Tests", "index.html#autotoc_md4", null ],
         [ "Linking library (in cmake)", "index.html#autotoc_md5", null ]
       ] ],
-      [ "Usage", "index.html#autotoc_md6", null ],
-      [ "Documentation", "index.html#autotoc_md14", null ],
+      [ "Usage", "index.html#autotoc_md6", [
+        [ "Unregistering a callckack defined earlier", "index.html#autotoc_md13", [
+          [ "Opening Engine", "index.html#autotoc_md7", null ],
+          [ "Logging UCI Protocol Communication", "index.html#autotoc_md8", null ],
+          [ "Configure Engine Options", "index.html#autotoc_md9", null ],
+          [ "Query Engine for best move", "index.html#autotoc_md10", null ],
+          [ "Defining a callback for capturing engine info", "index.html#autotoc_md11", null ],
+          [ "Registering a callback capturing engine info", "index.html#autotoc_md12", null ],
+          [ "Closing Engine", "index.html#autotoc_md14", null ]
+        ] ]
+      ] ],
+      [ "Documentation", "index.html#autotoc_md15", null ],
       [ "Namespace List", "namespaces.html", null ],
       [ "Namespace Members", "namespacemembers.html", [
         [ "All", "namespacemembers.html", null ],

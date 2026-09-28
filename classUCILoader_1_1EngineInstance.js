@@ -2,9 +2,9 @@ var classUCILoader_1_1EngineInstance =
 [
     [ "EngineBusyException", "classUCILoader_1_1EngineInstance_1_1EngineBusyException.html", null ],
     [ "TimeoutException", "classUCILoader_1_1EngineInstance_1_1TimeoutException.html", null ],
-    [ "addInfoBatchHandler", "classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1", null ],
-    [ "addInfoHandler", "classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473", null ],
-    [ "addSearchRequestHandler", "classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090", null ],
+    [ "addInfoBatchHandler", "classUCILoader_1_1EngineInstance.html#a5b356cbc83cb53e3820cd4794f50d193", null ],
+    [ "addInfoHandler", "classUCILoader_1_1EngineInstance.html#a88c95be5fdfa7b3f17172885d8ca96ed", null ],
+    [ "addSearchRequestHandler", "classUCILoader_1_1EngineInstance.html#a4fc4122e1ccd7359e6ec227426d42f29", null ],
     [ "getAuthor", "classUCILoader_1_1EngineInstance.html#ac8a4ccdec041aba8b0f11da0d2df8fb4", null ],
     [ "getCurrentSearch", "classUCILoader_1_1EngineInstance.html#a32081db0bf87f046ab54b59dcddac6b3", null ],
     [ "getName", "classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145", null ],

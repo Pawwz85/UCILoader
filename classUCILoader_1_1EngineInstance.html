@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.0</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.1</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -154,15 +154,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a96c7b8a18879044ee18a8af7c9929230"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230">quit</a> ()</td></tr>
 <tr class="memdesc:a96c7b8a18879044ee18a8af7c9929230"><td class="mdescLeft">&#160;</td><td class="mdescRight">Manually terminate the engine process.  <br /></td></tr>
 <tr class="separator:a96c7b8a18879044ee18a8af7c9929230"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a792b4715fb8831a9d0d76ee0d3f9c473"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473">addInfoHandler</a> (std::function&lt; void(const Info&lt; Move &gt; &amp;)&gt; handler)</td></tr>
-<tr class="memdesc:a792b4715fb8831a9d0d76ee0d3f9c473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function that is invoked when an info message arrives from the engine.  <br /></td></tr>
-<tr class="separator:a792b4715fb8831a9d0d76ee0d3f9c473"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a21def7eda21c1498606eb0155bdea6b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1">addInfoBatchHandler</a> (std::function&lt; void(const std::vector&lt; Info&lt; Move &gt; &gt; &amp;)&gt; handler)</td></tr>
-<tr class="memdesc:a21def7eda21c1498606eb0155bdea6b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function that is invoked when multiple info messages arrive together.  <br /></td></tr>
-<tr class="separator:a21def7eda21c1498606eb0155bdea6b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">addSearchRequestHandler</a> (std::function&lt; void(const SearchRequest&lt; Move &gt; &amp;)&gt; handler)</td></tr>
-<tr class="memdesc:a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function that is invoked when the engine starts processing a new search request.  <br /></td></tr>
-<tr class="separator:a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88c95be5fdfa7b3f17172885d8ca96ed"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a88c95be5fdfa7b3f17172885d8ca96ed">addInfoHandler</a> (std::function&lt; void(const Info&lt; Move &gt; &amp;)&gt; handler)</td></tr>
+<tr class="memdesc:a88c95be5fdfa7b3f17172885d8ca96ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function that is invoked when an info message arrives from the engine.  <br /></td></tr>
+<tr class="separator:a88c95be5fdfa7b3f17172885d8ca96ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b356cbc83cb53e3820cd4794f50d193"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a5b356cbc83cb53e3820cd4794f50d193">addInfoBatchHandler</a> (std::function&lt; void(const std::vector&lt; Info&lt; Move &gt; &gt; &amp;)&gt; handler)</td></tr>
+<tr class="memdesc:a5b356cbc83cb53e3820cd4794f50d193"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function that is invoked when multiple info messages arrive together.  <br /></td></tr>
+<tr class="separator:a5b356cbc83cb53e3820cd4794f50d193"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fc4122e1ccd7359e6ec227426d42f29"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a4fc4122e1ccd7359e6ec227426d42f29">addSearchRequestHandler</a> (std::function&lt; void(const SearchRequest&lt; Move &gt; &amp;)&gt; handler)</td></tr>
+<tr class="memdesc:a4fc4122e1ccd7359e6ec227426d42f29"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback function that is invoked when the engine starts processing a new search request.  <br /></td></tr>
+<tr class="separator:a4fc4122e1ccd7359e6ec227426d42f29"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3e6a9b96ec4961f6aab2b6a022e338f3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a3e6a9b96ec4961f6aab2b6a022e338f3">receivedUCIOK</a> () const</td></tr>
 <tr class="memdesc:a3e6a9b96ec4961f6aab2b6a022e338f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if engine has send 'uciok' message.  <br /></td></tr>
 <tr class="separator:a3e6a9b96ec4961f6aab2b6a022e338f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -170,15 +170,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab55696b1aa30e58c3ce67f19388a3be7 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#ab55696b1aa30e58c3ce67f19388a3be7">unlink</a> (const <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> *receiver)</td></tr>
 <tr class="memdesc:ab55696b1aa30e58c3ce67f19388a3be7 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect a specific receiver from future events.  <br /></td></tr>
 <tr class="separator:ab55696b1aa30e58c3ce67f19388a3be7 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a181dc0a6ad8a0812540f634069d78aae inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a181dc0a6ad8a0812540f634069d78aae">connect</a> (std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; receiver)</td></tr>
-<tr class="memdesc:a181dc0a6ad8a0812540f634069d78aae inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a custom event receiver.  <br /></td></tr>
-<tr class="separator:a181dc0a6ad8a0812540f634069d78aae inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4690730108128b484206b717fb93f81 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#ae4690730108128b484206b717fb93f81">connect</a> (std::function&lt; void(const <a class="el" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a> *)&gt; callback, uint32_t eventFilter)</td></tr>
-<tr class="memdesc:ae4690730108128b484206b717fb93f81 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a callback function that receives the full event.  <br /></td></tr>
-<tr class="separator:ae4690730108128b484206b717fb93f81 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7bf0aaef6d0f16ab71a7b3e24a922836 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a7bf0aaef6d0f16ab71a7b3e24a922836">connect</a> (std::function&lt; void()&gt; callback, uint32_t eventFilter)</td></tr>
-<tr class="memdesc:a7bf0aaef6d0f16ab71a7b3e24a922836 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a simple parameterless callback function.  <br /></td></tr>
-<tr class="separator:a7bf0aaef6d0f16ab71a7b3e24a922836 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:addfbf2ebc01373d6296f2ccd58f350b5 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#addfbf2ebc01373d6296f2ccd58f350b5">connect</a> (std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; receiver)</td></tr>
+<tr class="memdesc:addfbf2ebc01373d6296f2ccd58f350b5 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a custom event receiver.  <br /></td></tr>
+<tr class="separator:addfbf2ebc01373d6296f2ccd58f350b5 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73cded349c218c2cc31628c0707c9021 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a73cded349c218c2cc31628c0707c9021">connect</a> (std::function&lt; void(const <a class="el" href="classUCILoader_1_1EngineEvent.html">EngineEvent</a> *)&gt; callback, uint32_t eventFilter)</td></tr>
+<tr class="memdesc:a73cded349c218c2cc31628c0707c9021 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a callback function that receives the full event.  <br /></td></tr>
+<tr class="separator:a73cded349c218c2cc31628c0707c9021 inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b68e870ab911efe2839356459816edc inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EventEmitter.html#a6b68e870ab911efe2839356459816edc">connect</a> (std::function&lt; void()&gt; callback, uint32_t eventFilter)</td></tr>
+<tr class="memdesc:a6b68e870ab911efe2839356459816edc inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect a simple parameterless callback function.  <br /></td></tr>
+<tr class="separator:a6b68e870ab911efe2839356459816edc inherit pub_methods_classUCILoader_1_1EventEmitter"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -235,7 +235,7 @@ class UCILoader::EngineInstance&lt; Move &gt;</div><p>Top-level interface for ma
 <div class="line">    <span class="keyword">auto</span> result = <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a>-&gt;getResult();</div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Best move: &quot;</span> &lt;&lt; moveToString(result.bestMove) &lt;&lt; std::endl;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a9b966a808539bc72af6061c29890c177"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1135</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a9b966a808539bc72af6061c29890c177"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1141</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1LoggerTraits_html_aa37b1735dcd9b41a98b0de1b58b46d50"><div class="ttname"><a href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">UCILoader::LoggerTraits::Pretty</a></div><div class="ttdeci">const LoggerTrait &amp; Pretty</div><div class="ttdoc">Trait that formats log messages for human readability.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:165</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1Loggers_html_a3effa63e40d9a10f8a2a687d501c26d5"><div class="ttname"><a href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">UCILoader::Loggers::toFile</a></div><div class="ttdeci">LoggerBuilder toFile(const std::string &amp;filename)</div><div class="ttdoc">Create a logger that outputs to a file.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:185</div></div>
 </div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>Always call <a class="el" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295" title="Synchronize engine state with local representation.">sync()</a> after construction to ensure engine options and metadata are loaded. </dd></dl>
@@ -243,8 +243,8 @@ class UCILoader::EngineInstance&lt; Move &gt;</div><p>Top-level interface for ma
 <dd>
 <a class="el" href="classUCILoader_1_1Logger.html" title="Base interface for logging UCI protocol messages.">Logger</a> for configuring logging behavior </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a21def7eda21c1498606eb0155bdea6b1" name="a21def7eda21c1498606eb0155bdea6b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21def7eda21c1498606eb0155bdea6b1">&#9670;&#160;</a></span>addInfoBatchHandler()</h2>
+<a id="a5b356cbc83cb53e3820cd4794f50d193" name="a5b356cbc83cb53e3820cd4794f50d193"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b356cbc83cb53e3820cd4794f50d193">&#9670;&#160;</a></span>addInfoBatchHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -255,7 +255,7 @@ template&lt;class Move &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::addInfoBatchHandler </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::addInfoBatchHandler </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; void(const std::vector&lt; Info&lt; Move &gt; &gt; &amp;)&gt;&#160;</td>
           <td class="paramname"><em>handler</em></td><td>)</td>
@@ -285,12 +285,13 @@ template&lt;class Move &gt; </div>
 <p>This method allows you to receive batches of info messages that the engine sends together. Some engines emit multiple 'info' commands in one line (e.g., for each depth level), which may be delivered as a batch rather than individually.</p>
 <p><b>Comparison with addInfoHandler:</b> Use this method when you want to reduce callback overhead or process info messages in bulk. For simple logging of each message individually, use <code>addInfoHandler</code> instead.</p>
 <p><b>Thread Safety:</b> Like individual handlers, batch callbacks are invoked from the engine's communication thread and should avoid blocking operations that could delay search progress.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1EngineInstance.html#a792b4715fb8831a9d0d76ee0d3f9c473" title="Register a callback function that is invoked when an info message arrives from the engine.">addInfoHandler</a> for handling individual info messages </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1EngineInstance.html#a88c95be5fdfa7b3f17172885d8ca96ed" title="Register a callback function that is invoked when an info message arrives from the engine.">addInfoHandler</a> for handling individual info messages</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Event receiver associated with the handler </dd></dl>
 
 </div>
 </div>
-<a id="a792b4715fb8831a9d0d76ee0d3f9c473" name="a792b4715fb8831a9d0d76ee0d3f9c473"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a792b4715fb8831a9d0d76ee0d3f9c473">&#9670;&#160;</a></span>addInfoHandler()</h2>
+<a id="a88c95be5fdfa7b3f17172885d8ca96ed" name="a88c95be5fdfa7b3f17172885d8ca96ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88c95be5fdfa7b3f17172885d8ca96ed">&#9670;&#160;</a></span>addInfoHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -301,7 +302,7 @@ template&lt;class Move &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::addInfoHandler </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::addInfoHandler </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; void(const Info&lt; Move &gt; &amp;)&gt;&#160;</td>
           <td class="paramname"><em>handler</em></td><td>)</td>
@@ -332,14 +333,15 @@ template&lt;class Move &gt; </div>
 <p>Info messages typically contain: depth, nodes searched, selDepth, mate in N, evaluation scores, and other search statistics. These are useful for building GUI progress indicators or logging detailed search information.</p>
 <p><b>Multiple Handlers:</b> You can register multiple handlers. Each will be invoked for every info message received. This enables different components (GUI thread, logging system, analysis tools) to react independently.</p>
 <p><b>Thread Safety:</b> The handler is called from the engine's communication thread. If you need to update GUI elements or perform blocking operations, ensure proper synchronization.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1EngineInstance.html#a21def7eda21c1498606eb0155bdea6b1" title="Register a callback function that is invoked when multiple info messages arrive together.">addInfoBatchHandler</a> for handling batches of info messages instead of individual ones </dd>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1EngineInstance.html#a5b356cbc83cb53e3820cd4794f50d193" title="Register a callback function that is invoked when multiple info messages arrive together.">addInfoBatchHandler</a> for handling batches of info messages instead of individual ones </dd>
 <dd>
-<a class="el" href="classUCILoader_1_1SearchConnection.html#acfcb3bcc76da9a63e2c5a862953f7a2d" title="Get the current status of the search operation.">SearchConnection::getStatus()</a> for checking <a class="el" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177" title="Start a new search operation with specified parameters.">search</a> completion status </dd></dl>
+<a class="el" href="classUCILoader_1_1SearchConnection.html#acfcb3bcc76da9a63e2c5a862953f7a2d" title="Get the current status of the search operation.">SearchConnection::getStatus()</a> for checking <a class="el" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177" title="Start a new search operation with specified parameters.">search</a> completion status</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Event receiver associated with the handler </dd></dl>
 
 </div>
 </div>
-<a id="a2f366ca4c8c7fd7a6dfbf7fc8c1b4090" name="a2f366ca4c8c7fd7a6dfbf7fc8c1b4090"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f366ca4c8c7fd7a6dfbf7fc8c1b4090">&#9670;&#160;</a></span>addSearchRequestHandler()</h2>
+<a id="a4fc4122e1ccd7359e6ec227426d42f29" name="a4fc4122e1ccd7359e6ec227426d42f29"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fc4122e1ccd7359e6ec227426d42f29">&#9670;&#160;</a></span>addSearchRequestHandler()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -347,7 +349,7 @@ template&lt;class Move &gt; </div>
 template&lt;class Move &gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::addSearchRequestHandler </td>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1EventReceiver.html">EventReceiver</a> &gt; <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::addSearchRequestHandler </td>
           <td>(</td>
           <td class="paramtype">std::function&lt; void(const SearchRequest&lt; Move &gt; &amp;)&gt;&#160;</td>
           <td class="paramname"><em>handler</em></td><td>)</td>
@@ -400,7 +402,8 @@ template&lt;class Move &gt; </div>
 <li><code>moves</code>: Sequence of moves to be played from root search position before searching</li>
 </ul>
 <p><b>Multiple Handlers:</b> You can register multiple handlers. Each will be invoked when a new search begins, enabling different components to prepare independently for analysis workloads.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1SearchConnection.html#acfcb3bcc76da9a63e2c5a862953f7a2d" title="Get the current status of the search operation.">SearchConnection::getStatus()</a> for monitoring ongoing searches </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classUCILoader_1_1SearchConnection.html#acfcb3bcc76da9a63e2c5a862953f7a2d" title="Get the current status of the search operation.">SearchConnection::getStatus()</a> for monitoring ongoing searches</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>Event receiver associated with the handler </dd></dl>
 
 </div>
 </div>
