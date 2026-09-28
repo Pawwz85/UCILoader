@@ -56,7 +56,8 @@ int UCILoader::EventEmitter::countActiveReceivers() const {
 	return receivers.size();
 }
 
-void UCILoader::EventEmitter::connect(std::shared_ptr<EventReceiver> receiver)
+std::shared_ptr<UCILoader::EventReceiver>
+UCILoader::EventEmitter::connect(std::shared_ptr<EventReceiver> receiver)
 {
 	std::lock_guard<std::mutex> guard(lock);
 	receivers.push_back(receiver);
@@ -66,16 +67,19 @@ void UCILoader::EventEmitter::connect(std::shared_ptr<EventReceiver> receiver)
 	if (receiver->eventFilter() & connectionEvent.getType()) 
 		receiver->receiveEvent(&connectionEvent);
 	
+	return receiver; 
 }
 
-void UCILoader::EventEmitter::connect(std::function<void(const EngineEvent*)> callback, uint32_t eventFilter)
+std::shared_ptr<UCILoader::EventReceiver>
+UCILoader::EventEmitter::connect(std::function<void(const EngineEvent*)> callback, uint32_t eventFilter)
 {
 	auto receiver = std::make_shared<FunctionCallbackEventReceiver>(callback, eventFilter);
-	connect(std::static_pointer_cast<EventReceiver>(receiver));
+	return connect(std::static_pointer_cast<EventReceiver>(receiver));
 }
 
-void UCILoader::EventEmitter::connect(std::function<void()> callback, uint32_t eventFilter)
+std::shared_ptr<UCILoader::EventReceiver>
+UCILoader::EventEmitter::connect(std::function<void()> callback, uint32_t eventFilter)
 {
 	auto receiver = std::make_shared<FunctionCallbackEventReceiver>(callback, eventFilter);
-	connect(std::static_pointer_cast<EventReceiver>(receiver));
+	return connect(std::static_pointer_cast<EventReceiver>(receiver));
 }

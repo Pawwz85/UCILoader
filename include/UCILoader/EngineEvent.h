@@ -566,8 +566,10 @@ namespace UCILoader {
 		 * The first event sent will be EmitterConnected with no payload.
 		 * 
 		 * See EventReceiver documentation for implementing custom receivers.
+		 * 
+		 * @return Registered event received
 		 */
-		void connect(std::shared_ptr<EventReceiver> receiver);
+		std::shared_ptr<EventReceiver> connect(std::shared_ptr<EventReceiver> receiver);
 
 		/*!
 		 * @brief Connect a callback function that receives the full event.
@@ -588,8 +590,10 @@ namespace UCILoader {
 		 *         NamedEngineEvents::SearchCompleted | NamedEngineEvents::EngineCrashed
 		 *     );
 		 * @endcode
+		 * 
+		 * @return Registered event received
 		 */
-		void connect(std::function<void(const EngineEvent*)> callback, uint32_t eventFilter);
+		std::shared_ptr<EventReceiver> connect(std::function<void(const EngineEvent*)> callback, uint32_t eventFilter);
 
 		/*!
 		 * @brief Connect a simple parameterless callback function.
@@ -608,8 +612,10 @@ namespace UCILoader {
 		 *         NamedEngineEvents::SearchCompleted
 		 *     );
 		 * @endcode
+		 * 
+		 * @return Registered event received
 		 */
-		void connect(std::function<void()> callback, uint32_t eventFilter);
+		std::shared_ptr<EventReceiver> connect(std::function<void()> callback, uint32_t eventFilter);
 	};
 	
 

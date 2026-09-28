@@ -996,8 +996,10 @@ namespace UCILoader {
 			* 
 			* @see addInfoBatchHandler for handling batches of info messages instead of individual ones
 			* @see SearchConnection::getStatus() for checking search completion status
+			* 
+			* @return Event receiver associated with the handler
 		*/
-		void addInfoHandler(std::function<void(const Info<Move> &)> handler);
+		std::shared_ptr<EventReceiver> addInfoHandler(std::function<void(const Info<Move> &)> handler);
 		
 		/*!
 		* @brief Register a callback function that is invoked when multiple info messages arrive together.
@@ -1014,8 +1016,10 @@ namespace UCILoader {
 		* **Thread Safety:** Like individual handlers, batch callbacks are invoked from the engine's communication thread and should avoid blocking operations that could delay search progress.
 		* 
 		* @see addInfoHandler for handling individual info messages
+		* 
+		* @return Event receiver associated with the handler
 		*/
-		void addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler);
+		std::shared_ptr<EventReceiver> addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler);
 		
 		/*!
 		* @brief Register a callback function that is invoked when the engine starts processing a new search request.
@@ -1061,8 +1065,10 @@ namespace UCILoader {
 		* **Multiple Handlers:** You can register multiple handlers. Each will be invoked when a new search begins, enabling different components to prepare independently for analysis workloads.
 		* 
 		* @see SearchConnection::getStatus() for monitoring ongoing searches
+		* 
+		* @return Event receiver associated with the handler
 		*/
-		void addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler);
+		std::shared_ptr<EventReceiver> addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler);
 
 		/*!
 		* @brief Check if engine has send 'uciok' message
@@ -1219,8 +1225,8 @@ namespace UCILoader {
 	}
 
 	template <class Move>
-	inline void EngineInstance<Move>::addInfoHandler(std::function<void(const Info<Move> &)> handler){
-			connect([this, handler](const EngineEvent* event){
+	inline std::shared_ptr<EventReceiver> EngineInstance<Move>::addInfoHandler(std::function<void(const Info<Move> &)> handler){
+			return connect([this, handler](const EngineEvent* event){
 				auto info = (const Info<Move>*)event->getPayload();
 				if (info != nullptr)
 					handler(*info);
@@ -1228,8 +1234,8 @@ namespace UCILoader {
 	};
 
 	template <class Move>
-	inline void EngineInstance<Move>::addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler){
-			connect([this, handler](const EngineEvent* event){
+	inline std::shared_ptr<EventReceiver> EngineInstance<Move>::addInfoBatchHandler(std::function<void(const std::vector<Info<Move>> &)> handler){
+			return connect([this, handler](const EngineEvent* event){
 				auto batch = (const std::vector<Info<Move>>*)event->getPayload();
 				if (batch != nullptr)
 					handler(*batch);
@@ -1237,8 +1243,8 @@ namespace UCILoader {
 	};
 
 	template <class Move>
-	void EngineInstance<Move>::addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler) {
-		connect([this, handler](const EngineEvent* event){
+	std::shared_ptr<EventReceiver> EngineInstance<Move>::addSearchRequestHandler(std::function<void(const SearchRequest<Move> &)> handler) {
+		return connect([this, handler](const EngineEvent* event){
 			auto request = (const SearchRequest<Move>*)event->getPayload();
 			if (request != nullptr)
 				handler(*request);

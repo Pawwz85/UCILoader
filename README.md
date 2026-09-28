@@ -66,7 +66,7 @@ Alternatively, you can use FetchContent module to download and build the library
 include(FetchContent)
 FetchContent_Declare(
 		UCILoader
-		URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.1.3.zip
+		URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.2.1.zip
 )
 ```
 
@@ -278,7 +278,12 @@ For specialized logging needs, implement a custom logger and use `Loggers::from<
 
 #### Registering a callback capturing engine info
 ```cpp
-  	instance->addInfoHandler(displayPv);
+  	auto infoEventReceiver = instance->addInfoHandler(displayPv);
+```
+
+### Unregistering a callckack defined earlier
+```cpp
+  infoEventReceiver->unlinkAll();
 ```
 
 #### Closing Engine
