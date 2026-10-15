@@ -20,7 +20,7 @@ project(UCILoader
                   DESCRIPTION "Small C++ library that allows user to connect to a chess engines via UCI protocol."
                   LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 # configure target os based on detected platform

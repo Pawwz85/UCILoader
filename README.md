@@ -21,7 +21,7 @@ tools and application for both regular and variant chess.
 <!-- Prerequisites -->
 #### Prerequisites
 
-You need to have cmake installed to build this project. 
+You need to have CMake 3.28 or newer installed to build this project. The library is built as a C++17 static library.
 
 <!-- Installation -->
 #### Building from source
@@ -32,22 +32,30 @@ In order to build the library from source code you should clone this repository 
 git clone https://github.com/Pawwz85/UCILoader.git
 cd UCILoader
 cmake -B build
+cmake --build build
 ```
 
-Depending on your OS and your build system the next step will differ. On windows, if you are using visual studio, enter generated build folder and open .sln file in visual studio then compile the solution (you can use ctrl+shift+b shortcut). On Linux simply execute following commands:
+Tests are enabled by default. Examples are disabled by default, which keeps the default build suitable for use as a dependency. To set these options explicitly, use:
 
 ```bash
-  cd build
-  make
+cmake -B build -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
+cmake --build build
 ```
+
+```bash
+cmake -B build -DENABLE_IWYU=ON
+cmake --build build
+```
+
+Use `--config Release` with multi-configuration generators such as Visual Studio when building or installing a release build.
 
 <!-- Running Tests -->
 ### Running Tests
 
-To run tests, run the following command (in build directory)
+After configuring the project with tests enabled, run the unit and system tests with:
 
 ```bash
-  ctest
+ctest --test-dir build --output-on-failure
 ```
 
 <!-- Deployment -->
@@ -60,7 +68,7 @@ simply add the following line:
   add_subdirectory(UCILoader)
 ```
 
-Alternatively, you can use FetchContent module to download and build the library for you:
+Alternatively, you can use the FetchContent module to download and build the library for you:
 
 ```cmake
 include(FetchContent)
@@ -68,6 +76,7 @@ FetchContent_Declare(
 		UCILoader
 		URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.2.1.zip
 )
+FetchContent_MakeAvailable(UCILoader)
 ```
 
 Then link it like this:
