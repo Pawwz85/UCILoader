@@ -3,6 +3,7 @@
 #include "UCI.h"
 #include <memory>
 #include <string>
+
 namespace UCILoader { template <class Move> class EngineInstanceBuilder; }
 
 /*!
@@ -330,5 +331,10 @@ namespace StandardChess {
 	extern std::shared_ptr<UCILoader::EngineInstanceBuilder<StandardChessMove>> ChessEngineInstanceBuilder;
 
 }
+
+// register move formatter function inside MoveFormatter
 template <>
-std::string(*UCILoader::UciFormatter<StandardChess::StandardChessMove>::MoveFormatter)(const StandardChess::StandardChessMove& m);
+inline std::string (*UCILoader::UciFormatter<StandardChess::StandardChessMove>::MoveFormatter)
+	(const StandardChess::StandardChessMove&) = StandardChess::stringValueOf;
+
+
