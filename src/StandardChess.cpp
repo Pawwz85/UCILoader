@@ -1,4 +1,8 @@
 #include <UCILoader/StandardChess.h>
+#include <UCILoader/EngineConnection.h>
+#include <UCILoader/Parser.h>
+#include <UCILoader/UCI.h>
+
 using namespace StandardChess;
 
 // register move formatter function inside MoveFormatter

@@ -5,6 +5,7 @@
 #include <cstdint>
 
 namespace UCILoader {
+	template <class Move> class GoParamsBuilder;
 
 	enum ProcedureStatus {
 		Checking,

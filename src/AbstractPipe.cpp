@@ -1,6 +1,7 @@
 #include <UCILoader/AbstractPipe.h>
 
 #include <thread>
+#include <chrono>
 
 using namespace UCILoader;
 

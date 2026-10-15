@@ -1,6 +1,10 @@
 #include <UCILoader/EngineConnection.h>
+#include <UCILoader/Logger.h>
+#include <UCILoader/AbstractPipe.h>
+#include <UCILoader/UCI.h>
 #include <sstream> 
 #include <algorithm> // for std::transform
+#include <cctype> // for std::tolower
 
 UCILoader::MessageRelay::MessageRelay(std::shared_ptr<AbstractPipeWriter> pipeWriter, std::unique_ptr<Logger> && logger) :
 	pipeWriter(pipeWriter), logger(std::move(logger)) {

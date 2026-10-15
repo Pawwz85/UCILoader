@@ -1,7 +1,9 @@
 #pragma once
 #include "Parser.h"
-#include "EngineConnection.h" 
-#include <cstring> // for memcpy
+#include "UCI.h"
+#include <memory>
+#include <string>
+namespace UCILoader { template <class Move> class EngineInstanceBuilder; }
 
 /*!
  * @page Standard_Chess Standard Chess UCI Loader Module

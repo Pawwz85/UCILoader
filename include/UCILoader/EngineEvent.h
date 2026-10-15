@@ -3,6 +3,7 @@
 #include <cstdint>
 #include <mutex>
 #include <list>
+#include <vector>
 #include <memory>
 #include <functional>
 #include "UCI.h"

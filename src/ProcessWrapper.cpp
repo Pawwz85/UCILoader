@@ -2,7 +2,6 @@
 
 #include <algorithm>
 #include <mutex>
-#include <csignal>
 
 std::mutex processWrapperInstancesLock;
 std::vector<UCILoader::ProcessWrapper *> proccessWrapperInstances;

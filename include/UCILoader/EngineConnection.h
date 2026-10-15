@@ -4,10 +4,22 @@
 #include "Parser.h"
 #include "EngineEvent.h"
 #include "Logger.h"
+#include "AbstractPipe.h"
+#include "UCI.h"
 #include <mutex>
 #include <atomic>
 #include <unordered_map>
 #include <condition_variable>
+#include <cassert>
+#include <chrono>
+#include <cstdint>
+#include <exception>
+#include <functional>
+#include <memory>
+#include <string>
+#include <thread>
+#include <utility>
+#include <vector>
 
 namespace UCILoader {
 

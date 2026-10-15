@@ -6,8 +6,16 @@
 #include <sstream>
 #include <memory>
 #include <map>
+#include <cstddef>
+#include <cstdint>
+#include <exception>
+#include <string>
+#include <utility>
+#include <vector>
 
 namespace UCILoader {
+
+	template <class Move> class UCIParser;
 
 	/*!
 		This class verifies if given string matches certain pattern. 

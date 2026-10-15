@@ -6,8 +6,10 @@
 #include <memory>
 #include <vector>
 #include <cassert>
-#include <cstring>
 #include <functional>
+#include <exception>
+#include <string>
+#include <utility>
 
 namespace UCILoader {
 	/*!

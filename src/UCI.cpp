@@ -1,4 +1,5 @@
-#include <UCILoader/Parser.h>
+#include <UCILoader/UCI.h>
+#include <string>
 
 void UCILoader::Option::dispose_content() {
 	switch (type_)

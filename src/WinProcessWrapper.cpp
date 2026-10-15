@@ -1,5 +1,9 @@
 #include <mutex>
 #include <stdexcept>
+#include <cstddef>
+#include <memory>
+#include <string>
+#include <vector>
 #include <UCILoader/AbstractPipe.h>
 #include <UCILoader/ProcessWrapper.h>
 #include <Windows.h>
