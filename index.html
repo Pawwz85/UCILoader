@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.1</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.2</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -105,30 +105,35 @@ About the Project</h2>
 Getting Started</h2>
 <h4><a class="anchor" id="autotoc_md2"></a>
 Prerequisites</h4>
-<p>You need to have cmake installed to build this project.</p>
+<p>You need to have CMake 3.28 or newer installed to build this project. The library is built as a C++17 static library.</p>
 <h4><a class="anchor" id="autotoc_md3"></a>
 Building from source</h4>
 <p>In order to build the library from source code you should clone this repository then use cmake to generate build files for you:</p>
 <div class="fragment"><div class="line">git clone https://github.com/Pawwz85/UCILoader.git</div>
 <div class="line">cd UCILoader</div>
 <div class="line">cmake -B build</div>
-</div><!-- fragment --><p>Depending on your OS and your build system the next step will differ. On windows, if you are using visual studio, enter generated build folder and open .sln file in visual studio then compile the solution (you can use ctrl+shift+b shortcut). On Linux simply execute following commands:</p>
-<div class="fragment"><div class="line">cd build</div>
-<div class="line">make</div>
-</div><!-- fragment --><h3><a class="anchor" id="autotoc_md4"></a>
+<div class="line">cmake --build build</div>
+</div><!-- fragment --><p>Tests are enabled by default. Examples are disabled by default, which keeps the default build suitable for use as a dependency. To set these options explicitly, use:</p>
+<div class="fragment"><div class="line">cmake -B build -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON</div>
+<div class="line">cmake --build build</div>
+</div><!-- fragment --><div class="fragment"><div class="line">cmake -B build -DENABLE_IWYU=ON</div>
+<div class="line">cmake --build build</div>
+</div><!-- fragment --><p>Use <code>--config Release</code> with multi-configuration generators such as Visual Studio when building or installing a release build.</p>
+<h3><a class="anchor" id="autotoc_md4"></a>
 Running Tests</h3>
-<p>To run tests, run the following command (in build directory)</p>
-<div class="fragment"><div class="line">ctest</div>
+<p>After configuring the project with tests enabled, run the unit and system tests with:</p>
+<div class="fragment"><div class="line">ctest --test-dir build --output-on-failure</div>
 </div><!-- fragment --><h3><a class="anchor" id="autotoc_md5"></a>
 Linking library (in cmake)</h3>
 <p>If you are using cmake, the fastest way to add this library to your project is to simply add it to your project source folder. Then in your CMakeLists.txt simply add the following line:</p>
 <div class="fragment"><div class="line">add_subdirectory(UCILoader)</div>
-</div><!-- fragment --><p>Alternatively, you can use FetchContent module to download and build the library for you:</p>
+</div><!-- fragment --><p>Alternatively, you can use the FetchContent module to download and build the library for you:</p>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line">FetchContent_Declare(</div>
 <div class="line">        UCILoader</div>
-<div class="line">        URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.2.1.zip</div>
+<div class="line">        URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.2.2.zip</div>
 <div class="line">)</div>
+<div class="line">FetchContent_MakeAvailable(UCILoader)</div>
 </div><!-- fragment --><p>Then link it like this: </p><div class="fragment"><div class="line">target_link_libraries(MyProject PUBLIC uciloader)</div>
 </div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
 Usage</h2>
@@ -233,9 +238,9 @@ Logging UCI Protocol Communication</h4>
 <div class="line">  }</div>
 <div class="line">});</div>
 <div class="line"><span class="keyword">auto</span> instance4 = StandardChess::ChessEngineInstanceBuilder-&gt;build(proces, std::move(logger4));</div>
-<div class="ttc" id="aclassUCILoader_1_1LogBuffer_html"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html">UCILoader::LogBuffer</a></div><div class="ttdoc">Thread-safe buffer for storing log messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:451</div></div>
+<div class="ttc" id="aclassUCILoader_1_1LogBuffer_html"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html">UCILoader::LogBuffer</a></div><div class="ttdoc">Thread-safe buffer for storing log messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:450</div></div>
 <div class="ttc" id="aclassUCILoader_1_1LogBuffer_html_a5e9092d1c20a1fdca9b0e2a0ca9025f6"><div class="ttname"><a href="classUCILoader_1_1LogBuffer.html#a5e9092d1c20a1fdca9b0e2a0ca9025f6">UCILoader::LogBuffer::snapshot</a></div><div class="ttdeci">std::vector&lt; std::string &gt; snapshot() const</div><div class="ttdoc">Get a snapshot of all messages currently in the buffer.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:236</div></div>
-<div class="ttc" id="aclassUCILoader_1_1Logger_html_a6a406f7ebf130a25fc9f2116eb4406b0"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a6a406f7ebf130a25fc9f2116eb4406b0">UCILoader::Logger::MessageDirection</a></div><div class="ttdeci">MessageDirection</div><div class="ttdoc">Enumeration of message directions for logging purposes.</div><div class="ttdef"><b>Definition:</b> Logger.h:37</div></div>
+<div class="ttc" id="aclassUCILoader_1_1Logger_html_a6a406f7ebf130a25fc9f2116eb4406b0"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a6a406f7ebf130a25fc9f2116eb4406b0">UCILoader::Logger::MessageDirection</a></div><div class="ttdeci">MessageDirection</div><div class="ttdoc">Enumeration of message directions for logging purposes.</div><div class="ttdef"><b>Definition:</b> Logger.h:36</div></div>
 </div><!-- fragment --><p><b>Custom Logger:</b></p>
 <p>For specialized logging needs, implement a custom logger and use <code>Loggers::from&lt;T&gt;()</code>:</p>
 <div class="fragment"><div class="line"><span class="comment">// Define custom logger</span></div>
@@ -256,8 +261,8 @@ Logging UCI Protocol Communication</h4>
 <div class="line">  proces,</div>
 <div class="line">  Loggers::from&lt;MyCustomLogger&gt;(<span class="stringliteral">&quot;engine.log&quot;</span>) | LoggerTraits::Timestamp</div>
 <div class="line">);</div>
-<div class="ttc" id="aclassUCILoader_1_1Logger_html"><div class="ttname"><a href="classUCILoader_1_1Logger.html">UCILoader::Logger</a></div><div class="ttdoc">Base interface for logging UCI protocol messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:32</div></div>
-<div class="ttc" id="aclassUCILoader_1_1Logger_html_a6a406f7ebf130a25fc9f2116eb4406b0a130a2ca5e04a88593d7f2739091633ee"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a6a406f7ebf130a25fc9f2116eb4406b0a130a2ca5e04a88593d7f2739091633ee">UCILoader::Logger::ToEngine</a></div><div class="ttdeci">@ ToEngine</div><div class="ttdoc">Message sent from the application to the chess engine.</div><div class="ttdef"><b>Definition:</b> Logger.h:38</div></div>
+<div class="ttc" id="aclassUCILoader_1_1Logger_html"><div class="ttname"><a href="classUCILoader_1_1Logger.html">UCILoader::Logger</a></div><div class="ttdoc">Base interface for logging UCI protocol messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:31</div></div>
+<div class="ttc" id="aclassUCILoader_1_1Logger_html_a6a406f7ebf130a25fc9f2116eb4406b0a130a2ca5e04a88593d7f2739091633ee"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a6a406f7ebf130a25fc9f2116eb4406b0a130a2ca5e04a88593d7f2739091633ee">UCILoader::Logger::ToEngine</a></div><div class="ttdeci">@ ToEngine</div><div class="ttdoc">Message sent from the application to the chess engine.</div><div class="ttdef"><b>Definition:</b> Logger.h:37</div></div>
 <div class="ttc" id="aclassUCILoader_1_1Logger_html_a711215b81c405aec031793e862ad4701"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a711215b81c405aec031793e862ad4701">UCILoader::Logger::log</a></div><div class="ttdeci">virtual void log(MessageDirection dir, const std::string &amp;msg)=0</div><div class="ttdoc">Log a message with a specified direction.</div></div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md9"></a>
 Configure Engine Options</h4>
@@ -294,7 +299,7 @@ Query Engine for best move</h4>
 <div class="line"><span class="keywordflow">else</span> {</div>
 <div class="line">    cout &lt;&lt; <span class="stringliteral">&quot;Search status code timed out with a status code: &quot;</span> &lt;&lt; status&lt;&lt;<span class="charliteral">&#39;\n&#39;</span>;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassStandardChess_1_1StartPos_html"><div class="ttname"><a href="classStandardChess_1_1StartPos.html">StandardChess::StartPos</a></div><div class="ttdoc">Position formatter for the standard chess starting position.</div><div class="ttdef"><b>Definition:</b> StandardChess.h:250</div></div>
+<div class="ttc" id="aclassStandardChess_1_1StartPos_html"><div class="ttname"><a href="classStandardChess_1_1StartPos.html">StandardChess::StartPos</a></div><div class="ttdoc">Position formatter for the standard chess starting position.</div><div class="ttdef"><b>Definition:</b> StandardChess.h:252</div></div>
 </div><!-- fragment --><h4><a class="anchor" id="autotoc_md11"></a>
 Defining a callback for capturing engine info</h4>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> displayPV(<span class="keyword">const</span> UCILoader::Info&lt;Move&gt; &amp; e) {</div>

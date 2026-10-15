@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.1</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.2</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -156,7 +156,7 @@ Functions</h2></td></tr>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Create a custom logger</span></div>
 <div class="line"><span class="keyword">auto</span> logger = Loggers::from&lt;MyCustomLogger&gt;(arg1, arg2);</div>
-<div class="ttc" id="aclassUCILoader_1_1Logger_html_a6a406f7ebf130a25fc9f2116eb4406b0"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a6a406f7ebf130a25fc9f2116eb4406b0">UCILoader::Logger::MessageDirection</a></div><div class="ttdeci">MessageDirection</div><div class="ttdoc">Enumeration of message directions for logging purposes.</div><div class="ttdef"><b>Definition:</b> Logger.h:37</div></div>
+<div class="ttc" id="aclassUCILoader_1_1Logger_html_a6a406f7ebf130a25fc9f2116eb4406b0"><div class="ttname"><a href="classUCILoader_1_1Logger.html#a6a406f7ebf130a25fc9f2116eb4406b0">UCILoader::Logger::MessageDirection</a></div><div class="ttdeci">MessageDirection</div><div class="ttdoc">Enumeration of message directions for logging purposes.</div><div class="ttdef"><b>Definition:</b> Logger.h:36</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1LoggerTraits_html_aa37b1735dcd9b41a98b0de1b58b46d50"><div class="ttname"><a href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">UCILoader::LoggerTraits::Pretty</a></div><div class="ttdeci">const LoggerTrait &amp; Pretty</div><div class="ttdoc">Trait that formats log messages for human readability.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:165</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1Loggers_html_a3effa63e40d9a10f8a2a687d501c26d5"><div class="ttname"><a href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">UCILoader::Loggers::toFile</a></div><div class="ttdeci">LoggerBuilder toFile(const std::string &amp;filename)</div><div class="ttdoc">Create a logger that outputs to a file.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:185</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1Loggers_html_accb7020601495e1a00e1f526ba884646"><div class="ttname"><a href="namespaceUCILoader_1_1Loggers.html#accb7020601495e1a00e1f526ba884646">UCILoader::Loggers::toCallback</a></div><div class="ttdeci">LoggerBuilder toCallback(std::function&lt; void(Logger::MessageDirection, const std::string &amp;msg)&gt; callback)</div><div class="ttdoc">Create a logger that forwards all messages to a callback function.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:200</div></div>
@@ -199,7 +199,7 @@ template&lt;class CustomLogger , typename ... args&gt; </div>
 <div class="line">};</div>
 <div class="line"> </div>
 <div class="line"><span class="keyword">auto</span> logger = Loggers::from&lt;MyLogger&gt;(arg1, arg2).build();</div>
-<div class="ttc" id="aclassUCILoader_1_1Logger_html"><div class="ttname"><a href="classUCILoader_1_1Logger.html">UCILoader::Logger</a></div><div class="ttdoc">Base interface for logging UCI protocol messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:32</div></div>
+<div class="ttc" id="aclassUCILoader_1_1Logger_html"><div class="ttname"><a href="classUCILoader_1_1Logger.html">UCILoader::Logger</a></div><div class="ttdoc">Base interface for logging UCI protocol messages.</div><div class="ttdef"><b>Definition:</b> Logger.h:31</div></div>
 </div><!-- fragment --> 
 </div>
 </div>
