@@ -328,4 +328,7 @@ namespace StandardChess {
 	 * @see EngineInstanceBuilder for details about the builder pattern
 	 */
 	extern std::shared_ptr<UCILoader::EngineInstanceBuilder<StandardChessMove>> ChessEngineInstanceBuilder;
+
 }
+template <>
+std::string(*UCILoader::UciFormatter<StandardChess::StandardChessMove>::MoveFormatter)(const StandardChess::StandardChessMove& m);
