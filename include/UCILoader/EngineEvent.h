@@ -207,7 +207,7 @@ namespace UCILoader {
 		//! @brief Event emitted for individual info responses
 		const uint32_t InfoReceived = 128u;
 		//! @brief Event emitted after UCIOK
-		const uint32_t UCIOKReceived = 128u;
+		const uint32_t UCIOKReceived = 256u;
 
 
 		/*!
