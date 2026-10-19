@@ -30,6 +30,7 @@ var hierarchy =
       [ "StandardChess::StandardChessMoveMarschaler", "classStandardChess_1_1StandardChessMoveMarschaler.html", null ]
     ] ],
     [ "UCILoader::MessageRelay", "classUCILoader_1_1MessageRelay.html", null ],
+    [ "UCILoader::EngineInstance< Move >::NoPositionError", "classUCILoader_1_1EngineInstance_1_1NoPositionError.html", null ],
     [ "UCILoader::EngineOptionProxy::NotSupportedValueException", "classUCILoader_1_1EngineOptionProxy_1_1NotSupportedValueException.html", null ],
     [ "UCILoader::EngineOptionProxy::ParsingError", "classUCILoader_1_1EngineOptionProxy_1_1ParsingError.html", null ],
     [ "UCILoader::PatternMatcher", "classUCILoader_1_1PatternMatcher.html", null ],

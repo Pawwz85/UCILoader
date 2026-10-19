@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.2.3</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.3.0</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -118,6 +118,9 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html">EngineBusyException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception thrown when attempting to start a search while one is already in progress.  <a href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance_1_1NoPositionError.html">NoPositionError</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception thrown when <a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc" title="Start a search using the position most recently supplied with position().">go()</a> is called without a previously supplied position.  <a href="classUCILoader_1_1EngineInstance_1_1NoPositionError.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html">TimeoutException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Exception thrown when a <a class="el" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295" title="Synchronize engine state with local representation.">sync()</a> or <a class="el" href="classUCILoader_1_1EngineInstance.html#a8c94548d670ee5044d8af9b112dc971b" title="Measure engine latency by performing a ping operation.">ping()</a> operation times out.  <a href="classUCILoader_1_1EngineInstance_1_1TimeoutException.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -142,6 +145,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a9b966a808539bc72af6061c29890c177"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1SearchConnection.html">SearchConnection</a>&lt; Move &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a> (const GoParams&lt; Move &gt; &amp;params, const <a class="el" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a> &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</td></tr>
 <tr class="memdesc:a9b966a808539bc72af6061c29890c177"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a new search operation with specified parameters.  <br /></td></tr>
 <tr class="separator:a9b966a808539bc72af6061c29890c177"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a233587acd8eaf6b6646f9168a026bbfc"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1SearchConnection.html">SearchConnection</a>&lt; Move &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc">go</a> (const GoParams&lt; Move &gt; &amp;params)</td></tr>
+<tr class="memdesc:a233587acd8eaf6b6646f9168a026bbfc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start a search using the position most recently supplied with <a class="el" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1" title="Send a position to the engine and make it available to go().">position()</a>.  <br /></td></tr>
+<tr class="separator:a233587acd8eaf6b6646f9168a026bbfc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a45743f948538d9afa5c2af44bd664ef1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1">position</a> (const <a class="el" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a> &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</td></tr>
+<tr class="memdesc:a45743f948538d9afa5c2af44bd664ef1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a position to the engine and make it available to <a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc" title="Start a search using the position most recently supplied with position().">go()</a>.  <br /></td></tr>
+<tr class="separator:a45743f948538d9afa5c2af44bd664ef1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a136246a3dfc805a5cc5ae69b363d2145"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classUCILoader_1_1EngineInstance.html#a136246a3dfc805a5cc5ae69b363d2145">getName</a> ()</td></tr>
 <tr class="memdesc:a136246a3dfc805a5cc5ae69b363d2145"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the engine's name as declared via the id name command.  <br /></td></tr>
 <tr class="separator:a136246a3dfc805a5cc5ae69b363d2145"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -228,14 +237,15 @@ class UCILoader::EngineInstance&lt; Move &gt;</div><p>Top-level interface for ma
 <div class="line">}</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// Start search</span></div>
-<div class="line"><span class="keyword">auto</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a> = engine-&gt;search(params, position, moves);</div>
+<div class="line"><span class="keyword">auto</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a> = engine-&gt;search(params, <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1">position</a>, moves);</div>
 <div class="line"><a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a>-&gt;waitFor(std::chrono::seconds(5));</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordflow">if</span> (<a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a>-&gt;getStatus() == ResultReady) {</div>
 <div class="line">    <span class="keyword">auto</span> result = <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a>-&gt;getResult();</div>
 <div class="line">    std::cout &lt;&lt; <span class="stringliteral">&quot;Best move: &quot;</span> &lt;&lt; moveToString(result.bestMove) &lt;&lt; std::endl;</div>
 <div class="line">}</div>
-<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a9b966a808539bc72af6061c29890c177"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1153</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a45743f948538d9afa5c2af44bd664ef1"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1">UCILoader::EngineInstance::position</a></div><div class="ttdeci">void position(const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Send a position to the engine and make it available to go().</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1239</div></div>
+<div class="ttc" id="aclassUCILoader_1_1EngineInstance_html_a9b966a808539bc72af6061c29890c177"><div class="ttname"><a href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">UCILoader::EngineInstance::search</a></div><div class="ttdeci">std::shared_ptr&lt; SearchConnection&lt; Move &gt; &gt; search(const GoParams&lt; Move &gt; &amp;params, const PositionFormatter &amp;pos, const std::vector&lt; Move &gt; &amp;moves={})</div><div class="ttdoc">Start a new search operation with specified parameters.</div><div class="ttdef"><b>Definition:</b> EngineConnection.h:1245</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1LoggerTraits_html_aa37b1735dcd9b41a98b0de1b58b46d50"><div class="ttname"><a href="namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50">UCILoader::LoggerTraits::Pretty</a></div><div class="ttdeci">const LoggerTrait &amp; Pretty</div><div class="ttdoc">Trait that formats log messages for human readability.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:165</div></div>
 <div class="ttc" id="anamespaceUCILoader_1_1Loggers_html_a3effa63e40d9a10f8a2a687d501c26d5"><div class="ttname"><a href="namespaceUCILoader_1_1Loggers.html#a3effa63e40d9a10f8a2a687d501c26d5">UCILoader::Loggers::toFile</a></div><div class="ttdeci">LoggerBuilder toFile(const std::string &amp;filename)</div><div class="ttdoc">Create a logger that outputs to a file.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:185</div></div>
 </div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>Always call <a class="el" href="classUCILoader_1_1EngineInstance.html#a883dc1684175074ad7bf04b0c8750295" title="Synchronize engine state with local representation.">sync()</a> after construction to ensure engine options and metadata are loaded. </dd></dl>
@@ -371,7 +381,7 @@ template&lt;class Move &gt; </div>
   </table>
   </dd>
 </dl>
-<p>This method allows you to react when the user or application initiates a new search operation. The callback is invoked immediately after <code><a class="el" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177" title="Start a new search operation with specified parameters.">search()</a></code>.</p>
+<p>This method allows you to react when the user or application initiates a new search operation. The callback is invoked immediately after <a class="el" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177" title="Start a new search operation with specified parameters.">search()</a> or <a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc" title="Start a search using the position most recently supplied with position().">go()</a>.</p>
 <p><b>Use Cases:</b></p><ul>
 <li>Initialize GUI progress bars and status indicators for the upcoming search</li>
 <li>Reset internal counters, timers, or statistics tracking structures</li>
@@ -394,7 +404,7 @@ template&lt;class Move &gt; </div>
 <div class="line">    gui.setProgressBar(request);</div>
 <div class="line">});</div>
 <div class="line"> </div>
-<div class="line"><span class="keyword">auto</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a> = engine-&gt;search(params, position);</div>
+<div class="line"><span class="keyword">auto</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a> = engine-&gt;search(params, <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1">position</a>);</div>
 <div class="ttc" id="anamespaceUCILoader_1_1Loggers_html_af9091bf089485160cc6fc8495ae4e2f0"><div class="ttname"><a href="namespaceUCILoader_1_1Loggers.html#af9091bf089485160cc6fc8495ae4e2f0">UCILoader::Loggers::toStd</a></div><div class="ttdeci">LoggerBuilder toStd()</div><div class="ttdoc">Create a logger that outputs to standard output.</div><div class="ttdef"><b>Definition:</b> Logger.cpp:176</div></div>
 </div><!-- fragment --><p><b>SearchRequest Structure:</b> The SearchRequest object contains:</p><ul>
 <li><code>params</code>: GoParams specifying depth/time limits and other constraints</li>
@@ -490,6 +500,51 @@ template&lt;class Move &gt; </div>
 
 </div>
 </div>
+<a id="a233587acd8eaf6b6646f9168a026bbfc" name="a233587acd8eaf6b6646f9168a026bbfc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a233587acd8eaf6b6646f9168a026bbfc">&#9670;&#160;</a></span>go()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Move &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="classUCILoader_1_1SearchConnection.html">SearchConnection</a>&lt; Move &gt; &gt; <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::go </td>
+          <td>(</td>
+          <td class="paramtype">const GoParams&lt; Move &gt; &amp;&#160;</td>
+          <td class="paramname"><em>params</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Start a search using the position most recently supplied with <a class="el" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1" title="Send a position to the engine and make it available to go().">position()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>Search parameters (time, depth, nodes, etc.) - see GoParamsBuilder from <a class="el" href="UCI_8h_source.html">UCI.h</a> </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Shared pointer to the <a class="el" href="classUCILoader_1_1SearchConnection.html" title="Manages and controls an ongoing chess engine search operation.">SearchConnection</a> for monitoring and controlling the search </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname"><a class="el" href="classUCILoader_1_1EngineInstance_1_1EngineBusyException.html" title="Exception thrown when attempting to start a search while one is already in progress.">EngineBusyException</a></td><td>if a search is already in progress </td></tr>
+    <tr><td class="paramname"><a class="el" href="classUCILoader_1_1EngineInstance_1_1NoPositionError.html" title="Exception thrown when go() is called without a previously supplied position.">NoPositionError</a></td><td>if <a class="el" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1" title="Send a position to the engine and make it available to go().">position()</a> has not been called, or its position has already been consumed by a previous call to <a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc" title="Start a search using the position most recently supplied with position().">go()</a></td></tr>
+  </table>
+  </dd>
+</dl>
+<p>The position and move history are consumed when the search starts. Use <a class="el" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1" title="Send a position to the engine and make it available to go().">position()</a> again before starting another search. </p>
+
+</div>
+</div>
 <a id="a1f0171ebc0eff8c285744dea7ce254e2" name="a1f0171ebc0eff8c285744dea7ce254e2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1f0171ebc0eff8c285744dea7ce254e2">&#9670;&#160;</a></span>healthCheck()</h2>
 
@@ -562,6 +617,54 @@ template&lt;class Move &gt; </div>
 
 </div>
 </div>
+<a id="a45743f948538d9afa5c2af44bd664ef1" name="a45743f948538d9afa5c2af44bd664ef1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a45743f948538d9afa5c2af44bd664ef1">&#9670;&#160;</a></span>position()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Move &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classUCILoader_1_1EngineInstance.html">UCILoader::EngineInstance</a>&lt; Move &gt;::position </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a> &amp;&#160;</td>
+          <td class="paramname"><em>pos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::vector&lt; Move &gt; &amp;&#160;</td>
+          <td class="paramname"><em>moves</em> = <code>{}</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Send a position to the engine and make it available to <a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc" title="Start a search using the position most recently supplied with position().">go()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pos</td><td>Root position to analyze - must implement <a class="el" href="classUCILoader_1_1PositionFormatter.html">PositionFormatter</a> interface </td></tr>
+    <tr><td class="paramname">moves</td><td>Sequence of moves to play from the root position</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This method sends the UCI position command immediately and stores the position and move history for the next call to <a class="el" href="classUCILoader_1_1EngineInstance.html#a233587acd8eaf6b6646f9168a026bbfc" title="Start a search using the position most recently supplied with position().">go()</a>. Calling <a class="el" href="classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1" title="Send a position to the engine and make it available to go().">position()</a> again replaces the stored position. It is also safe to call while no search is active. </p>
+
+</div>
+</div>
 <a id="a96c7b8a18879044ee18a8af7c9929230" name="a96c7b8a18879044ee18a8af7c9929230"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a96c7b8a18879044ee18a8af7c9929230">&#9670;&#160;</a></span>quit()</h2>
 
@@ -587,7 +690,7 @@ template&lt;class Move &gt; </div>
 <p>Manually terminate the engine process. </p>
 <p><b>Note:</b> Manually calling this method is unnecessary. The engine will be automatically terminated when the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> object goes out of scope via the destructor.</p>
 <p>However, manual termination is allowed for exceptional cases, such as when the engine becomes stuck in an infinite loop or is otherwise unresponsive. In such scenarios, calling <a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230" title="Manually terminate the engine process.">quit()</a> will forcibly shut down the engine process.</p>
-<dl class="section warning"><dt>Warning</dt><dd><b>Important:</b> After calling <a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230" title="Manually terminate the engine process.">quit()</a> manually, the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> object becomes unusable. Do not attempt to perform any operations other than health check (search, sync, option configuration, etc.) on the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> after calling this method. <br  />
+<dl class="section warning"><dt>Warning</dt><dd><b>Important:</b> After calling <a class="el" href="classUCILoader_1_1EngineInstance.html#a96c7b8a18879044ee18a8af7c9929230" title="Manually terminate the engine process.">quit()</a> manually, the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> object becomes unusable. Do not attempt to perform any operations other than health check (position, go, search, sync, option configuration, etc.) on the <a class="el" href="classUCILoader_1_1EngineInstance.html" title="Top-level interface for managing and interacting with a UCI chess engine.">EngineInstance</a> after calling this method. <br  />
  </dd></dl>
 
 </div>
@@ -676,6 +779,7 @@ template&lt;class Move &gt; </div>
   </table>
   </dd>
 </dl>
+<p>This is equivalent to calling position(pos, moves) followed by go(params), while keeping both operations synchronized. The supplied position is retained by the engine until the search is started.</p>
 <p>Example with StandardChess variant: </p><div class="fragment"><div class="line">std::vector&lt;StandardChessMove&gt; moves = {e2e4, e7e5, g1f3};</div>
 <div class="line"><span class="keyword">auto</span> <a class="code hl_function" href="classUCILoader_1_1EngineInstance.html#a9b966a808539bc72af6061c29890c177">search</a> = engine-&gt;search(</div>
 <div class="line">    GoParamsBuilder().depth(20).build(),</div>

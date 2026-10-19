@@ -8,9 +8,10 @@ var searchData=
   ['poll_5',['poll',['../classUCILoader_1_1AbstractPipeReader.html#a746515922f424ab4f48fc7391f321abe',1,'UCILoader::AbstractPipeReader']]],
   ['ponderhit_6',['ponderhit',['../classUCILoader_1_1SearchConnection.html#a0519f069321cfd3c96d40dc86fad96a4',1,'UCILoader::SearchConnection']]],
   ['pondermove_7',['ponderMove',['../structUCILoader_1_1SearchResult.html#a116ef97a4bc601b5d87a650c1f598071',1,'UCILoader::SearchResult']]],
-  ['positionformatter_8',['PositionFormatter',['../classUCILoader_1_1PositionFormatter.html',1,'UCILoader']]],
-  ['pretty_9',['Pretty',['../namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50',1,'UCILoader::LoggerTraits']]],
-  ['processwrapper_10',['ProcessWrapper',['../classUCILoader_1_1ProcessWrapper.html',1,'UCILoader']]],
-  ['promoteto_11',['promoteTo',['../structStandardChess_1_1StandardChessMove.html#a911320d8413eba5f84549ff88b8c5947',1,'StandardChess::StandardChessMove']]],
-  ['push_5fback_12',['push_back',['../classUCILoader_1_1LogBuffer.html#afcd16e56080035246a8d71265a05738e',1,'UCILoader::LogBuffer']]]
+  ['position_8',['position',['../classUCILoader_1_1EngineInstance.html#a45743f948538d9afa5c2af44bd664ef1',1,'UCILoader::EngineInstance']]],
+  ['positionformatter_9',['PositionFormatter',['../classUCILoader_1_1PositionFormatter.html',1,'UCILoader']]],
+  ['pretty_10',['Pretty',['../namespaceUCILoader_1_1LoggerTraits.html#aa37b1735dcd9b41a98b0de1b58b46d50',1,'UCILoader::LoggerTraits']]],
+  ['processwrapper_11',['ProcessWrapper',['../classUCILoader_1_1ProcessWrapper.html',1,'UCILoader']]],
+  ['promoteto_12',['promoteTo',['../structStandardChess_1_1StandardChessMove.html#a911320d8413eba5f84549ff88b8c5947',1,'StandardChess::StandardChessMove']]],
+  ['push_5fback_13',['push_back',['../classUCILoader_1_1LogBuffer.html#afcd16e56080035246a8d71265a05738e',1,'UCILoader::LogBuffer']]]
 ];
