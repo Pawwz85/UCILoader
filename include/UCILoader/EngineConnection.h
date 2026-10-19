@@ -242,10 +242,10 @@ namespace UCILoader {
 	 * - Retrieve results when ready
 	 * - Implement timeouts
 	 * 
-	 * Instances are typically obtained by calling the search() method on an EngineInstance.
+	 * Instances are typically obtained by calling the search() or go() method on an EngineInstance.
 	 * The SearchConnection takes ownership of the search and manages its lifecycle.
 	 * 
-	 * @see EngineInstance::search() for initiating a search
+	 * @see EngineInstance::search() and EngineInstance::go() for initiating a search
 	 * @see SearchStatusCode for understanding search states
 	 */
 	template<class Move>
@@ -787,7 +787,9 @@ namespace UCILoader {
 			std::string name = "<empty>";
 			std::string author = "<empty>";
 			
+			//! FEN representation of the most recently sent position, used by go().
 			std::string stashedPositionRoot = "";
+			//! Moves sent with the most recently sent position, used by go().
 			std::vector<Move> stashedPositionMoves = {};
 
 			std::condition_variable conditional_var;
@@ -803,9 +805,11 @@ namespace UCILoader {
 
 		std::shared_ptr<InstancePrivate> core;
 		std::shared_ptr<MessageRelay> relay;
-		void detachInstance(); 
+		void detachInstance();
 
+		//! Starts a search using the stashed position; the caller must hold core->lock.
 		std::shared_ptr<SearchConnection<Move>> goNoLock(const GoParams<Move>& params);
+		//! Sends and stashes a position; the caller must hold core->lock.
 		void positionNoLock(const PositionFormatter& pos, const std::vector<Move> & moves);
 	public:
 		
@@ -863,6 +867,12 @@ namespace UCILoader {
 		 */
 		class EngineBusyException : public std::exception{};
 
+		/*!
+		 * @brief Exception thrown when go() is called without a previously supplied position.
+		 *
+		 * Call position() before go(), or use search() to supply the position and start the
+		 * search in one operation.
+		 */
 		class NoPositionError : public std::exception{};
 
 		/*!
@@ -926,6 +936,10 @@ namespace UCILoader {
 		 * @throws EngineBusyException if a search is already in progress
 		 * 
 		 * @details
+		 * This is equivalent to calling position(pos, moves) followed by go(params), while
+		 * keeping both operations synchronized. The supplied position is retained by the
+		 * engine until the search is started.
+		 *
 		 * Example with StandardChess variant:
 		 * @code
 		 *     std::vector<StandardChessMove> moves = {e2e4, e7e5, g1f3};
@@ -947,9 +961,33 @@ namespace UCILoader {
 		 */
 		std::shared_ptr<SearchConnection<Move>> search(const GoParams<Move>& params, const PositionFormatter& pos,
 			const std::vector<Move> & moves = {});
-		
+
+		/*!
+		 * @brief Start a search using the position most recently supplied with position().
+		 *
+		 * @param params Search parameters (time, depth, nodes, etc.) - see GoParamsBuilder from UCI.h
+		 * @return Shared pointer to the SearchConnection for monitoring and controlling the search
+		 * @throws EngineBusyException if a search is already in progress
+		 * @throws NoPositionError if position() has not been called, or its position has already
+		 * been consumed by a previous call to go()
+		 *
+		 * @details
+		 * The position and move history are consumed when the search starts. Use position() again
+		 * before starting another search.
+		 */
 		std::shared_ptr<SearchConnection<Move>> go(const GoParams<Move>& params);	
 		
+		/*!
+		 * @brief Send a position to the engine and make it available to go().
+		 *
+		 * @param pos Root position to analyze - must implement PositionFormatter interface
+		 * @param moves Sequence of moves to play from the root position
+		 *
+		 * @details
+		 * This method sends the UCI position command immediately and stores the position and
+		 * move history for the next call to go(). Calling position() again replaces the stored
+		 * position. It is also safe to call while no search is active.
+		 */
 		void position(const PositionFormatter& pos, const std::vector<Move> & moves = {});
 
 		/*!
@@ -996,7 +1034,7 @@ namespace UCILoader {
 		 * forcibly shut down the engine process.
 		 * 
 		 * @warning **Important:** After calling quit() manually, the EngineInstance object becomes unusable.
-		 * Do not attempt to perform any operations other than health check (search, sync, option configuration, etc.) on the 
+		 * Do not attempt to perform any operations other than health check (position, go, search, sync, option configuration, etc.) on the
 		 * EngineInstance after calling this method.  
 		 */
 		void quit();
@@ -1053,7 +1091,8 @@ namespace UCILoader {
 		* @param handler A callable object accepting a SearchRequest<Move> parameter and returning void
 		* 
 		* @details
-		* This method allows you to react when the user or application initiates a new search operation. The callback is invoked immediately after `search()`.
+		* This method allows you to react when the user or application initiates a new search operation. The callback is invoked immediately after
+		* search() or go().
 		* 
 		* **Use Cases:**
 		* - Initialize GUI progress bars and status indicators for the upcoming search
