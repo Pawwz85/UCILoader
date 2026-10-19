@@ -3,7 +3,7 @@ project(Demo VERSION 1.0
                   DESCRIPTION "Example program usage of UCILoader library to connect to UCI engine"
                   LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 add_executable(demo main.cpp)

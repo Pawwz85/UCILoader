@@ -332,6 +332,12 @@ namespace UCILoader {
 		const std::vector<Move> & moves) {
 			return ConcreteEvent<SearchRequest<Move>, SearchStarted>({params, pos.toFen(), moves});
 		};
+
+		template <class Move>
+		ConcreteEvent<SearchRequest<Move>, SearchStarted> makeSearchStartedEvent(const GoParams<Move>& params, const std::string & fen,
+		const std::vector<Move> & moves) {
+			return ConcreteEvent<SearchRequest<Move>, SearchStarted>({params, fen, moves});
+		};
 	};
 	
 	class EventEmitter;

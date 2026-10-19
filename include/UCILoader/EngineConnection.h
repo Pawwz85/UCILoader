@@ -786,6 +786,10 @@ namespace UCILoader {
 			std::atomic_bool quitCommandSend;
 			std::string name = "<empty>";
 			std::string author = "<empty>";
+			
+			std::string stashedPositionRoot = "";
+			std::vector<Move> stashedPositionMoves = {};
+
 			std::condition_variable conditional_var;
 			EngineInstance<Move> * instance;
 			std::mutex lock;
@@ -800,6 +804,9 @@ namespace UCILoader {
 		std::shared_ptr<InstancePrivate> core;
 		std::shared_ptr<MessageRelay> relay;
 		void detachInstance(); 
+
+		std::shared_ptr<SearchConnection<Move>> goNoLock(const GoParams<Move>& params);
+		void positionNoLock(const PositionFormatter& pos, const std::vector<Move> & moves);
 	public:
 		
 		class _CommandHandler : public AbstractEngineHandler<Move> {
@@ -855,6 +862,8 @@ namespace UCILoader {
 		 * call stop() on it, then wait for it to complete with waitFor() before starting a new search.
 		 */
 		class EngineBusyException : public std::exception{};
+
+		class NoPositionError : public std::exception{};
 
 		/*!
 		 * @brief Map of available engine options.
@@ -939,6 +948,10 @@ namespace UCILoader {
 		std::shared_ptr<SearchConnection<Move>> search(const GoParams<Move>& params, const PositionFormatter& pos,
 			const std::vector<Move> & moves = {});
 		
+		std::shared_ptr<SearchConnection<Move>> go(const GoParams<Move>& params);	
+		
+		void position(const PositionFormatter& pos, const std::vector<Move> & moves = {});
+
 		/*!
 		 * @brief Get the engine's name as declared via the id name command.
 		 * 
@@ -1149,6 +1162,47 @@ namespace UCILoader {
 		return core->currentConnection;
 	}
 
+	template <class Move>
+	inline std::shared_ptr<SearchConnection<Move>> EngineInstance<Move>::goNoLock(const GoParams<Move>& params) {
+		if (core->currentConnection != nullptr)
+			throw EngineBusyException();
+
+		if (core->stashedPositionRoot.empty())
+			throw NoPositionError();
+
+		core->currentConnection = std::make_shared<SearchConnection<Move>>(core->processWrapper, relay);
+
+		core->sendToEngine(UciFormatter<Move>::go(params));
+		core->currentConnection->status.set(OnGoing);
+
+		auto event = NamedEngineEvents::makeSearchStartedEvent(params, core->stashedPositionRoot, core->stashedPositionMoves);
+		emit(&event);
+
+		core->stashedPositionRoot.clear();
+		core->stashedPositionMoves.clear();
+
+		return core->currentConnection;	
+	}
+
+	template <class Move>
+	inline std::shared_ptr<SearchConnection<Move>> EngineInstance<Move>::go(const GoParams<Move>& params) {
+		std::unique_lock<std::mutex> guard(core->lock);
+		return goNoLock(params);
+	}
+
+	template <class Move>
+	inline void  EngineInstance<Move>::positionNoLock(const PositionFormatter& pos, const std::vector<Move> & moves) {
+		core->stashedPositionRoot = pos.toFen();
+		core->stashedPositionMoves = moves;
+		core->sendToEngine(UciFormatter<Move>::position(pos, moves));
+	}
+
+	template <class Move>
+	inline void  EngineInstance<Move>::position(const PositionFormatter& pos, const std::vector<Move> & moves) {
+		std::unique_lock<std::mutex> guard(core->lock);
+		positionNoLock(pos, moves);
+	}
+
 	template<class Move>
 	inline std::shared_ptr<SearchConnection<Move>> EngineInstance<Move>::search(const GoParams<Move>& params, const PositionFormatter& pos,
 		const std::vector<Move> & moves)
@@ -1158,16 +1212,10 @@ namespace UCILoader {
 		if (core->currentConnection != nullptr)
 			throw EngineBusyException();
 
-		core->currentConnection = std::make_shared<SearchConnection<Move>>(core->processWrapper, relay);
-
-		core->sendToEngine(UciFormatter<Move>::position(pos, moves));
-		core->sendToEngine(UciFormatter<Move>::go(params));
-		core->currentConnection->status.set(OnGoing);
-
-		auto event = NamedEngineEvents::makeSearchStartedEvent(params, pos, moves);
-		emit(&event);
-		return core->currentConnection;
+		positionNoLock(pos, moves);
+		return goNoLock(params);
 	}
+
 	template<class Move>
 	inline std::string EngineInstance<Move>::getName()
 	{
