@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.3.0</span>
+   <div id="projectname">UCILoader<span id="projectnumber">&#160;1.3.1</span>
    </div>
    <div id="projectbrief">Small C++ library that allows user to connect to a chess engines via UCI protocol.</div>
   </td>
@@ -634,8 +634,8 @@ $(document).ready(function(){initNavTree('EngineConnection_8h_source.html',''); 
 <div class="line"><a id="l01210" name="l01210"></a><span class="lineno"> 1210</span>            <span class="keywordflow">throw</span> NoPositionError();</div>
 <div class="line"><a id="l01211" name="l01211"></a><span class="lineno"> 1211</span> </div>
 <div class="line"><a id="l01212" name="l01212"></a><span class="lineno"> 1212</span> </div>
-<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span>        core-&gt;currentConnection-&gt;status.set(OnGoing);</div>
-<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span>        core-&gt;currentConnection = std::make_shared&lt;SearchConnection&lt;Move&gt;&gt;(core-&gt;processWrapper, relay);</div>
+<div class="line"><a id="l01213" name="l01213"></a><span class="lineno"> 1213</span>        core-&gt;currentConnection = std::make_shared&lt;SearchConnection&lt;Move&gt;&gt;(core-&gt;processWrapper, relay);</div>
+<div class="line"><a id="l01214" name="l01214"></a><span class="lineno"> 1214</span>        core-&gt;currentConnection-&gt;status.set(OnGoing);</div>
 <div class="line"><a id="l01215" name="l01215"></a><span class="lineno"> 1215</span>        core-&gt;sendToEngine(UciFormatter&lt;Move&gt;::go(params));</div>
 <div class="line"><a id="l01216" name="l01216"></a><span class="lineno"> 1216</span>        <span class="keyword">auto</span> <span class="keyword">event</span> = NamedEngineEvents::makeSearchStartedEvent(params, core-&gt;stashedPositionRoot, core-&gt;stashedPositionMoves);</div>
 <div class="line"><a id="l01217" name="l01217"></a><span class="lineno"> 1217</span>        emit(&amp;event);</div>
