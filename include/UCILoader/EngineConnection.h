@@ -1210,8 +1210,8 @@ namespace UCILoader {
 			throw NoPositionError();
 
 
-		core->currentConnection->status.set(OnGoing);
 		core->currentConnection = std::make_shared<SearchConnection<Move>>(core->processWrapper, relay);
+		core->currentConnection->status.set(OnGoing);
 		core->sendToEngine(UciFormatter<Move>::go(params));
 		auto event = NamedEngineEvents::makeSearchStartedEvent(params, core->stashedPositionRoot, core->stashedPositionMoves);
 		emit(&event);
