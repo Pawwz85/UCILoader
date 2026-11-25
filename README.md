@@ -74,7 +74,7 @@ Alternatively, you can use the FetchContent module to download and build the lib
 include(FetchContent)
 FetchContent_Declare(
 		UCILoader
-		URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.3.1.zip
+		URL https://github.com/Pawwz85/UCILoader/archive/refs/tags/v1.3.2.zip
 )
 FetchContent_MakeAvailable(UCILoader)
 ```

@@ -16,7 +16,7 @@ option (UCILOADER_BUILD_TESTS "Build tests" ON)
 option (UCILOADER_ENABLE_IWYU "Enable include-what-you-use" OFF)
 
 project(UCILoader 
-                  VERSION 1.3.1
+                  VERSION 1.3.2
                   DESCRIPTION "Small C++ library that allows user to connect to a chess engines via UCI protocol."
                   LANGUAGES CXX)
 
