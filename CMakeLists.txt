@@ -3,17 +3,17 @@ cmake_minimum_required(VERSION 3.28) # my version of cmake, might be lower actua
 
 
 # Build examples option, default is OFF to avoid building examples when using this library as a dependency in other projects
-option(BUILD_EXAMPLES "Build examples" OFF)
+option(UCILOADER_BUILD_EXAMPLES "Build examples" OFF)
 
 # Build tests option, default is ON because library behaviour might be different on different platforms and we want to
 # make sure that the library works as expected on user platform. If the user doesn't want to build tests, they can 
 # simply disable this option.
-option (BUILD_TESTS "Build tests" ON)
+option (UCILOADER_BUILD_TESTS "Build tests" ON)
 
 # Enable include-what-you-use option, default is OFF because this tool is not available on all platforms and it is not
 # required for building the library. If the user wants to use this tool, they can enable this option. This option is only
 # available if the user has include-what-you-use installed on their system.
-option (ENABLE_IWYU "Enable include-what-you-use" OFF)
+option (UCILOADER_ENABLE_IWYU "Enable include-what-you-use" OFF)
 
 project(UCILoader 
                   VERSION 1.3.1
@@ -73,23 +73,23 @@ $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
 $<INSTALL_INTERFACE:include/UCILoader>
 )
 
-if (BUILD_TESTS)
+if (UCILOADER_BUILD_TESTS)
     include(CTest)
     enable_testing()
     add_subdirectory("UnitTests")
     add_subdirectory("SystemTests")
 endif()
 
-if (BUILD_EXAMPLES) 
+if (UCILOADER_BUILD_EXAMPLES) 
     add_subdirectory("Examples/proxy")
     add_subdirectory("Examples/demo")
 endif()
 
-if (ENABLE_IWYU)
+if (UCILOADER_ENABLE_IWYU)
     find_program(IWYU_EXECUTABLE NAMES include-what-you-use)
     if(NOT IWYU_EXECUTABLE)
         message(FATAL_ERROR
-            "ENABLE_IWYU is ON, but include-what-you-use was not found.")
+            "UCILOADER_ENABLE_IWYU is ON, but include-what-you-use was not found.")
     endif()
     set_target_properties(uciloader PROPERTIES CXX_INCLUDE_WHAT_YOU_USE "${IWYU_EXECUTABLE}")
 endif()
