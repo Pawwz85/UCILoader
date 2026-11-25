@@ -114,9 +114,9 @@ Building from source</h4>
 <div class="line">cmake -B build</div>
 <div class="line">cmake --build build</div>
 </div><!-- fragment --><p>Tests are enabled by default. Examples are disabled by default, which keeps the default build suitable for use as a dependency. To set these options explicitly, use:</p>
-<div class="fragment"><div class="line">cmake -B build -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON</div>
+<div class="fragment"><div class="line">cmake -B build -DUCILOADER_BUILD_TESTS=ON -DUCILOADER_BUILD_EXAMPLES=ON</div>
 <div class="line">cmake --build build</div>
-</div><!-- fragment --><div class="fragment"><div class="line">cmake -B build -DENABLE_IWYU=ON</div>
+</div><!-- fragment --><div class="fragment"><div class="line">cmake -B build -DUCILOADER_ENABLE_IWYU=ON</div>
 <div class="line">cmake --build build</div>
 </div><!-- fragment --><p>Use <code>--config Release</code> with multi-configuration generators such as Visual Studio when building or installing a release build.</p>
 <h3><a class="anchor" id="autotoc_md4"></a>
