@@ -38,12 +38,12 @@ cmake --build build
 Tests are enabled by default. Examples are disabled by default, which keeps the default build suitable for use as a dependency. To set these options explicitly, use:
 
 ```bash
-cmake -B build -DBUILD_TESTS=ON -DBUILD_EXAMPLES=ON
+cmake -B build -DUCILOADER_BUILD_TESTS=ON -DUCILOADER_BUILD_EXAMPLES=ON
 cmake --build build
 ```
 
 ```bash
-cmake -B build -DENABLE_IWYU=ON
+cmake -B build -DUCILOADER_ENABLE_IWYU=ON
 cmake --build build
 ```
 
